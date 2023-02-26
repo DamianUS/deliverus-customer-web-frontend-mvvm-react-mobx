@@ -6,6 +6,9 @@
       "dom.iterable",
       "esnext"
     ],
+    "types": ["reflect-metadata"],
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
     "allowJs": true,
     "skipLibCheck": true,
     "esModuleInterop": true,

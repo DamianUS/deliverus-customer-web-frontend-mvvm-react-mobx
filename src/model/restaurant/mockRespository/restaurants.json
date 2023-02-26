@@ -1,0 +1,200 @@
+[
+    {
+      "id": 2,
+      "name": "100 montaditos",
+      "description": "Una forma divertida y variada de disfrutar de la comida. Un lugar para compartir experiencias y dejarse llevar por el momento.",
+      "address": "Av. de la Reina Mercedes, 43, Sevilla",
+      "postalCode": "41012",
+      "url": "http://spain.100montaditos.com/",
+      "shippingCosts": 1.5,
+      "averageServiceMinutes": null,
+      "email": "attcliente@gruporestalia.com",
+      "phone": "+34902197494",
+      "logo": "public/restaurants/100MontaditosLogo.jpeg",
+      "heroImage": "public/restaurants/100MontaditosHero.jpeg",
+      "status": "online",
+      "restaurantCategoryId": 2,
+      "restaurantCategory": {
+        "id": 2,
+        "name": "Fast food",
+        "createdAt": "2023-02-26T20:17:10.000Z",
+        "updatedAt": "2023-02-26T20:17:10.000Z"
+      }
+    },
+    {
+      "id": 3,
+      "name": "1000 productos",
+      "description": "1000 productos",
+      "address": "Av. de la Reina Mercedes, 43, Sevilla",
+      "postalCode": "41012",
+      "url": "http://1000productos.com/",
+      "shippingCosts": 1.5,
+      "averageServiceMinutes": null,
+      "email": "attcliente@gruporestalia.com",
+      "phone": "+34902197494",
+      "logo": "",
+      "heroImage": "",
+      "status": "online",
+      "restaurantCategoryId": 2,
+      "restaurantCategory": {
+        "id": 2,
+        "name": "Fast food",
+        "createdAt": "2023-02-26T20:17:10.000Z",
+        "updatedAt": "2023-02-26T20:17:10.000Z"
+      }
+    },
+    {
+      "id": 4,
+      "name": "0 productos",
+      "description": "0 productos",
+      "address": "Av. de la Reina Mercedes, 43, Sevilla",
+      "postalCode": "41012",
+      "url": "http://1000productos.com/",
+      "shippingCosts": 1.5,
+      "averageServiceMinutes": null,
+      "email": "attcliente@gruporestalia.com",
+      "phone": "+34902197494",
+      "logo": "",
+      "heroImage": "",
+      "status": "closed",
+      "restaurantCategoryId": 2,
+      "restaurantCategory": {
+        "id": 2,
+        "name": "Fast food",
+        "createdAt": "2023-02-26T20:17:10.000Z",
+        "updatedAt": "2023-02-26T20:17:10.000Z"
+      }
+    },
+    {
+      "id": 5,
+      "name": "30 productos",
+      "description": "1000 productos",
+      "address": "Av. de la Reina Mercedes, 43, Sevilla",
+      "postalCode": "41012",
+      "url": "http://1000productos.com/",
+      "shippingCosts": 1.5,
+      "averageServiceMinutes": null,
+      "email": "attcliente@gruporestalia.com",
+      "phone": "+34902197494",
+      "logo": "",
+      "heroImage": "",
+      "status": "online",
+      "restaurantCategoryId": 2,
+      "restaurantCategory": {
+        "id": 2,
+        "name": "Fast food",
+        "createdAt": "2023-02-26T20:17:10.000Z",
+        "updatedAt": "2023-02-26T20:17:10.000Z"
+      }
+    },
+    {
+      "id": 6,
+      "name": "50 productos",
+      "description": "1000 productos",
+      "address": "Av. de la Reina Mercedes, 43, Sevilla",
+      "postalCode": "41012",
+      "url": "http://1000productos.com/",
+      "shippingCosts": 1.5,
+      "averageServiceMinutes": null,
+      "email": "attcliente@gruporestalia.com",
+      "phone": "+34902197494",
+      "logo": "",
+      "heroImage": "",
+      "status": "online",
+      "restaurantCategoryId": 2,
+      "restaurantCategory": {
+        "id": 2,
+        "name": "Fast food",
+        "createdAt": "2023-02-26T20:17:10.000Z",
+        "updatedAt": "2023-02-26T20:17:10.000Z"
+      }
+    },
+    {
+      "id": 7,
+      "name": "100 productos",
+      "description": "1000 productos",
+      "address": "Av. de la Reina Mercedes, 43, Sevilla",
+      "postalCode": "41012",
+      "url": "http://1000productos.com/",
+      "shippingCosts": 1.5,
+      "averageServiceMinutes": null,
+      "email": "attcliente@gruporestalia.com",
+      "phone": "+34902197494",
+      "logo": "",
+      "heroImage": "",
+      "status": "online",
+      "restaurantCategoryId": 2,
+      "restaurantCategory": {
+        "id": 2,
+        "name": "Fast food",
+        "createdAt": "2023-02-26T20:17:10.000Z",
+        "updatedAt": "2023-02-26T20:17:10.000Z"
+      }
+    },
+    {
+      "id": 8,
+      "name": "200 productos",
+      "description": "1000 productos",
+      "address": "Av. de la Reina Mercedes, 43, Sevilla",
+      "postalCode": "41012",
+      "url": "http://1000productos.com/",
+      "shippingCosts": 1.5,
+      "averageServiceMinutes": null,
+      "email": "attcliente@gruporestalia.com",
+      "phone": "+34902197494",
+      "logo": "",
+      "heroImage": "",
+      "status": "online",
+      "restaurantCategoryId": 2,
+      "restaurantCategory": {
+        "id": 2,
+        "name": "Fast food",
+        "createdAt": "2023-02-26T20:17:10.000Z",
+        "updatedAt": "2023-02-26T20:17:10.000Z"
+      }
+    },
+    {
+      "id": 9,
+      "name": "1 producto",
+      "description": "1 producto",
+      "address": "Av. de la Reina Mercedes, 43, Sevilla",
+      "postalCode": "41012",
+      "url": "http://1000productos.com/",
+      "shippingCosts": 1.5,
+      "averageServiceMinutes": null,
+      "email": "attcliente@gruporestalia.com",
+      "phone": "+34902197494",
+      "logo": "",
+      "heroImage": "",
+      "status": "online",
+      "restaurantCategoryId": 2,
+      "restaurantCategory": {
+        "id": 2,
+        "name": "Fast food",
+        "createdAt": "2023-02-26T20:17:10.000Z",
+        "updatedAt": "2023-02-26T20:17:10.000Z"
+      }
+    },
+    {
+      "id": 1,
+      "name": "Casa Félix",
+      "description": "Cocina Tradicional",
+      "address": "Av. Reina Mercedes 51, Sevilla",
+      "postalCode": "41012",
+      "url": "https://goo.gl/maps/GZEfzge4zXz6ySLR8",
+      "shippingCosts": 2.5,
+      "averageServiceMinutes": null,
+      "email": "casafelix@restaurant.com",
+      "phone": "954123123",
+      "logo": "public/restaurants/casaFelixLogo.jpeg",
+      "heroImage": null,
+      "status": "closed",
+      "restaurantCategoryId": 1,
+      "restaurantCategory": {
+        "id": 1,
+        "name": "Spanish",
+        "createdAt": "2023-02-26T20:17:10.000Z",
+        "updatedAt": "2023-02-26T20:17:10.000Z"
+      }
+    }
+  ]
