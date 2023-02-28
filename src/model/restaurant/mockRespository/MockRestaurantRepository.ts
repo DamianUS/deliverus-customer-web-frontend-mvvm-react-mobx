@@ -1,13 +1,12 @@
 import 'reflect-metadata'
 import Restaurant from "../Restaurant";
-import Repository from "../../interfaces/Repository";
 import restaurantsMocked from "./restaurants.json";
 import {injectable} from "inversify";
-import disableable from "../../mocks/Disableable";
 import MockRestaurantConversor from "./MockRestaurantConversor";
 import BaseMockRepository from "../../mocks/BaseMockRepository";
+import RestaurantRepository from "../interfaces/RestaurantRepository";
 @injectable()
-class MockRestaurantRepository extends BaseMockRepository<Restaurant>{
+class MockRestaurantRepository extends BaseMockRepository<Restaurant> implements RestaurantRepository{
     private conversor:MockRestaurantConversor;
     constructor() {
         super()

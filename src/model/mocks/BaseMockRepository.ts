@@ -1,6 +1,6 @@
 import Repository from "../interfaces/Repository";
 import Model from "../interfaces/Model";
-import disableable from "./Disableable";
+import disableable from "./decorators/Disableable";
 import {injectable} from "inversify";
 // @ts-ignore
 @injectable()
@@ -19,7 +19,7 @@ abstract class BaseMockRepository<T extends Model> implements Repository<T>{
     async getById(id: number): Promise<T | undefined> {
         const entities = await this.getAll()
         // @ts-ignore
-        return entities.find(user => user.id === id);
+        return entities.find(entity => entity.id === id);
     }
     @disableable()
     async removeById(id: number): Promise<number> {
@@ -43,6 +43,8 @@ abstract class BaseMockRepository<T extends Model> implements Repository<T>{
         const ids:number[] = entities.map(entity => entity.id as number);
         const lastId = Math.max(...ids);
         entity.id = lastId+1;
+        entity.createdAt = new Date()
+        entity.updatedAt = new Date()
         this.entities.push(entity);
         return entity
     }
@@ -53,6 +55,7 @@ abstract class BaseMockRepository<T extends Model> implements Repository<T>{
         if (oldEntityIndex === -1) {
             throw new Error("the entity does not exist")
         }
+        entity.updatedAt = new Date()
         this.entities[oldEntityIndex] = entity
         return entity
     }

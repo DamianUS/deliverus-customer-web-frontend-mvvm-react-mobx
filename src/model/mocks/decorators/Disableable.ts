@@ -1,5 +1,5 @@
-import BackendServiceError from "../errors/BackendServiceError";
-import config from "../../config/config";
+import BackendServiceError from "../../errors/BackendServiceError";
+import config from "../../../config/config";
 const disableable = () => {
     return function(target: unknown, propertyKey: string, descriptor: PropertyDescriptor) {
         const method = descriptor.value;

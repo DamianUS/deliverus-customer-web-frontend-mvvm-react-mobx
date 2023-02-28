@@ -18,8 +18,8 @@ class Restaurant implements Model{
     status!: string;
     category!: RestaurantCategory;
     owner?: User|null;
-    createdAt?: Date;
-    updatedAt?: Date;
+    createdAt: Date|undefined;
+    updatedAt: Date|undefined;
 
     getProperties(){
         return [

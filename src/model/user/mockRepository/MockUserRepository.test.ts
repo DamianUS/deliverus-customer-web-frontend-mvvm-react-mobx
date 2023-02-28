@@ -257,3 +257,40 @@ test('removeById reduce el length en 1 cuando borra', async () => {
         expect(error instanceof BackendServiceError).toEqual(config.mock_disabled);
     }
 });
+
+
+test('findByEmail and password no encuentra datos incorrectos', async () => {
+    try {
+        const repository = new MockUserRepository();
+        // eslint-disable-next-line testing-library/no-await-sync-query
+        const user = await repository.getByEmailAndPassword("fakeemail@invent.org", "thisPasswordIsIncorrect");
+        expect(user).toBeUndefined()
+    }
+    catch(error){
+        expect(error instanceof BackendServiceError).toEqual(config.mock_disabled);
+    }
+});
+
+test('findByEmail and password encuentra algo con customer1@customer.com/secret', async () => {
+    try {
+        const repository = new MockUserRepository();
+        // eslint-disable-next-line testing-library/no-await-sync-query
+        const user = await repository.getByEmailAndPassword("customer1@customer.com", "secret");
+        expect(user).toBeDefined()
+    }
+    catch(error){
+        expect(error instanceof BackendServiceError).toEqual(config.mock_disabled);
+    }
+});
+
+test('findByEmail and password encuentra el user id 1 con customer1@customer.com/secret', async () => {
+    try {
+        const repository = new MockUserRepository();
+        // eslint-disable-next-line testing-library/no-await-sync-query
+        const user = await repository.getByEmailAndPassword("customer1@customer.com", "secret");
+        expect(user instanceof User && user.id === 1).toBeTruthy()
+    }
+    catch(error){
+        expect(error instanceof BackendServiceError).toEqual(config.mock_disabled);
+    }
+});
