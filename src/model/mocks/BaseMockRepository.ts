@@ -10,7 +10,7 @@ abstract class BaseMockRepository<T extends Model> implements Repository<T>{
     protected constructor() {
         this.entities = [];
     }
-
+    @disableable()
     async getAll(): Promise<T[]>{
         return this.entities
     }

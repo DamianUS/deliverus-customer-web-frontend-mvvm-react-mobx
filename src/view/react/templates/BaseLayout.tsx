@@ -1,10 +1,11 @@
 import { observer } from "mobx-react-lite"
-import { Layout, Space, Spin } from 'antd';
+import { Layout, Space, Spin, Typography } from 'antd';
 import React, {ReactNode} from "react";
 import GuestTopBarComponent from "../components/molecules/GuestTopBarComponent";
 import inversifyContainer from "../../../config/inversify.config";
 import GlobalState from "../../../viewmodel/GlobalState";
 const { Header, Content, Footer } = Layout;
+const { Text } = Typography;
 
 type Props = {
     children?: ReactNode,
@@ -21,7 +22,12 @@ const BaseLayout = observer((props: Props) => {
             </Header>
             <Content>
                 {globalState.loading && <Space size="middle"><Spin size="large" /></Space>}
-                {props.children ?? 'Default content'}
+                {globalState.backendError ?
+                    <Text>Errror</Text>
+                    :
+                    props.children ?? 'Default content'
+                }
+
             </Content>
             <Footer>{props.footer ?? 'Default footer'}</Footer>
         </Layout>
