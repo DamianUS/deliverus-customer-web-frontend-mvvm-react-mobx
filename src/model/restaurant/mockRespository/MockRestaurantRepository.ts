@@ -4,7 +4,6 @@ import Repository from "../../interfaces/Repository";
 import restaurantsMocked from "./restaurants.json";
 import {convertToRestaurant} from "./MockRestaurantConversor";
 import {injectable} from "inversify";
-import BackendServiceError from "../../errors/BackendServiceError";
 import disableable from "../../mocks/Disableable"; // see https://github.com/motdotla/dotenv#how-do-i-use-dotenv-with-import
 @injectable()
 class MockRestaurantRepository implements Repository<Restaurant>{
@@ -23,15 +22,15 @@ class MockRestaurantRepository implements Repository<Restaurant>{
     async getById(id: number): Promise<Restaurant|undefined> {
         const restaurants = await this.getAll()
         // @ts-ignore
-        return restaurants.find(restaurantObject => restaurantObject.id == id);
+        return restaurants.find(restaurantObject => restaurantObject.id === id);
     }
     @disableable()
     async removeById(id: number): Promise<number> {
         const restaurants = await this.getAll()
         const oldCount = restaurants.length
-        if(!id || !restaurants.find(restaurant => restaurant.id == id))
+        if(!id || !restaurants.find(restaurant => restaurant.id === id))
             return 0
-        this.restaurants = this.restaurants.filter(restaurant => restaurant.id != id)
+        this.restaurants = this.restaurants.filter(restaurant => restaurant.id !== id)
         return this.restaurants.length - oldCount
     }
     @disableable()

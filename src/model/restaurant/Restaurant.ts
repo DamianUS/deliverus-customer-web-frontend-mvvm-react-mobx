@@ -12,9 +12,9 @@ class Restaurant implements Model{
     shippingCosts!: number;
     averageServiceMinutes?: number;
     email?: string;
-    phone?: string;
-    logo?: string;
-    heroImage?:string;
+    phone: string|undefined;
+    logo: string|undefined;
+    heroImage:string|undefined;
     status!: string;
     category!: RestaurantCategory;
     owner?: User|null;

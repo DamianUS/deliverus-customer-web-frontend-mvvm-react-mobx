@@ -140,6 +140,17 @@ test('findById con id 1 devuelve algo un tipo Restaurant que tiene createdAt y u
     }
 });
 
+
+test('findById con id 3 devuelve un tipo Restaurant con el logo undefined', async () => {
+    try {
+        const restaurant = await new MockRestaurantRepository().getById(3)
+        expect(restaurant.logo).toBeUndefined();
+    }
+    catch(error){
+        expect(error instanceof BackendServiceError).toEqual(config.mock_disabled);
+    }
+});
+
 const _createMockRestaurant = ():Restaurant => {
     const restaurantObject = {
         "name": "Mocked restaurant",

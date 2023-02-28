@@ -5,34 +5,34 @@ import BackendServiceError from "../../model/errors/BackendServiceError";
 import {injectable} from "inversify";
 import 'reflect-metadata'
 import { makeAutoObservable } from "mobx"
+import GlobalState from "../GlobalState";
 
 
 @injectable()
 class IndexRestaurantsViewModel{
     restaurantRepository: Repository<Restaurant>;
     restaurants: Restaurant[];
-    loading:boolean;
-    backendError!:BackendServiceError;
+    globalState: GlobalState;
 
     constructor() {
         this.restaurantRepository = inversifyContainer.get<Repository<Restaurant>>("RestaurantRepository");
+        this.globalState = inversifyContainer.get<GlobalState>("GlobalState")
         this.restaurants = [];
-        this.loading = false;
         makeAutoObservable(this)
     }
 
-    async onPageLoad(): Promise<void> {
-        this.loading = true;
+    async initialize(): Promise<void> {
+        this.globalState.loading = true;
         try{
             this.restaurants = await this.restaurantRepository.getAll();
         }
         catch(error){
             // @ts-ignore
             if(error.name === "BackendServiceError")
-                this.backendError = error as BackendServiceError;
+                this.globalState.backendError = error as BackendServiceError;
         }
         finally {
-            this.loading = false
+            this.globalState.loading = false
         }
     }
 }

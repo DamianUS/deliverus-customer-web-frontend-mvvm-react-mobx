@@ -7,11 +7,11 @@
       "postalCode": "41012",
       "url": "http://spain.100montaditos.com/",
       "shippingCosts": 1.5,
-      "averageServiceMinutes": null,
+      "averageServiceMinutes": 24.3,
       "email": "attcliente@gruporestalia.com",
       "phone": "+34902197494",
-      "logo": "public/restaurants/100MontaditosLogo.jpeg",
-      "heroImage": "public/restaurants/100MontaditosHero.jpeg",
+      "logo": "http://localhost:3000/restaurants/100MontaditosLogo.jpeg",
+      "heroImage": "http://localhost:3000/restaurants/100MontaditosHero.jpeg",
       "status": "online",
       "restaurantCategoryId": 2,
       "restaurantCategory": {
@@ -32,8 +32,6 @@
       "averageServiceMinutes": null,
       "email": "attcliente@gruporestalia.com",
       "phone": "+34902197494",
-      "logo": "",
-      "heroImage": "",
       "status": "online",
       "restaurantCategoryId": 2,
       "restaurantCategory": {
@@ -54,8 +52,6 @@
       "averageServiceMinutes": null,
       "email": "attcliente@gruporestalia.com",
       "phone": "+34902197494",
-      "logo": "",
-      "heroImage": "",
       "status": "closed",
       "restaurantCategoryId": 2,
       "restaurantCategory": {
@@ -76,8 +72,6 @@
       "averageServiceMinutes": null,
       "email": "attcliente@gruporestalia.com",
       "phone": "+34902197494",
-      "logo": "",
-      "heroImage": "",
       "status": "online",
       "restaurantCategoryId": 2,
       "restaurantCategory": {
@@ -98,8 +92,6 @@
       "averageServiceMinutes": null,
       "email": "attcliente@gruporestalia.com",
       "phone": "+34902197494",
-      "logo": "",
-      "heroImage": "",
       "status": "online",
       "restaurantCategoryId": 2,
       "restaurantCategory": {
@@ -120,8 +112,6 @@
       "averageServiceMinutes": null,
       "email": "attcliente@gruporestalia.com",
       "phone": "+34902197494",
-      "logo": "",
-      "heroImage": "",
       "status": "online",
       "restaurantCategoryId": 2,
       "restaurantCategory": {
@@ -142,8 +132,6 @@
       "averageServiceMinutes": null,
       "email": "attcliente@gruporestalia.com",
       "phone": "+34902197494",
-      "logo": "",
-      "heroImage": "",
       "status": "online",
       "restaurantCategoryId": 2,
       "restaurantCategory": {
@@ -164,8 +152,6 @@
       "averageServiceMinutes": null,
       "email": "attcliente@gruporestalia.com",
       "phone": "+34902197494",
-      "logo": "",
-      "heroImage": "",
       "status": "online",
       "restaurantCategoryId": 2,
       "restaurantCategory": {
@@ -186,8 +172,7 @@
       "averageServiceMinutes": null,
       "email": "casafelix@restaurant.com",
       "phone": "954123123",
-      "logo": "public/restaurants/casaFelixLogo.jpeg",
-      "heroImage": null,
+      "logo": "http://localhost:3000/restaurants/casaFelixLogo.jpeg",
       "status": "closed",
       "restaurantCategoryId": 1,
       "restaurantCategory": {
