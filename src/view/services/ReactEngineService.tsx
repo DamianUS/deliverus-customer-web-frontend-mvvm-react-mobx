@@ -5,10 +5,11 @@ import React from "react";
 import reportWebVitals from "../react/reportWebVitals";
 import '../react/index.css';
 import AppRoutes from "../react/routes/AppRoutes";
-
 @injectable()
 export default class ReactEngineService implements ViewEngineService {
+
     initialize(): void {
+
         const root = ReactDOM.createRoot(
             document.getElementById('root') as HTMLElement
         );

@@ -4,6 +4,8 @@ import Restaurant from "../../model/restaurant/Restaurant";
 import BackendServiceError from "../../model/errors/BackendServiceError";
 import {injectable} from "inversify";
 import 'reflect-metadata'
+import { makeAutoObservable } from "mobx"
+
 
 @injectable()
 class IndexRestaurantsViewModel{
@@ -16,6 +18,7 @@ class IndexRestaurantsViewModel{
         this.restaurantRepository = inversifyContainer.get<Repository<Restaurant>>("RestaurantRepository");
         this.restaurants = [];
         this.loading = false;
+        makeAutoObservable(this)
     }
 
     async onPageLoad(): Promise<void> {
