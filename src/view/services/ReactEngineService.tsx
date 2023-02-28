@@ -2,9 +2,9 @@ import { injectable } from 'inversify'
 import ViewEngineService from "./interfaces/ViewEngineService";
 import ReactDOM from "react-dom/client";
 import React from "react";
-import App from "../react/App";
 import reportWebVitals from "../react/reportWebVitals";
 import '../react/index.css';
+import AppRoutes from "../react/routes/AppRoutes";
 
 @injectable()
 export default class ReactEngineService implements ViewEngineService {
@@ -14,7 +14,7 @@ export default class ReactEngineService implements ViewEngineService {
         );
         root.render(
             <React.StrictMode>
-                <App />
+                <AppRoutes />
             </React.StrictMode>
         );
 

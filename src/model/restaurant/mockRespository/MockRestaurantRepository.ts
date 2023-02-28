@@ -4,19 +4,8 @@ import Repository from "../../interfaces/Repository";
 import restaurantsMocked from "./restaurants.json";
 import {convertToRestaurant} from "./MockRestaurantConversor";
 import {injectable} from "inversify";
-import * as dotenv from 'dotenv'
-import BackendServiceError from "../../errors/BackendServiceError"; // see https://github.com/motdotla/dotenv#how-do-i-use-dotenv-with-import
-dotenv.config()
-
-function log() {
-    return function(target: unknown, propertyKey: string, descriptor: PropertyDescriptor) {
-        const value = descriptor.value;
-        descriptor.value = function(...args: any[]) {
-            value.apply(this, args);
-            console.log(`${propertyKey} was executed.`);
-        };
-    };
-}
+import BackendServiceError from "../../errors/BackendServiceError";
+import disableable from "../../mocks/Disableable"; // see https://github.com/motdotla/dotenv#how-do-i-use-dotenv-with-import
 @injectable()
 class MockRestaurantRepository implements Repository<Restaurant>{
 
@@ -24,46 +13,52 @@ class MockRestaurantRepository implements Repository<Restaurant>{
     constructor() {
         this.restaurants = restaurantsMocked.map(restaurantObject => convertToRestaurant(restaurantObject));
     }
-
-    getAll(): Restaurant[] {
+    @disableable()
+    async getAll(): Promise<Restaurant[]> {
         // @ts-ignore
-        if(process.env.MOCK_REPOSITORY_STATUS == "enabled")
-            return this.restaurants;
-        throw new BackendServiceError();
+        return this.restaurants;
     }
 
-    getById(id: number): Restaurant {
+    @disableable()
+    async getById(id: number): Promise<Restaurant|undefined> {
+        const restaurants = await this.getAll()
         // @ts-ignore
-        return this.restaurants.find(restaurantObject => restaurantObject.id == id);
+        return restaurants.find(restaurantObject => restaurantObject.id == id);
     }
-
-    removeById(id: number): void {
-        if(!id || !this.restaurants.find(restaurant => restaurant.id == id))
-            throw new Error("This entity is not persisted, can't remove")
+    @disableable()
+    async removeById(id: number): Promise<number> {
+        const restaurants = await this.getAll()
+        const oldCount = restaurants.length
+        if(!id || !restaurants.find(restaurant => restaurant.id == id))
+            return 0
         this.restaurants = this.restaurants.filter(restaurant => restaurant.id != id)
+        return this.restaurants.length - oldCount
     }
-
-    save(entity: Restaurant): void {
+    @disableable()
+    async save(entity: Restaurant): Promise<Restaurant> {
         if (entity.id)
-            this.update(entity)
+            return this.update(entity)
         else
-            this.store(entity)
+            return this.store(entity)
     }
-
-    private store(entity: Restaurant): void {
-        const ids:number[] = this.getAll().map(restaurant => restaurant.id)
-        const lastId = Math.max(...ids)
-        entity.id = lastId+1
+    @disableable()
+    private async store(entity: Restaurant): Promise<Restaurant> {
+        const restaurants = await this.getAll()
+        const ids:number[] = restaurants.map(restaurant => restaurant.id);
+        const lastId = Math.max(...ids);
+        entity.id = lastId+1;
         this.restaurants.push(entity);
+        return entity
     }
-
-    private update(entity: Restaurant): void {
-        const oldEntityIndex = this.getAll()
-            .findIndex(storedEntity => storedEntity.id === entity.id)
+    @disableable()
+    private async update(entity: Restaurant): Promise<Restaurant> {
+        const restaurants = await this.getAll();
+        const oldEntityIndex = restaurants.findIndex(storedEntity => storedEntity.id === entity.id)
         if (oldEntityIndex === -1) {
             throw new Error("the entity does not exist")
         }
         this.restaurants[oldEntityIndex] = entity
+        return entity
     }
 }
 export default MockRestaurantRepository;

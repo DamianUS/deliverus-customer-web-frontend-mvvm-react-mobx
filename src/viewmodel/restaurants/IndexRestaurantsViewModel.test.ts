@@ -1,8 +1,6 @@
 import IndexRestaurantsViewModel from "./IndexRestaurantsViewModel";
 import Restaurant from "../../model/restaurant/Restaurant";
-import * as dotenv from "dotenv";
 import BackendServiceError from "../../model/errors/BackendServiceError";
-dotenv.config()
 
 test('IndexRestaurantViewModel gets a repository injected', () => {
     const viewModel = new IndexRestaurantsViewModel();
@@ -24,31 +22,15 @@ test('IndexRestaurantViewModel has no backend error at creation', () => {
     expect(viewModel.backendError).toBeUndefined();
 });
 
-test('IndexRestaurantViewModel recovers an array of length > 0 when page loads', () => {
+test('IndexRestaurantViewModel recovers an array of length > 0 when page loads', async () => {
     const viewModel = new IndexRestaurantsViewModel();
-    viewModel.onPageLoad()
-    expect(viewModel.restaurants.length).toBeGreaterThan(0);
+    await viewModel.onPageLoad()
+    expect(viewModel.restaurants.length > 0 || viewModel.backendError instanceof BackendServiceError).toBeTruthy();
 });
 
-test('IndexRestaurantViewModel recovers an array of restaurants when page loads', () => {
+test('IndexRestaurantViewModel recovers an array of restaurants when page loads', async () => {
     const viewModel = new IndexRestaurantsViewModel();
-    viewModel.onPageLoad()
+    await viewModel.onPageLoad()
     const areAllRestaurants = viewModel.restaurants.map(restaurant => restaurant instanceof Restaurant).reduce((areAllRestaurants, isRestaurant) =>  areAllRestaurants && isRestaurant, true)
-    expect(areAllRestaurants).toBeTruthy();
-});
-
-test('IndexRestaurantViewModel backend error must be defined if something goes wrong on page load', () => {
-    if(process.env.MOCK_REPOSITORY_STATUS !== "enabled"){
-        const viewModel = new IndexRestaurantsViewModel();
-        viewModel.onPageLoad()
-        expect(viewModel.backendError).toBeDefined();
-    }
-});
-
-test('IndexRestaurantViewModel backend error must be a BackendError if something goes wrong on page load', () => {
-    if(process.env.MOCK_REPOSITORY_STATUS !== "enabled"){
-        const viewModel = new IndexRestaurantsViewModel();
-        viewModel.onPageLoad()
-        expect(viewModel.backendError instanceof BackendServiceError).toBeTruthy();
-    }
+    expect(areAllRestaurants || viewModel.backendError instanceof BackendServiceError).toBeTruthy();
 });

@@ -1,5 +1,5 @@
 import Restaurant from "../Restaurant";
-import Conversor, {convertToDate, convertDateToString} from "../../helpers/Conversor";
+import Conversor, {convertToDate, convertDateToString} from "../../mocks/Conversor";
 import RestaurantCategory from "../../restaurantCategory/RestaurantCategory";
 import User from "../../user/User";
 
