@@ -42,8 +42,10 @@ abstract class BaseConversor<T extends Model> implements Conversor<T>{
                 const conversionFunction = Object.values(mappingRule)[0];
                 // @ts-ignore
                 const conversionValue = entity[Object.keys(mappingRule)[0]];
-                // @ts-ignore
-                objectWithAllPropertiesEmpty[objectPropertyName] = conversionFunction(conversionValue);
+                if(conversionFunction && conversionValue){
+                    // @ts-ignore
+                    objectWithAllPropertiesEmpty[objectPropertyName] = conversionFunction(conversionValue);
+                }
             }
             else if(typeof mappingRule === 'string'){
                 // @ts-ignore
