@@ -1,0 +1,38 @@
+[
+  {
+    "id": 1,
+    "name": "Starters",
+    "createdAt": "2023-02-26T20:17:10.000Z",
+    "updatedAt": "2023-02-26T20:17:10.000Z"
+  },
+  {
+    "id": 2,
+    "name": "Sides",
+    "createdAt": "2023-02-26T20:17:10.000Z",
+    "updatedAt": "2023-02-26T20:17:10.000Z"
+  },
+  {
+    "id": 3,
+    "name": "Drinks",
+    "createdAt": "2023-02-26T20:17:10.000Z",
+    "updatedAt": "2023-02-26T20:17:10.000Z"
+  },
+  {
+    "id": 4,
+    "name": "Main Courses",
+    "createdAt": "2023-02-26T20:17:10.000Z",
+    "updatedAt": "2023-02-26T20:17:10.000Z"
+  },
+  {
+    "id": 5,
+    "name": "Desserts",
+    "createdAt": "2023-02-26T20:17:10.000Z",
+    "updatedAt": "2023-02-26T20:17:10.000Z"
+  },
+  {
+    "id": 6,
+    "name": "Sandwiches",
+    "createdAt": "2023-02-26T20:17:10.000Z",
+    "updatedAt": "2023-02-26T20:17:10.000Z"
+  }
+]

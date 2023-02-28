@@ -1,11 +1,11 @@
 import Model from "../interfaces/Model";
 
 class RestaurantCategory implements Model{
-    id?: number;
+    id: number|undefined;
     name!: string;
-    createdAt?: Date;
+    createdAt: Date|undefined;
 
-    updatedAt?: Date;
+    updatedAt: Date|undefined;
 
     getProperties(): string[] {
         return ['id', 'name', 'createdAt', 'updatedAt'];

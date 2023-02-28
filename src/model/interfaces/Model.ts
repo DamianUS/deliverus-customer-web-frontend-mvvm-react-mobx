@@ -1,4 +1,5 @@
 interface Model{
+    id: number|undefined
     getProperties():string[]
 }
 

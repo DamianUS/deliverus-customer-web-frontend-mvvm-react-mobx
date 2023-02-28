@@ -11,8 +11,7 @@ type Props = {
     onClick?: () => void,
 }
 
-const RestaurantCard = (props:Props) => {
-
+const RestaurantCard = (props:Props):JSX.Element => {
     return (
         <Card
             cover={
@@ -40,13 +39,15 @@ const RestaurantCard = (props:Props) => {
                                 <Text style={{alignSelf: 'self-end'}}>{props.restaurant.averageServiceMinutes ?? '30-60'} mins.</Text>
                             </Space>
                         </Col>
+                        {//@ts-ignore
                         <Col span={12} type="flex" align="end">
+
                             <Space>
                                 <DollarCircleOutlined />
                                 <Text style={{alignSelf: 'self-end'}}>{props.restaurant.shippingCosts} €</Text>
                             </Space>
                         </Col>
-
+                        }
                     </Row>
 
                 </>

@@ -1,10 +1,10 @@
+/* eslint-disable jest/no-conditional-expect */
 import MockRestaurantRepository from "./MockRestaurantRepository";
 import Restaurant from "../Restaurant";
 import RestaurantCategory from "../../restaurantCategory/RestaurantCategory";
-import {convertToRestaurant, convertToObject} from "./MockRestaurantConversor";
 import config from "../../../config/config";
-import exp from "constants";
 import BackendServiceError from "../../errors/BackendServiceError";
+import MockRestaurantConversor from "./MockRestaurantConversor";
 // @ts-ignore
 
 test('getAll devuelve un array o un BackendServiceError if mocking service is disabled', async () => {
@@ -91,6 +91,7 @@ test('getAll devuelve un array de Restaurant que tienen restaurantCategories y t
 
 test('findById con id 2 devuelve algo definido', async () => {
     try {
+        // eslint-disable-next-line testing-library/no-await-sync-query
         const restaurant = await new MockRestaurantRepository().getById(1)
         expect(restaurant).toBeDefined();
     }
@@ -101,6 +102,7 @@ test('findById con id 2 devuelve algo definido', async () => {
 
 test('findById con id 10 devuelve null', async () => {
     try {
+        // eslint-disable-next-line testing-library/no-await-sync-query
         const restaurant = await new MockRestaurantRepository().getById(10)
         expect(restaurant).toBeUndefined();
     }
@@ -132,6 +134,7 @@ test('findById con id 1 devuelve algo un tipo Restaurant que tiene restaurantCat
 test('findById con id 1 devuelve algo un tipo Restaurant que tiene createdAt y updatedAt como Date', async () => {
     try{
         const repository = new MockRestaurantRepository()
+        // eslint-disable-next-line testing-library/no-await-sync-query
         const restaurant = await repository.getById(1) ?? new Restaurant()
         expect(restaurantDatesAreDateIfPresent(restaurant)).toBeTruthy();
     }
@@ -143,8 +146,9 @@ test('findById con id 1 devuelve algo un tipo Restaurant que tiene createdAt y u
 
 test('findById con id 3 devuelve un tipo Restaurant con el logo undefined', async () => {
     try {
+        // eslint-disable-next-line testing-library/no-await-sync-query
         const restaurant = await new MockRestaurantRepository().getById(3)
-        expect(restaurant.logo).toBeUndefined();
+        expect(restaurant?.logo).toBeUndefined();
     }
     catch(error){
         expect(error instanceof BackendServiceError).toEqual(config.mock_disabled);
@@ -173,12 +177,12 @@ const _createMockRestaurant = ():Restaurant => {
             "updatedAt": "2023-02-26T20:17:10.000Z"
         }
     }
-    return convertToRestaurant(restaurantObject)
+    return new MockRestaurantConversor().convertToInternalEntity(restaurantObject)
 }
 
 const _createMockRestaurantObject = ():object => {
     const newRestaurant = _createMockRestaurant()
-    return convertToObject(newRestaurant)
+    return new MockRestaurantConversor().convertToExternalObject(newRestaurant)
 }
 
 test('save es capaz de utilizar un conversor para pasar de restaurant object a Restaurant', () => {
@@ -189,7 +193,7 @@ test('save es capaz de utilizar un conversor para pasar de restaurant object a R
 
 test('save es capaz de utilizar un conversor para pasar de Restaurant a object',() => {
     const newRestaurant = _createMockRestaurant()
-    const restaurantObject = convertToObject(newRestaurant)
+    const restaurantObject = new MockRestaurantConversor().convertToExternalObject(newRestaurant)
     expect(typeof restaurantObject).toEqual('object');
 });
 
@@ -244,11 +248,13 @@ test('save introduce 6 elementos', async () => {
 test('save modifica el restaurant 1 y le pone como nombre Mock restaurant', async () => {
     try{
         const repository = new MockRestaurantRepository()
+        // eslint-disable-next-line testing-library/no-await-sync-query
         const restaurant = await repository.getById(1)
         if(restaurant){
             restaurant.name = 'Mock restaurant'
             await repository.save(restaurant);
         }
+        // eslint-disable-next-line testing-library/no-await-sync-query
         const updatedRestaurant = await repository.getById(1)
         expect(updatedRestaurant?.name).toEqual('Mock restaurant');
     }
@@ -271,6 +277,7 @@ test('removeById borra el id 1', async () => {
     const repository = new MockRestaurantRepository();
     try{
         await repository.removeById(1);
+        // eslint-disable-next-line testing-library/no-await-sync-query
         expect(await repository.getById(1)).toBeUndefined();
     }
     catch(error){

@@ -1,7 +1,11 @@
 import Model from "../interfaces/Model";
+import Conversor from "./interfaces/Conversor";
 
-class Conversor<T extends Model>{
-    convertToEntity(emptyEntity: T, sourceObject: object, mappingRules: Record<string, any>):T{
+abstract class BaseConversor<T extends Model> implements Conversor<T>{
+
+    convertToInternalEntity(sourceObject: object):T{
+        const emptyEntity = this.getEmptyInternalEntity();
+        const mappingRules = this.getMapperToObtainInternalEntity()
         emptyEntity.getProperties().forEach(entityPropertyName => {
             const mappingRule = mappingRules[entityPropertyName];
             if(!mappingRule){
@@ -25,7 +29,9 @@ class Conversor<T extends Model>{
         return emptyEntity;
     }
 
-    convertToObject(entity: T, objectWithAllPropertiesEmpty:object, mappingRules: Record<string, any>):object{
+    convertToExternalObject(entity: T):object{
+        const objectWithAllPropertiesEmpty = this.getExternalObjectWithAllPropertiesEmpty()
+        const mappingRules = this.getMapperToObtainExternalObject()
         Object.keys(objectWithAllPropertiesEmpty).forEach(objectPropertyName => {
             const mappingRule = mappingRules[objectPropertyName];
             if(!mappingRule){
@@ -46,15 +52,11 @@ class Conversor<T extends Model>{
         })
         return objectWithAllPropertiesEmpty;
     }
+
+    abstract getMapperToObtainInternalEntity(): Record<string, any>;
+    abstract getMapperToObtainExternalObject(): Record<string, any>;
+    abstract getEmptyInternalEntity(): T;
+    abstract getExternalObjectWithAllPropertiesEmpty(): object;
 }
 
-const convertToDate = (date: string): Date => {
-    return new Date(date);
-}
-
-const convertDateToString = (date: Date): string => {
-    return date.toISOString();
-}
-
-export default Conversor
-export {convertToDate, convertDateToString}
+export default BaseConversor

@@ -1,6 +1,7 @@
 import IndexRestaurantsViewModel from "./IndexRestaurantsViewModel";
 import Restaurant from "../../model/restaurant/Restaurant";
 import BackendServiceError from "../../model/errors/BackendServiceError";
+import GlobalState from "../GlobalState";
 
 test('IndexRestaurantViewModel gets a repository injected', () => {
     const viewModel = new IndexRestaurantsViewModel();
@@ -47,6 +48,7 @@ test('IndexRestaurantViewModel initial globalState loading is false', () => {
 
 test('IndexRestaurantViewModel initial backendError is false', () => {
     const viewModel = new IndexRestaurantsViewModel();
+    viewModel.globalState = new GlobalState();
     expect(viewModel.globalState.backendError).toBeUndefined();
 });
 

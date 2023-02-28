@@ -1,44 +1,32 @@
 import UserType from "./UserType";
+import Model from "../interfaces/Model";
 
-class User{
-    id: number;
-    firstName: string;
-    lastName: string;
-    email: string;
-    password: string;
-    token: string;
-    tokenExpiration: Date;
-    phone: string;
-    avatar: string;
-    address: string;
-    postalCode: string;
-    userType: UserType;
-    createdAt: Date;
-    updatedAt: Date;
+class User implements Model{
+    id: number|undefined;
+    firstName: string|undefined;
+    lastName: string|undefined;
+    email: string|undefined;
+    password: string|undefined;
+    token: string|undefined;
+    tokenExpiration: Date|undefined;
+    phone: string|undefined;
+    avatar: string|undefined;
+    address: string|undefined;
+    postalCode: string|undefined;
+    userType: UserType|undefined;
+    createdAt: Date|undefined;
+    updatedAt: Date|undefined;
+
+    getProperties(): string[] {
+        return ['id', 'firstName', 'lastName', 'email', 'password', 'token', 'tokenExpiration', 'phone', 'avatar', 'address', 'postalCode', 'userType', 'createdAt', 'updatedAt'];
+    }
 
     get fullName(): string {
         return `${this.firstName} ${this.lastName}`
     }
 
     get remainingSessionSeconds(): number{
-        return (this.tokenExpiration.getTime() - new Date().getTime()) / 1000
-    }
-
-    constructor(id: number, firstName: string, lastName: string, email: string, password: string, token: string, tokenExpiration: Date, phone: string, avatar: string, address: string, postalCode: string, userType: UserType, createdAt: Date, updatedAt: Date) {
-        this.id = id;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.email = email;
-        this.password = password;
-        this.token = token;
-        this.tokenExpiration = tokenExpiration;
-        this.phone = phone;
-        this.avatar = avatar;
-        this.address = address;
-        this.postalCode = postalCode;
-        this.userType = userType;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
+        return this.tokenExpiration ? (this.tokenExpiration.getTime() - new Date().getTime()) / 1000 : 0
     }
 }
 

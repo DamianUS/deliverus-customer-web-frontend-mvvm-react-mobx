@@ -1,0 +1,26 @@
+[
+  {
+    "id": 1,
+    "firstName": "Customer 1",
+    "lastName": "Fake 1",
+    "email": "customer1@customer.com",
+    "password": "secret",
+    "phone": "+3466677888",
+    "address": "Fake street 123",
+    "postalCode": "41010",
+    "userType": "customer",
+    "avatar": "/maleavatar.png"
+  },
+  {
+    "id": 2,
+    "firstName": "Restaurant Owner 1",
+    "lastName": "Fake 1",
+    "email": "owner1@owner.com",
+    "password": "secret",
+    "phone": "+3466677888",
+    "address": "Fake street 123",
+    "postalCode": "41001",
+    "userType": "owner",
+    "avatar": "/femaleavatar.png"
+  }
+]
