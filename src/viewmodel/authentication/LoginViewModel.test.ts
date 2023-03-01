@@ -46,7 +46,7 @@ test('LoginViewModel gets an BackendService error or Authorization error with wr
     expect(viewModel.loginError === undefined).toEqual(mock_disabled);
 });
 
-test('LoginViewModel gets an BackendService error or an authorized User error with good credentials', async () => {
+test('LoginViewModel gets a BackendService error or an authorized User with good credentials', async () => {
     const viewModel = new LoginViewModel();
     await viewModel.login("customer1@customer.com", "secret");
     expect(viewModel.globalState.backendError === undefined).toEqual(!mock_disabled);
@@ -54,4 +54,14 @@ test('LoginViewModel gets an BackendService error or an authorized User error wi
         && viewModel.loggedInUser.token === "mockToken"
         && viewModel.loggedInUser.tokenExpiration instanceof Date
         && viewModel.loggedInUser.tokenExpiration > new Date()).toEqual(!mock_disabled);
+});
+
+test('LoginViewModel gets a BackendService error or the global state gets an authorized User with good credentials', async () => {
+    const viewModel = new LoginViewModel();
+    await viewModel.login("customer1@customer.com", "secret");
+    expect(viewModel.globalState.backendError === undefined).toEqual(!mock_disabled);
+    expect(viewModel.globalState.loggedInUser instanceof User
+        && viewModel.globalState.loggedInUser.token === "mockToken"
+        && viewModel.globalState.loggedInUser.tokenExpiration instanceof Date
+        && viewModel.globalState.loggedInUser.tokenExpiration > new Date()).toEqual(!mock_disabled);
 });

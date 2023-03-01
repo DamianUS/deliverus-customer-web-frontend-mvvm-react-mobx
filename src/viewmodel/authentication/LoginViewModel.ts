@@ -27,6 +27,7 @@ class LoginViewModel{
     async login(email:string, password:string) {
         try{
             this.loggedInUser = await this.authenticationRepository.login(email,password);
+            this.globalState.loggedInUser = this.loggedInUser
         }
         catch(error){
             if(error instanceof BackendServiceError){

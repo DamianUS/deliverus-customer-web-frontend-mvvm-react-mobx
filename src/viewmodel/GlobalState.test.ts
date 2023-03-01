@@ -5,7 +5,12 @@ test('Initial globalState loading is false', () => {
     expect(globalState.loading).toBeFalsy();
 });
 
-test('IndexRestaurantViewModel initial backendError is false', () => {
+test('the backendError is initially undefined in GlobalState', () => {
     const globalState = new GlobalState();
     expect(globalState.backendError).toBeUndefined();
+});
+
+test('The logged in user is initially undefined in GlobalState', () => {
+    const globalState = new GlobalState();
+    expect(globalState.loggedInUser).toBeUndefined();
 });
