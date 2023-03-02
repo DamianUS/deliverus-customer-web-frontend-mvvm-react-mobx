@@ -6,8 +6,12 @@ import {Form, Modal, Input, Button, Checkbox, Typography, Col} from "antd";
 import {convertFromValidationErrorToAntDFormFields} from "../../../validation/ConversorToAntDFormFields";
 const {Text} = Typography;
 
+type Props = {
+    visible: boolean;
+    onClose: any;
+}
 
-const LoginModal = observer(() => {
+const LoginModal = observer((props:Props) => {
 
     const [viewModel] = React.useState(inversifyContainer.get<LoginViewModel>("LoginViewModel"))
     const [form] = Form.useForm();
@@ -32,32 +36,27 @@ const LoginModal = observer(() => {
 
     return (
         <Modal
-            open={true}
+            open={props.visible}
             title="Login"
             footer={[]}
+            onCancel={props.onClose}
         >
             <Form
+                layout="vertical"
                 form={form}
-                name="basic"
-                labelCol={{ span: 8 }}
-                wrapperCol={{ span: 16 }}
-                style={{ maxWidth: 600 }}
                 initialValues={viewModel.initialValues}
                 onFinish={loginFormSubmit}
                 autoComplete="off"
             >
-                <Form.Item
-                    label="Email"
-                    name="email"
-                >
-                    <Input />
+                <Form.Item label="Email" name="email">
+                    <Input size="large" />
                 </Form.Item>
 
                 <Form.Item
                     label="Password"
                     name="password"
                 >
-                    <Input.Password />
+                    <Input.Password size="large" />
                 </Form.Item>
 
                 <Form.Item name="remember" valuePropName="checked" wrapperCol={{ offset: 8, span: 16 }}>
@@ -70,8 +69,8 @@ const LoginModal = observer(() => {
 
 
 
-                <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
-                    <Button type="primary" htmlType="submit">
+                <Form.Item>
+                    <Button type="primary" size="large" htmlType="submit">
                         Submit
                     </Button>
                 </Form.Item>

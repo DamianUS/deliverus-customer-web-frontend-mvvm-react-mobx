@@ -1,8 +1,6 @@
 import React, {ReactNode} from "react";
 import TopBarTemplate from "./TopBarTemplate";
 import {Button} from "antd";
-import {LoginOutlined} from "@ant-design/icons";
-import LoginViewModel from "../../../../viewmodel/authentication/LoginViewModel";
 import LoginModal from "../organisms/auth/LoginModal";
 
 type Props = {
@@ -12,12 +10,16 @@ function GuestTopBarComponent () {
 
     const [showModal, setShowModal] = React.useState(false)
 
+    const toggleModalVisibility = () => {
+        setShowModal(!showModal);
+    }
+
     return (
         <>
-            <LoginModal></LoginModal>
+            <LoginModal visible={showModal} onClose={toggleModalVisibility}></LoginModal>
             <TopBarTemplate>
                 <div className="flex justify-end pt-3">
-                    <Button type="primary" size="large">Sign in</Button>
+                    <Button type="primary" size="large" onClick={toggleModalVisibility}>Sign in</Button>
                 </div>
             </TopBarTemplate>
         </>
