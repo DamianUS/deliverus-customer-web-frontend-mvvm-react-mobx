@@ -5,6 +5,8 @@ import React from "react";
 import reportWebVitals from "../react/reportWebVitals";
 import '../react/index.css';
 import AppRoutes from "../react/routes/AppRoutes";
+import { Button, ConfigProvider, theme } from 'antd';
+
 @injectable()
 export default class ReactEngineService implements ViewEngineService {
 
@@ -15,7 +17,9 @@ export default class ReactEngineService implements ViewEngineService {
         );
         root.render(
             <React.StrictMode>
-                <AppRoutes />
+                <ConfigProvider theme={{algorithm: theme.darkAlgorithm}}>
+                    <AppRoutes />
+                </ConfigProvider>
             </React.StrictMode>
         );
 

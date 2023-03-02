@@ -1,5 +1,5 @@
 import { observer } from "mobx-react-lite"
-import { Layout, Space, Spin, Typography } from 'antd';
+import {Alert, Layout, Space, Spin, Typography} from 'antd';
 import React, {ReactNode} from "react";
 import GuestTopBarComponent from "../components/molecules/GuestTopBarComponent";
 import inversifyContainer from "../../../config/inversify.config";
@@ -15,19 +15,27 @@ type Props = {
 
 const BaseLayout = observer((props: Props) => {
     const [globalState] = React.useState(inversifyContainer.get<GlobalState>("GlobalState"))
+
     return (
         <Layout>
             <Header style={{ position: 'sticky', top: 0, zIndex: 1, width: '100%' }}>
                 {props.topBar ?? <GuestTopBarComponent></GuestTopBarComponent>}
             </Header>
             <Content>
+                <div className="dark:bg-slate-800 p-10" style={{minHeight: "90vh"}}>
                 {globalState.loading && <Space size="middle"><Spin size="large" /></Space>}
                 {globalState.backendError ?
-                    <Text>Errror</Text>
+                    <Alert
+                        message="Something wrong happened."
+                        description="Please, contact with the system administrator."
+                        type="error"
+                        showIcon
+                        closable
+                    />
                     :
                     props.children ?? 'Default content'
                 }
-
+                </div>
             </Content>
             <Footer>{props.footer ?? 'Default footer'}</Footer>
         </Layout>

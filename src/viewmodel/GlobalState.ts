@@ -9,7 +9,16 @@ import User from "../model/user/User";
 @injectable()
 class GlobalState{
     loading:boolean;
-    backendError!:BackendServiceError;
+    _backendError:BackendServiceError|undefined;
+    get backendError():BackendServiceError|undefined{
+        return this._backendError;
+    }
+    set backendError(backendServiceError: BackendServiceError|undefined){
+        this._backendError = backendServiceError;
+        setTimeout( (globalState:GlobalState) => {
+            globalState._backendError = undefined;
+        }, 3000, this);
+    }
     loggedInUser:User|undefined;
 
     constructor() {

@@ -13,12 +13,9 @@ type Props = {
 
 const RestaurantCard = (props:Props):JSX.Element => {
     return (
-        <Card
+        <Card bordered={false}
             cover={
-                <img
-                    alt="Restaurant logo"
-                    src={props.restaurant.logo ?? "/restaurants/defaultLogo.jpeg"}
-                />
+                <img alt="Restaurant logo" src={props.restaurant.logo ?? "/restaurants/defaultLogo.jpeg"}/>
             }
             /*actions={[
                 <SettingOutlined key="setting" />,
