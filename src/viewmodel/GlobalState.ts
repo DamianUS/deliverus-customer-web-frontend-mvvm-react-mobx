@@ -4,6 +4,7 @@ import 'reflect-metadata'
 import { makeAutoObservable } from "mobx"
 import BackendServiceError from "../model/errors/BackendServiceError";
 import User from "../model/user/User";
+import config from "../config/config";
 
 
 @injectable()
@@ -20,8 +21,11 @@ class GlobalState{
         }, 3000, this);
     }
     loggedInUser:User|undefined;
+    enabledFrontEndValidation:boolean;
+
 
     constructor() {
+        this.enabledFrontEndValidation = config.frontend_validation_enabled;
         this.loading = false;
         makeAutoObservable(this)
     }
