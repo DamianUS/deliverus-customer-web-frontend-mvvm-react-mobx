@@ -1,9 +1,10 @@
 import { observer } from "mobx-react-lite"
 import {Alert, Layout, Space, Spin, Typography} from 'antd';
 import React, {ReactNode} from "react";
-import GuestTopBarComponent from "../components/molecules/GuestTopBarComponent";
+import GuestTopBar from "../components/molecules/GuestTopBar";
 import inversifyContainer from "../../../config/inversify.config";
 import GlobalState from "../../../viewmodel/GlobalState";
+import LoggedInTopBar from "../components/molecules/LoggedInTopBar";
 const { Header, Content, Footer } = Layout;
 const { Text } = Typography;
 
@@ -19,7 +20,7 @@ const BaseLayout = observer((props: Props) => {
     return (
         <Layout>
             <Header style={{ position: 'sticky', top: 0, zIndex: 1, width: '100%' }}>
-                {props.topBar ?? <GuestTopBarComponent></GuestTopBarComponent>}
+                {props.topBar ?? (globalState.loggedInUser ? <LoggedInTopBar/> : <GuestTopBar/>)}
             </Header>
             <Content>
                 <div className="dark:bg-slate-800 p-10" style={{minHeight: "90vh"}}>

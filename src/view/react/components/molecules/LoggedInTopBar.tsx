@@ -1,22 +1,21 @@
 import React, {ReactNode} from "react";
 import TopBarTemplate from "./TopBarTemplate";
-import {Button} from "antd";
-import LoginModal from "../organisms/auth/LoginModal";
+import {Avatar, Button} from "antd";
+import inversifyContainer from "../../../../config/inversify.config";
+import GlobalState from "../../../../viewmodel/GlobalState";
+import {observer} from "mobx-react-lite";
+import {UserOutlined} from "@ant-design/icons";
 
-type Props = {
-    children: ReactNode|undefined
-}
-function LoggedInTopBar () {
-
+const LoggedInTopBar = observer(() => {
+    const [globalState] = React.useState(inversifyContainer.get<GlobalState>("GlobalState"))
     return (
         <>
             <TopBarTemplate>
                 <div className="flex justify-end pt-3">
-                    <Button type="primary" size="large" onClick={toggleModalVisibility}>Sign in</Button>
+                    <Avatar size="large" icon={<UserOutlined />} />
                 </div>
             </TopBarTemplate>
         </>
     )
-}
-
+});
 export default LoggedInTopBar

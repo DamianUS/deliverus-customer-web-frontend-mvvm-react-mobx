@@ -11,11 +11,25 @@ import { cloneDeep } from "lodash";
 const generateToken = () => {
     return "mockToken"
 }
+
+const refreshToken = (user: User):void => {
+    user.token = generateToken()
+    user.tokenExpiration = new Date(new Date().getTime() + 30*60000);
+}
+
 @injectable()
 class MockAuthenticationRepository implements AuthenticationRepository{
     private userRepository:UserRepository;
     constructor() {
         this.userRepository = inversifyContainer.get<UserRepository>("UserRepository");
+    }
+    @disableable()
+    async loginByToken(token: string): Promise<User | undefined> {
+        let user = await this.userRepository.getByToken(token);
+        if(user){
+            refreshToken(user);
+        }
+        return user;
     }
 
     @disableable()
@@ -23,8 +37,7 @@ class MockAuthenticationRepository implements AuthenticationRepository{
         const loggedInUser = await this.userRepository.getByEmailAndPassword(email, password)
         if(!loggedInUser)
             throw new UnauthorizedError()
-        loggedInUser.token = generateToken()
-        loggedInUser.tokenExpiration = new Date(new Date().getTime() + 30*60000);
+        refreshToken(loggedInUser);
         const user = await this.userRepository.save(loggedInUser);
         return user;
     }

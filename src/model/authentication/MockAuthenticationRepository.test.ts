@@ -4,6 +4,7 @@ import MockAuthenticationRepository from "./MockAuthenticationRepository";
 import UnauthorizedError from "../errors/UnauthorizedError";
 import User from "../user/User";
 import exp from "constants";
+import MockUserRepository from "../user/mockRepository/MockUserRepository";
 
 test('login con datos erróneos devuelve BackendServiceError si está disabled o Unauthorized error en caso contrario', async () => {
     expect.assertions(1)
@@ -34,15 +35,47 @@ test('login con customer1@customer.com/secret devuelve BackendServiceError si es
 });
 
 
-test('login con datos erróneos devuelve BackendServiceError si está disabled o Unauthorized error en caso contrario', async () => {
+test('logout con devuelve usuario sin token ni expiration date', async () => {
     expect.assertions(1)
     try {
         const repository = new MockAuthenticationRepository();
         const user = await repository.login("customer1@customer.com", "secret") as User;
         const loggedOutUser = await repository.logout(user);
-        expect(loggedOutUser).toBeDefined()
+        expect(loggedOutUser && !loggedOutUser.token && !loggedOutUser.tokenExpiration).toBeTruthy();
     }
     catch(error){
         expect(config.mock_disabled && error instanceof BackendServiceError).toBeTruthy();
     }
 });
+
+
+test('login con token customer3token devuelve undefined', async () => {
+    expect.assertions(1)
+    try {
+        const repository = new MockAuthenticationRepository();
+        const user = await repository.loginByToken("customer3token");
+        expect(user).toBeUndefined();
+    }
+    catch(error){
+        expect(config.mock_disabled && error instanceof BackendServiceError).toBeTruthy();
+    }
+});
+
+test('login con token customer2token devuelve user con fecha de expiración actualizada', async () => {
+    expect.assertions(1)
+    try {
+        const repository = new MockAuthenticationRepository();
+        const userRepository = new MockUserRepository();
+        const user = await userRepository.getById(3);
+        const userRefreshed = await repository.loginByToken("customer2token");
+        expect(userRefreshed instanceof User
+            && user instanceof User
+            && userRefreshed.token
+            && userRefreshed.tokenExpiration
+            && userRefreshed.tokenExpiration !== user.tokenExpiration).toBeTruthy();
+    }
+    catch(error){
+        expect(config.mock_disabled && error instanceof BackendServiceError).toBeTruthy();
+    }
+});
+

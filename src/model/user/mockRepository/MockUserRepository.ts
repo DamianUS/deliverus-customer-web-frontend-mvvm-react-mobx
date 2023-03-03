@@ -6,6 +6,8 @@ import MockUserConversor, {MockUserObject} from "./MockUserConversor";
 import BaseMockRepository from "../../mocks/BaseMockRepository";
 import UserRepository from "../interfaces/UserRepository";
 import disableable from "../../mocks/decorators/Disableable";
+import { cloneDeep } from "lodash";
+
 @injectable()
 class MockUserRepository extends BaseMockRepository<User> implements UserRepository{
     private conversor:MockUserConversor;
@@ -19,7 +21,18 @@ class MockUserRepository extends BaseMockRepository<User> implements UserReposit
     @disableable()
     async getByEmailAndPassword(email: string, password: string): Promise<User | undefined> {
         const users = await this.getAll()
-        return users.find(user => user.email === email && user.password === password);
+        const foundUser = users.find(user => user.email === email && user.password === password);
+        if(!foundUser)
+            return undefined
+        return cloneDeep(foundUser);
+    }
+    @disableable()
+    async getByToken(token: string): Promise<User | undefined> {
+        const users = await this.getAll()
+        const foundUser = users.find(user => user.token === token && user.tokenExpiration && user.tokenExpiration > new Date());
+        if(!foundUser)
+            return undefined
+        return cloneDeep(foundUser);
     }
 
 

@@ -12,16 +12,19 @@ import ValidationError from "../../model/errors/ValidationError";
 import { object, string, number, date, InferType} from 'yup';
 import * as yup from 'yup';
 import React from "react";
+import TokenStorer from "../../view/services/interfaces/TokenStorer";
 
 
 @injectable()
 class LogoutViewModel{
     authenticationRepository: AuthenticationRepository;
     globalState: GlobalState;
+    tokenStorer: TokenStorer;
 
     constructor() {
         this.authenticationRepository = inversifyContainer.get<AuthenticationRepository>("AuthenticationRepository");
-        this.globalState = inversifyContainer.get<GlobalState>("GlobalState")
+        this.globalState = inversifyContainer.get<GlobalState>("GlobalState");
+        this.tokenStorer = inversifyContainer.get<TokenStorer>("TokenStorer");
         makeAutoObservable(this)
     }
     @loadingToggler()
@@ -30,6 +33,7 @@ class LogoutViewModel{
             try{
                 await this.authenticationRepository.logout(this.globalState.loggedInUser);
                 this.globalState.loggedInUser = undefined;
+                this.tokenStorer.clear();
             }
             catch(error){
                 if(error instanceof BackendServiceError){
@@ -37,7 +41,6 @@ class LogoutViewModel{
                 }
             }
         }
-
     }
 }
 

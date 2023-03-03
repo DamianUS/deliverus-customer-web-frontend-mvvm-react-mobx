@@ -59,6 +59,7 @@ class MockUserConversor extends BaseConversor<User>{
         return {
             createdAt:{"createdAt": convertToDate},
             updatedAt:{"updatedAt": convertToDate},
+            tokenExpiration:{"tokenExpiration": convertToDate},
             userType:{"userType": (sourceTypeName:string) => {
                 if(sourceTypeName == "customer"){
                     return UserType.customer

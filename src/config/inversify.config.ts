@@ -1,6 +1,6 @@
 import 'reflect-metadata'
 import {Container} from 'inversify'
-import ViewEngineService from '../view/services/interfaces/ViewEngineService'
+import ViewEngine from '../view/services/interfaces/ViewEngine'
 import ReactEngineService from "../view/services/ReactEngineService";
 import Repository from "../model/interfaces/Repository";
 import Restaurant from "../model/restaurant/Restaurant";
@@ -14,10 +14,10 @@ import RestaurantRepository from "../model/restaurant/interfaces/RestaurantRepos
 import UserRepository from "../model/user/interfaces/UserRepository";
 import AuthenticationRepository from "../model/authentication/interfaces/AuthenticationRepository";
 import MockAuthenticationRepository from "../model/authentication/MockAuthenticationRepository";
+import TokenStorer from "../view/services/interfaces/TokenStorer";
+import BrowserLocalStorageStorer from "../view/services/BrowserLocalStorageStorer";
 
 const inversifyContainer = new Container()
-//Global configurations
-inversifyContainer.bind<ViewEngineService>('ViewEngineService').to(ReactEngineService)
 inversifyContainer.bind<GlobalState>('GlobalState').to(GlobalState).inSingletonScope()
 
 //Repositories
@@ -28,5 +28,9 @@ inversifyContainer.bind<AuthenticationRepository>('AuthenticationRepository').to
 //ViewModels
 inversifyContainer.bind<IndexRestaurantsViewModel>('IndexRestaurantsViewModel').to(IndexRestaurantsViewModel).inSingletonScope()
 inversifyContainer.bind<LoginViewModel>('LoginViewModel').to(LoginViewModel).inSingletonScope()
+
+//View
+inversifyContainer.bind<ViewEngine>('ViewEngineService').to(ReactEngineService)
+inversifyContainer.bind<TokenStorer>('TokenStorer').to(BrowserLocalStorageStorer)
 
 export default inversifyContainer

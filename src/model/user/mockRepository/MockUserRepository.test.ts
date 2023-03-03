@@ -343,3 +343,43 @@ test('findByEmail and password encuentra el user id 1 con customer1@customer.com
         expect(config.mock_disabled && error instanceof BackendServiceError).toBeTruthy();
     }
 });
+
+test('findByToken no encuentra a nadie con faketoken', async () => {
+    expect.assertions(1)
+    try {
+        const repository = new MockUserRepository();
+        // eslint-disable-next-line testing-library/no-await-sync-query
+        const user = await repository.getByToken("faketoken");
+        expect(user).toBeUndefined()
+    }
+    catch(error){
+        expect(config.mock_disabled && error instanceof BackendServiceError).toBeTruthy();
+    }
+});
+
+test('findByToken no encuentra al usuario con id 4 con customer3token (expirado)', async () => {
+    expect.assertions(1)
+    try {
+        const repository = new MockUserRepository();
+        // eslint-disable-next-line testing-library/no-await-sync-query
+        const user = await repository.getByToken("customer3token");
+        expect(user).toBeUndefined()
+    }
+    catch(error){
+        expect(config.mock_disabled && error instanceof BackendServiceError).toBeTruthy();
+    }
+});
+
+
+test('findByToken and password encuentra el user id 3 con customer2token', async () => {
+    expect.assertions(1)
+    try {
+        const repository = new MockUserRepository();
+        // eslint-disable-next-line testing-library/no-await-sync-query
+        const user = await repository.getByToken("customer2token");
+        expect(user instanceof User && user.id === 3).toBeTruthy()
+    }
+    catch(error){
+        expect(config.mock_disabled && error instanceof BackendServiceError).toBeTruthy();
+    }
+});

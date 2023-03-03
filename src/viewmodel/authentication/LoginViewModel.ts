@@ -12,6 +12,7 @@ import ValidationError from "../../model/errors/ValidationError";
 import { object, string, number, date, InferType} from 'yup';
 import * as yup from 'yup';
 import React from "react";
+import TokenStorer from "../../view/services/interfaces/TokenStorer";
 
 
 @injectable()
@@ -19,6 +20,7 @@ class LoginViewModel{
     initialValues: object;
     authenticationRepository: AuthenticationRepository;
     globalState: GlobalState;
+    tokenStorer: TokenStorer;
     loginError: UnauthorizedError|undefined;
     loggedInUser: User|undefined;
     loginValidationError: ValidationError|undefined;
@@ -36,7 +38,8 @@ class LoginViewModel{
     constructor() {
         this.initialValues = { email: '', password: '', remember: true }
         this.authenticationRepository = inversifyContainer.get<AuthenticationRepository>("AuthenticationRepository");
-        this.globalState = inversifyContainer.get<GlobalState>("GlobalState")
+        this.globalState = inversifyContainer.get<GlobalState>("GlobalState");
+        this.tokenStorer = inversifyContainer.get<TokenStorer>("TokenStorer");
         makeAutoObservable(this)
     }
     @loadingToggler()
@@ -49,6 +52,7 @@ class LoginViewModel{
             }
             this.loggedInUser = await this.authenticationRepository.login(email,password);
             this.globalState.loggedInUser = this.loggedInUser
+            this.tokenStorer.store(this.loggedInUser as User);
         }
         catch(error){
             if(error instanceof yup.ValidationError){

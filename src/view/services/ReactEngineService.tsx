@@ -1,5 +1,5 @@
 import { injectable } from 'inversify'
-import ViewEngineService from "./interfaces/ViewEngineService";
+import ViewEngine from "./interfaces/ViewEngine";
 import ReactDOM from "react-dom/client";
 import React from "react";
 import reportWebVitals from "../react/reportWebVitals";
@@ -8,7 +8,7 @@ import AppRoutes from "../react/routes/AppRoutes";
 import { Button, ConfigProvider, theme } from 'antd';
 
 @injectable()
-export default class ReactEngineService implements ViewEngineService {
+export default class ReactEngineService implements ViewEngine {
 
     initialize(): void {
 
