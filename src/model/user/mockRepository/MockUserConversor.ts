@@ -44,10 +44,10 @@ class MockUserConversor extends BaseConversor<User>{
             createdAt:{"createdAt": convertDateToString},
             updatedAt:{"updatedAt": convertDateToString},
             userType:{"userType": (userTypeEnumerate:UserType) => {
-                    if(userTypeEnumerate === UserType.Customer){
+                    if(userTypeEnumerate === UserType.customer){
                         return "customer"
                     }
-                    else if(userTypeEnumerate === UserType.Owner){
+                    else if(userTypeEnumerate === UserType.owner){
                         return "owner"
                     }
                     return undefined
@@ -59,12 +59,12 @@ class MockUserConversor extends BaseConversor<User>{
         return {
             createdAt:{"createdAt": convertToDate},
             updatedAt:{"updatedAt": convertToDate},
-            userType:{"userType": (sourceObject:MockUserObject) => {
-                if(sourceObject.userType == "customer"){
-                    return UserType.Customer
+            userType:{"userType": (sourceTypeName:string) => {
+                if(sourceTypeName == "customer"){
+                    return UserType.customer
                 }
-                else if(sourceObject.userType == "owner"){
-                    return UserType.Owner
+                else if(sourceTypeName == "owner"){
+                    return UserType.owner
                 }
                 return undefined
             }}

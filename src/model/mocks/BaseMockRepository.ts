@@ -2,6 +2,8 @@ import Repository from "../interfaces/Repository";
 import Model from "../interfaces/Model";
 import disableable from "./decorators/Disableable";
 import {injectable} from "inversify";
+import { cloneDeep } from "lodash";
+
 // @ts-ignore
 @injectable()
 abstract class BaseMockRepository<T extends Model> implements Repository<T>{
@@ -19,7 +21,9 @@ abstract class BaseMockRepository<T extends Model> implements Repository<T>{
     async getById(id: number): Promise<T | undefined> {
         const entities = await this.getAll()
         // @ts-ignore
-        return entities.find(entity => entity.id === id);
+        let foundEntity = entities.find(entity => entity.id === id);
+        const clonedEntity = cloneDeep(foundEntity);
+        return clonedEntity
     }
     @disableable()
     async removeById(id: number): Promise<number> {
@@ -42,22 +46,24 @@ abstract class BaseMockRepository<T extends Model> implements Repository<T>{
         const entities = await this.getAll()
         const ids:number[] = entities.map(entity => entity.id as number);
         const lastId = Math.max(...ids);
-        entity.id = lastId+1;
-        entity.createdAt = new Date()
-        entity.updatedAt = new Date()
-        this.entities.push(entity);
-        return entity
+        const clonedEntity = cloneDeep(entity)
+        clonedEntity.id = lastId+1;
+        clonedEntity.createdAt = new Date();
+        clonedEntity.updatedAt = new Date();
+        this.entities.push(clonedEntity);
+        return clonedEntity;
     }
     @disableable()
     private async update(entity: T): Promise<T> {
         const entities = await this.getAll();
         const oldEntityIndex = entities.findIndex(storedEntity => storedEntity.id === entity.id)
         if (oldEntityIndex === -1) {
-            throw new Error("the entity does not exist")
+            throw new Error("the entity does not exist");
         }
-        entity.updatedAt = new Date()
-        this.entities[oldEntityIndex] = entity
-        return entity
+        const clonedEntity = cloneDeep(entity);
+        clonedEntity.updatedAt = new Date();
+        this.entities[oldEntityIndex] = clonedEntity;
+        return clonedEntity;
     }
 }
 

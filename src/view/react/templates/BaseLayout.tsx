@@ -24,15 +24,17 @@ const BaseLayout = observer((props: Props) => {
             <Content>
                 <div className="dark:bg-slate-800 p-10" style={{minHeight: "90vh"}}>
                 {globalState.loading && <Space size="middle"><Spin size="large" /></Space>}
-                {globalState.backendError ?
+                {globalState.backendError &&
                     <Alert
+                        className="mb-10"
                         message="Something wrong happened."
                         description="Please, contact with the system administrator."
                         type="error"
                         showIcon
                         closable
                     />
-                    :
+                }
+                {
                     props.children ?? 'Default content'
                 }
                 </div>

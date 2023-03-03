@@ -1,6 +1,6 @@
 enum UserType {
-    Customer = "customer",
-    Owner = "owner"
+    customer = "customer",
+    owner = "owner"
 }
 
 export default UserType;

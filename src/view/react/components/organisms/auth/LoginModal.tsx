@@ -38,8 +38,10 @@ const LoginModal = observer((props:Props) => {
         <Modal
             open={props.visible}
             title="Login"
-            footer={[]}
             onCancel={props.onClose}
+            okText="Login"
+            cancelText="Cancel"
+            onOk={form.submit}
         >
             <Form
                 layout="vertical"
@@ -59,21 +61,13 @@ const LoginModal = observer((props:Props) => {
                     <Input.Password size="large" />
                 </Form.Item>
 
-                <Form.Item name="remember" valuePropName="checked" wrapperCol={{ offset: 8, span: 16 }}>
+                <Form.Item name="remember" valuePropName="checked">
                     <Checkbox>Remember me</Checkbox>
                 </Form.Item>
 
                 <Col offset={8} span={16}>
                     {viewModel.loginError && <div className="mb-10"><Text type="danger">Wrong credentials</Text></div>}
                 </Col>
-
-
-
-                <Form.Item>
-                    <Button type="primary" size="large" htmlType="submit">
-                        Submit
-                    </Button>
-                </Form.Item>
             </Form>
         </Modal>
 

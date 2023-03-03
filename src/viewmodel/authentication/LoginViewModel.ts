@@ -37,7 +37,6 @@ class LoginViewModel{
         this.initialValues = { email: '', password: '', remember: true }
         this.authenticationRepository = inversifyContainer.get<AuthenticationRepository>("AuthenticationRepository");
         this.globalState = inversifyContainer.get<GlobalState>("GlobalState")
-        this.validationEnabled = true;
         makeAutoObservable(this)
     }
     @loadingToggler()

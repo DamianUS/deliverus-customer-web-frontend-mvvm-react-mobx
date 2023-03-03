@@ -18,17 +18,17 @@ const RestaurantList = observer(() => {
 
     return (
         <BaseLayout>
-                {viewModel.restaurants && viewModel.restaurants.length > 0
-                    ?
-                    <div className="grid gap-y-10 grid-cols-1 md:grid-cols-2 lg:grid-cols-4 2xl:grid-cols-6 md:gap-x-4 lg:gap-x-6">
-                        {viewModel.restaurants.map(restaurant => {
-                            return <RestaurantCard restaurant={restaurant}></RestaurantCard>
-                        })}
-                    </div>
-                    :
-                    <span>No restaurants yet</span>
-                }
 
+                    <div className="grid gap-y-10 grid-cols-1 md:grid-cols-2 lg:grid-cols-4 2xl:grid-cols-6 md:gap-x-4 lg:gap-x-6">
+                        {
+                            viewModel.restaurants && viewModel.restaurants.length > 0 ?
+                            viewModel.restaurants?.map(restaurant => {
+                            return <RestaurantCard restaurant={restaurant}></RestaurantCard>
+                        })
+                                // @ts-ignore
+                                : [...Array(12).keys()].map(_ => <RestaurantCard/>)
+                        }
+                    </div>
 
         </BaseLayout>
   );

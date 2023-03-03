@@ -12,13 +12,12 @@ import loadingToggler from "../decorators/LoadingToggler";
 @injectable()
 class IndexRestaurantsViewModel{
     restaurantRepository: RestaurantRepository;
-    restaurants: Restaurant[];
+    restaurants: Restaurant[]|undefined;
     globalState: GlobalState;
 
     constructor() {
         this.restaurantRepository = inversifyContainer.get<RestaurantRepository>("RestaurantRepository");
         this.globalState = inversifyContainer.get<GlobalState>("GlobalState")
-        this.restaurants = [];
         makeAutoObservable(this)
     }
 

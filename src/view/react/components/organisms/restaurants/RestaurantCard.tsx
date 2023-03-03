@@ -7,33 +7,28 @@ const {Text,Paragraph} = Typography;
 
 
 type Props = {
-    restaurant: Restaurant,
+    restaurant?: Restaurant|undefined,
     onClick?: () => void,
 }
 
-const RestaurantCard = (props:Props):JSX.Element => {
+const RestaurantCard = (props?:Props):JSX.Element => {
     return (
-        <Card bordered={false}
+        <Card bordered={false} loading={props === undefined || props.restaurant === undefined}
             cover={
-                <img alt="Restaurant logo" src={props.restaurant.logo ?? "/restaurants/defaultLogo.jpeg"}/>
+                <img alt="Restaurant logo" src={props?.restaurant?.logo ?? "/restaurants/defaultLogo.jpeg"}/>
             }
-            /*actions={[
-                <SettingOutlined key="setting" />,
-                <EditOutlined key="edit" />,
-                <EllipsisOutlined key="ellipsis" />,
-            ]}*/
         >
             <Meta
-                title={props.restaurant.name}
+                title={props?.restaurant?.name}
                 description={
                 <>
-                    <Paragraph style={{height:50}} ellipsis={{rows:2}}>{props.restaurant.description}</Paragraph>
+                    <Paragraph style={{height:50}} ellipsis={{rows:2}}>{props?.restaurant?.description}</Paragraph>
                     <Divider/>
                     <Row>
                         <Col span={12}>
                             <Space>
                                 <FieldTimeOutlined />
-                                <Text style={{alignSelf: 'self-end'}}>{props.restaurant.averageServiceMinutes ?? '30-60'} mins.</Text>
+                                <Text style={{alignSelf: 'self-end'}}>{props?.restaurant?.averageServiceMinutes ?? '30-60'} mins.</Text>
                             </Space>
                         </Col>
                         {//@ts-ignore
@@ -41,7 +36,7 @@ const RestaurantCard = (props:Props):JSX.Element => {
 
                             <Space>
                                 <DollarCircleOutlined />
-                                <Text style={{alignSelf: 'self-end'}}>{props.restaurant.shippingCosts} €</Text>
+                                <Text style={{alignSelf: 'self-end'}}>{props?.restaurant?.shippingCosts} €</Text>
                             </Space>
                         </Col>
                         }

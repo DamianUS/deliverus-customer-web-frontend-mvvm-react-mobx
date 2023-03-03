@@ -15,54 +15,59 @@ import ForbiddenError from "../../errors/ForbiddenError";
 // @ts-ignore
 
 test('getAll devuelve un array o un BackendServiceError if mocking service is disabled', async () => {
+    expect.assertions(1)
     try{
         const restaurants = await new MockRestaurantRepository().getAll()
         expect(Array.isArray(restaurants)).toBeTruthy();
     }
     catch(error){
-        expect(error instanceof BackendServiceError).toEqual(config.mock_disabled);
+        expect(config.mock_disabled && error instanceof BackendServiceError).toBeTruthy();
     }
 });
 
 test('getAll devuelve un array no vacío o un BackendServiceError if mocking service is disabled', async () => {
+    expect.assertions(1)
     try{
         const restaurants = await new MockRestaurantRepository().getAll()
         expect(restaurants.length > 0).toBeTruthy();
     }
     catch(error){
-        expect(error instanceof BackendServiceError).toEqual(config.mock_disabled);
+        expect(config.mock_disabled && error instanceof BackendServiceError).toBeTruthy();
     }
 });
 
 test('getAll devuelve un array de longitud 9', async () => {
+    expect.assertions(1)
     try{
         const restaurants = await new MockRestaurantRepository().getAll()
         expect(restaurants.length === 9).toBeTruthy();
     }
     catch(error){
-        expect(error instanceof BackendServiceError).toEqual(config.mock_disabled);
+        expect(config.mock_disabled && error instanceof BackendServiceError).toBeTruthy();
     }
 });
 
 test('getAll devuelve un array de Restaurant', async () => {
+    expect.assertions(1)
     try{
         const restaurants = await new MockRestaurantRepository().getAll()
         const areAllRestaurants = restaurants.map(restaurant => restaurant instanceof Restaurant).reduce((areAllRestaurants, isRestaurant) =>  areAllRestaurants && isRestaurant, true)
         expect(areAllRestaurants).toBeTruthy();
     }
     catch(error){
-        expect(error instanceof BackendServiceError).toEqual(config.mock_disabled);
+        expect(config.mock_disabled && error instanceof BackendServiceError).toBeTruthy();
     }
 });
 
 test('getAll devuelve un array de Restaurant que tienen restaurantCategories', async () => {
+    expect.assertions(1)
     try {
         const restaurants = await new MockRestaurantRepository().getAll()
         const areAllRestaurantCategories = restaurants.map(restaurant => restaurant.category instanceof RestaurantCategory).reduce((areAllRestaurantCategories, isRestaurantCategory) => areAllRestaurantCategories && isRestaurantCategory, true)
         expect(areAllRestaurantCategories).toBeTruthy();
     }
     catch(error){
-        expect(error instanceof BackendServiceError).toEqual(config.mock_disabled);
+        expect(config.mock_disabled && error instanceof BackendServiceError).toBeTruthy();
     }
 });
 
@@ -73,6 +78,7 @@ const restaurantDatesAreDateIfPresent = (restaurant:Restaurant):boolean =>{
 }
 
 test('getAll devuelve un array de Restaurant que tienen createdAt y updatedAt como Date si existen', async () => {
+    expect.assertions(1)
     try{
         const restaurants = await new MockRestaurantRepository().getAll();
         const areAllDates = restaurants
@@ -81,64 +87,70 @@ test('getAll devuelve un array de Restaurant que tienen createdAt y updatedAt co
         expect(areAllDates).toBeTruthy();
     }
     catch(error){
-        expect(error instanceof BackendServiceError).toEqual(config.mock_disabled);
+        expect(config.mock_disabled && error instanceof BackendServiceError).toBeTruthy();
     }
 });
 
 test('getAll devuelve un array de Restaurant que tienen restaurantCategories y todas ellas tienen createdAt y updatedAt como Date', async () => {
+    expect.assertions(1)
     try {
         const restaurants = await new MockRestaurantRepository().getAll()
         const areAllDates = restaurants.map(restaurant => restaurant.category.createdAt instanceof Date && restaurant.category.updatedAt instanceof Date).reduce((areAllDates, areDates) => areAllDates && areDates, true)
         expect(areAllDates).toBeTruthy();
     }
     catch(error){
-        expect(error instanceof BackendServiceError).toEqual(config.mock_disabled);
+        expect(config.mock_disabled && error instanceof BackendServiceError).toBeTruthy();
     }
 });
 
 test('findById con id 2 devuelve algo definido', async () => {
+    expect.assertions(1)
     try {
         // eslint-disable-next-line testing-library/no-await-sync-query
         const restaurant = await new MockRestaurantRepository().getById(1)
         expect(restaurant).toBeDefined();
     }
     catch(error){
-        expect(error instanceof BackendServiceError).toEqual(config.mock_disabled);
+        expect(config.mock_disabled && error instanceof BackendServiceError).toBeTruthy();
     }
 });
 
 test('findById con id 10 devuelve null', async () => {
+    expect.assertions(1)
     try {
         // eslint-disable-next-line testing-library/no-await-sync-query
         const restaurant = await new MockRestaurantRepository().getById(10)
         expect(restaurant).toBeUndefined();
     }
     catch(error){
-        expect(error instanceof BackendServiceError).toEqual(config.mock_disabled);
+        expect(config.mock_disabled && error instanceof BackendServiceError).toBeTruthy();
     }
 });
 
 test('findById con id 1 devuelve algo un tipo Restaurant', async () => {
+    expect.assertions(1)
     try {
         const restaurant = await new MockRestaurantRepository().getById(1)
         expect(restaurant instanceof Restaurant).toBeTruthy();
     }
     catch(error){
-        expect(error instanceof BackendServiceError).toEqual(config.mock_disabled);
+        expect(config.mock_disabled && error instanceof BackendServiceError).toBeTruthy();
     }
 });
 
 test('findById con id 1 devuelve algo un tipo Restaurant que tiene restaurantCategory', async () => {
+    expect.assertions(1)
     try {
         const restaurant = await new MockRestaurantRepository().getById(1)
         expect(restaurant?.category instanceof RestaurantCategory).toBeTruthy();
     }
     catch(error){
-        expect(error instanceof BackendServiceError).toEqual(config.mock_disabled);
+        expect(config.mock_disabled && error instanceof BackendServiceError).toBeTruthy();
     }
 });
 
 test('findById con id 1 devuelve algo un tipo Restaurant que tiene createdAt y updatedAt como Date', async () => {
+    expect.assertions(1)
     try{
         const repository = new MockRestaurantRepository()
         // eslint-disable-next-line testing-library/no-await-sync-query
@@ -146,19 +158,20 @@ test('findById con id 1 devuelve algo un tipo Restaurant que tiene createdAt y u
         expect(restaurantDatesAreDateIfPresent(restaurant)).toBeTruthy();
     }
     catch(error){
-        expect(error instanceof BackendServiceError).toEqual(config.mock_disabled);
+        expect(config.mock_disabled && error instanceof BackendServiceError).toBeTruthy();
     }
 });
 
 
 test('findById con id 3 devuelve un tipo Restaurant con el logo undefined', async () => {
+    expect.assertions(1)
     try {
         // eslint-disable-next-line testing-library/no-await-sync-query
         const restaurant = await new MockRestaurantRepository().getById(3)
         expect(restaurant?.logo).toBeUndefined();
     }
     catch(error){
-        expect(error instanceof BackendServiceError).toEqual(config.mock_disabled);
+        expect(config.mock_disabled && error instanceof BackendServiceError).toBeTruthy();
     }
 });
 
@@ -210,6 +223,7 @@ test('save es capaz de utilizar un conversor para pasar de restaurant object a R
 });
 
 test('save es capaz de incrementar la length del array a 10', async () => {
+    expect.assertions(1)
     try {
         const repository = new MockRestaurantRepository()
         const newRestaurant = _createMockRestaurant()
@@ -218,11 +232,12 @@ test('save es capaz de incrementar la length del array a 10', async () => {
         expect(restaurants.length).toEqual(10);
     }
     catch(error){
-        expect(error instanceof BackendServiceError).toEqual(config.mock_disabled);
+        expect(config.mock_disabled && error instanceof BackendServiceError).toBeTruthy();
     }
 });
 
 test('save introduce Restaurants con id numérico', async () => {
+    expect.assertions(1)
     try{
         const repository = new MockRestaurantRepository()
         const newRestaurant = _createMockRestaurant()
@@ -231,11 +246,12 @@ test('save introduce Restaurants con id numérico', async () => {
         expect(restaurants.find(restaurant => typeof restaurant.id !== 'number')).toBeUndefined();
     }
     catch(error){
-        expect(error instanceof BackendServiceError).toEqual(config.mock_disabled);
+        expect(config.mock_disabled && error instanceof BackendServiceError).toBeTruthy();
     }
 });
 
 test('save introduce 6 elementos', async () => {
+    expect.assertions(1)
     const repository = new MockRestaurantRepository()
     // @ts-ignore
     const insertionPromises = [...Array(6).keys()].map(_ => {
@@ -248,11 +264,12 @@ test('save introduce 6 elementos', async () => {
         expect(restaurants.length).toEqual(15);
     }
     catch(error){
-        expect(error instanceof BackendServiceError).toEqual(config.mock_disabled);
+        expect(config.mock_disabled && error instanceof BackendServiceError).toBeTruthy();
     }
 });
 
 test('save modifica el restaurant 1 y le pone como nombre Mock restaurant', async () => {
+    expect.assertions(1)
     try{
         const repository = new MockRestaurantRepository()
         // eslint-disable-next-line testing-library/no-await-sync-query
@@ -266,21 +283,23 @@ test('save modifica el restaurant 1 y le pone como nombre Mock restaurant', asyn
         expect(updatedRestaurant?.name).toEqual('Mock restaurant');
     }
     catch(error){
-        expect(error instanceof BackendServiceError).toEqual(config.mock_disabled);
+        expect(config.mock_disabled && error instanceof BackendServiceError).toBeTruthy();
     }
 });
 
 test('removeById devuelve 0 si el id no existe', async () => {
+    expect.assertions(1)
     try{
         const repository = new MockRestaurantRepository();
         expect(await repository.removeById(-1)).toEqual(0);
     }
     catch(error){
-        expect(error instanceof BackendServiceError).toEqual(config.mock_disabled);
+        expect(config.mock_disabled && error instanceof BackendServiceError).toBeTruthy();
     }
 });
 
 test('removeById borra el id 1', async () => {
+    expect.assertions(1)
     const repository = new MockRestaurantRepository();
     try{
         await repository.removeById(1);
@@ -288,11 +307,12 @@ test('removeById borra el id 1', async () => {
         expect(await repository.getById(1)).toBeUndefined();
     }
     catch(error){
-        expect(error instanceof BackendServiceError).toEqual(config.mock_disabled);
+        expect(config.mock_disabled && error instanceof BackendServiceError).toBeTruthy();
     }
 });
 
 test('removeById reduce el length en 1 cuando borra', async () => {
+    expect.assertions(1)
     try {
         const repository = new MockRestaurantRepository();
         const oldRestaurants = await repository.getAll()
@@ -302,11 +322,12 @@ test('removeById reduce el length en 1 cuando borra', async () => {
         expect(restaurants.length).toEqual(oldLength - 1);
     }
     catch(error){
-        expect(error instanceof BackendServiceError).toEqual(config.mock_disabled);
+        expect(config.mock_disabled && error instanceof BackendServiceError).toBeTruthy();
     }
 });
 
 test('getOwnerRestaurants devuelve UnauthorizedError con usuario vacío', async () => {
+    expect.assertions(1)
     const repository = new MockRestaurantRepository();
     try{
         const restaurants = await repository.getOwnerRestaurants(new User());
@@ -319,6 +340,7 @@ test('getOwnerRestaurants devuelve UnauthorizedError con usuario vacío', async 
 });
 
 test('getOwnerRestaurants devuelve UnauthorizedError con usuario Owner sin logear', async () => {
+    expect.assertions(1)
     const repository = new MockRestaurantRepository();
     const userRepository = new MockUserRepository();
     try{
@@ -328,15 +350,16 @@ test('getOwnerRestaurants devuelve UnauthorizedError con usuario Owner sin logea
         // eslint-disable-next-line testing-library/no-await-sync-query
         expect(restaurants).toBeUndefined();
     }
-    catch(error){
-        expect(error instanceof BackendServiceError).toEqual(config.mock_disabled);
-        expect(error instanceof UnauthorizedError).toEqual(!config.mock_disabled);    }
+    catch(error) {
+        expect(config.mock_disabled ? error instanceof BackendServiceError : error instanceof UnauthorizedError).toBeTruthy();
+    }
 });
 
 test('getOwnerRestaurants devuelve UnauthorizedError con usuario Owner con token pero fecha expirada', async () => {
     const repository = new MockRestaurantRepository();
     const authRepository = new MockAuthenticationRepository();
     try{
+        expect.assertions(1)
         // eslint-disable-next-line testing-library/no-await-sync-query
         const user = await authRepository.login('owner1@owner.com', 'secret') as User;
         const pastDate = new Date(new Date().getTime() - 30*60000);
@@ -346,8 +369,7 @@ test('getOwnerRestaurants devuelve UnauthorizedError con usuario Owner con token
         expect(restaurants).toBeUndefined();
     }
     catch(error){
-        expect(error instanceof BackendServiceError).toEqual(config.mock_disabled);
-        expect(error instanceof UnauthorizedError).toEqual(!config.mock_disabled);
+        expect(config.mock_disabled ? error instanceof BackendServiceError : error instanceof UnauthorizedError).toBeTruthy();
     }
 });
 
@@ -355,6 +377,7 @@ test('getOwnerRestaurants devuelve Forbidden error error con usuario Customer lo
     const repository = new MockRestaurantRepository();
     const authRepository = new MockAuthenticationRepository();
     try{
+        expect.assertions(1)
         // eslint-disable-next-line testing-library/no-await-sync-query
         const user = await authRepository.login('customer1@customer.com', 'secret') as User;
         const restaurants = await repository.getOwnerRestaurants(user);
@@ -362,12 +385,12 @@ test('getOwnerRestaurants devuelve Forbidden error error con usuario Customer lo
         expect(restaurants).toBeUndefined();
     }
     catch(error){
-        expect(error instanceof BackendServiceError).toEqual(config.mock_disabled);
-        expect(error instanceof ForbiddenError).toEqual(!config.mock_disabled);
+        expect(config.mock_disabled ? error instanceof BackendServiceError : error instanceof ForbiddenError).toBeTruthy();
     }
 });
 
 test('getOwnerRestaurants devuelve una lista de Restaurant con Owner logeado o BackendServiceError', async () => {
+    expect.assertions(1)
     const repository = new MockRestaurantRepository();
     const authRepository = new MockAuthenticationRepository();
     try{
@@ -379,6 +402,6 @@ test('getOwnerRestaurants devuelve una lista de Restaurant con Owner logeado o B
         expect(areAllRestaurants).toBeTruthy();
     }
     catch(error){
-        expect(error instanceof BackendServiceError).toEqual(config.mock_disabled);
+        expect(config.mock_disabled && error instanceof BackendServiceError).toBeTruthy();
     }
 });

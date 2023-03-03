@@ -6,6 +6,7 @@ import inversifyContainer from "../../config/inversify.config";
 import User from "../user/User";
 import UnauthorizedError from "../errors/UnauthorizedError";
 import disableable from "../mocks/decorators/Disableable";
+import { cloneDeep } from "lodash";
 
 const generateToken = () => {
     return "mockToken"
@@ -24,7 +25,15 @@ class MockAuthenticationRepository implements AuthenticationRepository{
             throw new UnauthorizedError()
         loggedInUser.token = generateToken()
         loggedInUser.tokenExpiration = new Date(new Date().getTime() + 30*60000);
-        return await this.userRepository.save(loggedInUser);
+        const user = await this.userRepository.save(loggedInUser);
+        return user;
+    }
+    @disableable()
+    async logout(loggedInUser: User): Promise<User | undefined> {
+        const loggedOutUser = cloneDeep(loggedInUser);
+        loggedOutUser.token = undefined;
+        loggedOutUser.tokenExpiration = undefined;
+        return Promise.resolve(loggedOutUser);
     }
 }
 export default MockAuthenticationRepository;

@@ -10,7 +10,7 @@ test('IndexRestaurantViewModel gets a repository injected', () => {
 
 test('IndexRestaurantViewModel has an empty array of restaurants at creation', () => {
     const viewModel = new IndexRestaurantsViewModel();
-    expect(viewModel.restaurants).toEqual([]);
+    expect(viewModel.restaurants).toBeUndefined();
 });
 
 test('IndexRestaurantViewModel is not loading at creation', () => {
@@ -26,13 +26,13 @@ test('IndexRestaurantViewModel has no backend error at creation', () => {
 test('IndexRestaurantViewModel recovers an array of length > 0 when page loads', async () => {
     const viewModel = new IndexRestaurantsViewModel();
     await viewModel.initialize()
-    expect(viewModel.restaurants.length > 0 || viewModel.globalState.backendError instanceof BackendServiceError).toBeTruthy();
+    expect((viewModel.restaurants && viewModel.restaurants.length > 0) || viewModel.globalState.backendError instanceof BackendServiceError).toBeTruthy();
 });
 
 test('IndexRestaurantViewModel recovers an array of restaurants when page loads', async () => {
     const viewModel = new IndexRestaurantsViewModel();
     await viewModel.initialize()
-    const areAllRestaurants = viewModel.restaurants.map(restaurant => restaurant instanceof Restaurant).reduce((areAllRestaurants, isRestaurant) =>  areAllRestaurants && isRestaurant, true)
+    const areAllRestaurants = viewModel.restaurants?.map(restaurant => restaurant instanceof Restaurant).reduce((areAllRestaurants, isRestaurant) =>  areAllRestaurants && isRestaurant, true)
     expect(areAllRestaurants || viewModel.globalState.backendError instanceof BackendServiceError).toBeTruthy();
 });
 

@@ -5,6 +5,8 @@ import BackendServiceError from "../../errors/BackendServiceError";
 import MockUserConversor from "./MockUserConversor";
 import usersMocked from "./users.json";
 import User from "../User";
+import UserType from "../UserType";
+import exp from "constants";
 
 // @ts-ignore
 
@@ -12,54 +14,72 @@ import User from "../User";
 const conversor = new MockUserConversor()
 const collectionLength = usersMocked.length
 test('getAll devuelve un array o un BackendServiceError if mocking service is disabled', async () => {
+    expect.assertions(1);
     try{
         const entities = await new MockUserRepository().getAll()
         expect(Array.isArray(entities)).toBeTruthy();
     }
     catch(error){
-        expect(error instanceof BackendServiceError).toEqual(config.mock_disabled);
+        expect(config.mock_disabled && error instanceof BackendServiceError).toBeTruthy();
     }
 });
 
 test('getAll devuelve un array no vacío o un BackendServiceError if mocking service is disabled', async () => {
+    expect.assertions(1);
     try{
         const entities = await new MockUserRepository().getAll()
         expect(entities.length > 0).toBeTruthy();
     }
     catch(error){
-        expect(error instanceof BackendServiceError).toEqual(config.mock_disabled);
+        expect(config.mock_disabled && error instanceof BackendServiceError).toBeTruthy();
     }
 });
 
-test(`getAll devuelve un array de longitud ${collectionLength}`, async () => {
+test(`getAll devuelve un array de longitud correcta`, async () => {
+    expect.assertions(1);
     try{
         const entities = await new MockUserRepository().getAll()
         expect(entities.length === collectionLength).toBeTruthy();
     }
     catch(error){
-        expect(error instanceof BackendServiceError).toEqual(config.mock_disabled);
+        expect(config.mock_disabled && error instanceof BackendServiceError).toBeTruthy();
     }
 });
 
 test('getAll devuelve un array de User', async () => {
-    try{
+    expect.assertions(1);
+    try {
         const entities = await new MockUserRepository().getAll()
-        const areAllEntities = entities.map(restaurant => restaurant instanceof User).reduce((areAllEntities, isRestaurant) =>  areAllEntities && isRestaurant, true)
+        const areAllEntities = entities.map(entity => entity instanceof User).reduce((areAllEntities, isEntity) => areAllEntities && isEntity, true)
         expect(areAllEntities).toBeTruthy();
     }
     catch(error){
-        expect(error instanceof BackendServiceError).toEqual(config.mock_disabled);
+        expect(config.mock_disabled && error instanceof BackendServiceError).toBeTruthy();
+    }
+});
+
+test('getAll devuelve un array de User y todo con userType', async () => {
+    expect.assertions(1);
+    try{
+        const entities = await new MockUserRepository().getAll()
+        // @ts-ignore
+        const areAllEntities = entities.map(entity => entity.userType in UserType.customer).reduce((areAllEntities, isEntityAndHasType) =>  areAllEntities && isEntityAndHasType, true)
+        return expect(areAllEntities).toBeTruthy();
+    }
+    catch(error){
+        expect(error instanceof BackendServiceError).toEqual(config.mock_disabled)
     }
 });
 
 test('getAll devuelve un array que tienen id numérico', async () => {
+    expect.assertions(1)
     try {
         const entities = await new MockUserRepository().getAll()
         const allHaveNumericIds = entities.map(restaurantCategory => typeof restaurantCategory.id === 'number').reduce((areAllIdsNumeric, isNumeric) => areAllIdsNumeric && isNumeric, true)
         expect(allHaveNumericIds).toBeTruthy();
     }
     catch(error){
-        expect(error instanceof BackendServiceError).toEqual(config.mock_disabled);
+        expect(config.mock_disabled && error instanceof BackendServiceError).toBeTruthy();
     }
 });
 
@@ -70,6 +90,7 @@ const entityDatesAreDateIfPresent = (entity:User):boolean =>{
 }
 
 test('getAll devuelve un array de User que tienen createdAt y updatedAt como Date si existen', async () => {
+    expect.assertions(1)
     try{
         const entities = await new MockUserRepository().getAll();
         const areAllDates = entities
@@ -78,45 +99,61 @@ test('getAll devuelve un array de User que tienen createdAt y updatedAt como Dat
         expect(areAllDates).toBeTruthy();
     }
     catch(error){
-        expect(error instanceof BackendServiceError).toEqual(config.mock_disabled);
+        expect(config.mock_disabled && error instanceof BackendServiceError).toBeTruthy();
     }
 });
 
 test('findById con id 2 devuelve algo definido', async () => {
+    expect.assertions(1)
     try {
         // eslint-disable-next-line testing-library/no-await-sync-query
         const entity = await new MockUserRepository().getById(1)
         expect(entity).toBeDefined();
     }
     catch(error){
-        expect(error instanceof BackendServiceError).toEqual(config.mock_disabled);
+        expect(config.mock_disabled && error instanceof BackendServiceError).toBeTruthy();
     }
 });
 
 test('findById con id 10 devuelve undefined', async () => {
+    expect.assertions(1)
     try {
         // eslint-disable-next-line testing-library/no-await-sync-query
         const entity = await new MockUserRepository().getById(10)
         expect(entity).toBeUndefined();
     }
     catch(error){
-        expect(error instanceof BackendServiceError).toEqual(config.mock_disabled);
+        expect(config.mock_disabled && error instanceof BackendServiceError).toBeTruthy();
     }
 });
 
 test('findById con id 1 devuelve algo un tipo User', async () => {
+    expect.assertions(1)
     try {
         // eslint-disable-next-line testing-library/no-await-sync-query
         const entity = await new MockUserRepository().getById(1)
         expect(entity instanceof User).toBeTruthy();
     }
     catch(error){
-        expect(error instanceof BackendServiceError).toEqual(config.mock_disabled);
+        expect(config.mock_disabled && error instanceof BackendServiceError).toBeTruthy();
+    }
+});
+
+test('findById con id 1 devuelve algo un tipo User y tiene usertype', async () => {
+    expect.assertions(1)
+    try {
+        // eslint-disable-next-line testing-library/no-await-sync-query
+        const entity = await new MockUserRepository().getById(1)
+        expect(entity instanceof User && entity.userType !== undefined).toBeTruthy();
+    }
+    catch(error){
+        expect(config.mock_disabled && error instanceof BackendServiceError).toBeTruthy();
     }
 });
 
 
 test('findById con id 1 devuelve algo un tipo User que tiene createdAt y updatedAt como Date', async () => {
+    expect.assertions(1)
     try{
         const repository = new MockUserRepository()
         // eslint-disable-next-line testing-library/no-await-sync-query
@@ -124,7 +161,7 @@ test('findById con id 1 devuelve algo un tipo User que tiene createdAt y updated
         expect(entityDatesAreDateIfPresent(entity)).toBeTruthy();
     }
     catch(error){
-        expect(error instanceof BackendServiceError).toEqual(config.mock_disabled);
+        expect(config.mock_disabled && error instanceof BackendServiceError).toBeTruthy();
     }
 });
 
@@ -150,11 +187,13 @@ const _createMockObject = ():object => {
 
 test('save es capaz de utilizar un conversor para pasar de object a entity', () => {
     // @ts-ignore
+    expect.assertions(1)
     const newEntity = _createMockEntity()
     expect(newEntity instanceof User).toBeTruthy();
 });
 
 test('save es capaz de utilizar un conversor para pasar de entity a object',() => {
+    expect.assertions(1)
     const entity = _createMockEntity()
     const object = conversor.convertToExternalObject(entity)
     expect(typeof object).toEqual('object');
@@ -162,6 +201,7 @@ test('save es capaz de utilizar un conversor para pasar de entity a object',() =
 
 
 test(`save es capaz de incrementar la length del array a ${collectionLength+1}`, async () => {
+    expect.assertions(1)
     try {
         const repository = new MockUserRepository()
         const newEntity = _createMockEntity()
@@ -170,11 +210,12 @@ test(`save es capaz de incrementar la length del array a ${collectionLength+1}`,
         expect(entities.length).toEqual(collectionLength+1);
     }
     catch(error){
-        expect(error instanceof BackendServiceError).toEqual(config.mock_disabled);
+        expect(config.mock_disabled && error instanceof BackendServiceError).toBeTruthy();
     }
 });
 
 test('save introduce Entities con id numérico', async () => {
+    expect.assertions(1)
     try{
         const repository = new MockUserRepository()
         const newEntity = _createMockEntity()
@@ -183,11 +224,12 @@ test('save introduce Entities con id numérico', async () => {
         expect(entities.find(entity => typeof entity.id !== 'number')).toBeUndefined();
     }
     catch(error){
-        expect(error instanceof BackendServiceError).toEqual(config.mock_disabled);
+        expect(config.mock_disabled && error instanceof BackendServiceError).toBeTruthy();
     }
 });
 
 test('save introduce 6 elementos', async () => {
+    expect.assertions(1)
     const repository = new MockUserRepository()
     // @ts-ignore
     const insertionPromises = [...Array(6).keys()].map(_ => {
@@ -200,11 +242,12 @@ test('save introduce 6 elementos', async () => {
         expect(entities.length).toEqual(collectionLength+6);
     }
     catch(error){
-        expect(error instanceof BackendServiceError).toEqual(config.mock_disabled);
+        expect(config.mock_disabled && error instanceof BackendServiceError).toBeTruthy();
     }
 });
 
 test('save modifica la entidad 1 y le pone como firstName Mock name', async () => {
+    expect.assertions(1)
     try{
         const repository = new MockUserRepository()
         // eslint-disable-next-line testing-library/no-await-sync-query
@@ -218,21 +261,23 @@ test('save modifica la entidad 1 y le pone como firstName Mock name', async () =
         expect(updatedEntity?.firstName).toEqual('Mock name');
     }
     catch(error){
-        expect(error instanceof BackendServiceError).toEqual(config.mock_disabled);
+        expect(config.mock_disabled && error instanceof BackendServiceError).toBeTruthy();
     }
 });
 
 test('removeById devuelve 0 si el id no existe', async () => {
+    expect.assertions(1)
     try{
         const repository = new MockUserRepository();
         expect(await repository.removeById(-1)).toEqual(0);
     }
     catch(error){
-        expect(error instanceof BackendServiceError).toEqual(config.mock_disabled);
+        expect(config.mock_disabled && error instanceof BackendServiceError).toBeTruthy();
     }
 });
 
 test('removeById borra el id 1', async () => {
+    expect.assertions(1)
     const repository = new MockUserRepository();
     try{
         await repository.removeById(1);
@@ -240,11 +285,12 @@ test('removeById borra el id 1', async () => {
         expect(await repository.getById(1)).toBeUndefined();
     }
     catch(error){
-        expect(error instanceof BackendServiceError).toEqual(config.mock_disabled);
+        expect(config.mock_disabled && error instanceof BackendServiceError).toBeTruthy();
     }
 });
 
 test('removeById reduce el length en 1 cuando borra', async () => {
+    expect.assertions(1)
     try {
         const repository = new MockUserRepository();
         const oldEntities = await repository.getAll()
@@ -254,12 +300,13 @@ test('removeById reduce el length en 1 cuando borra', async () => {
         expect(entities.length).toEqual(oldLength - 1);
     }
     catch(error){
-        expect(error instanceof BackendServiceError).toEqual(config.mock_disabled);
+        expect(config.mock_disabled && error instanceof BackendServiceError).toBeTruthy();
     }
 });
 
 
 test('findByEmail and password no encuentra datos incorrectos', async () => {
+    expect.assertions(1)
     try {
         const repository = new MockUserRepository();
         // eslint-disable-next-line testing-library/no-await-sync-query
@@ -267,11 +314,12 @@ test('findByEmail and password no encuentra datos incorrectos', async () => {
         expect(user).toBeUndefined()
     }
     catch(error){
-        expect(error instanceof BackendServiceError).toEqual(config.mock_disabled);
+        expect(config.mock_disabled && error instanceof BackendServiceError).toBeTruthy();
     }
 });
 
 test('findByEmail and password encuentra algo con customer1@customer.com/secret', async () => {
+    expect.assertions(1)
     try {
         const repository = new MockUserRepository();
         // eslint-disable-next-line testing-library/no-await-sync-query
@@ -279,11 +327,12 @@ test('findByEmail and password encuentra algo con customer1@customer.com/secret'
         expect(user).toBeDefined()
     }
     catch(error){
-        expect(error instanceof BackendServiceError).toEqual(config.mock_disabled);
+        expect(config.mock_disabled && error instanceof BackendServiceError).toBeTruthy();
     }
 });
 
 test('findByEmail and password encuentra el user id 1 con customer1@customer.com/secret', async () => {
+    expect.assertions(1)
     try {
         const repository = new MockUserRepository();
         // eslint-disable-next-line testing-library/no-await-sync-query
@@ -291,6 +340,6 @@ test('findByEmail and password encuentra el user id 1 con customer1@customer.com
         expect(user instanceof User && user.id === 1).toBeTruthy()
     }
     catch(error){
-        expect(error instanceof BackendServiceError).toEqual(config.mock_disabled);
+        expect(config.mock_disabled && error instanceof BackendServiceError).toBeTruthy();
     }
 });
