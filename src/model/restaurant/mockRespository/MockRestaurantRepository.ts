@@ -18,6 +18,15 @@ class MockRestaurantRepository extends BaseMockRepository<Restaurant> implements
         this.conversor = new MockRestaurantConversor();
         this.entities = restaurantsMocked.map(restaurantObject => this.conversor.convertToInternalEntity(restaurantObject));
     }
+
+    get creationValidationSchema(): object|undefined {
+        return undefined;
+    }
+
+    get updateValidationSchema(): object|undefined {
+        return undefined;
+    }
+
     @hasLoggedInUserParameter()
     @hasUserParameterOfUserType(UserType.owner)
     async getOwnerRestaurants(owner:User): Promise<Restaurant[]> {

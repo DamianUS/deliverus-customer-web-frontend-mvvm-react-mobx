@@ -12,6 +12,11 @@ abstract class BaseMockRepository<T extends Model> implements Repository<T>{
     protected constructor() {
         this.entities = [];
     }
+
+    abstract get creationValidationSchema():object|undefined;
+    abstract get updateValidationSchema():object|undefined;
+
+
     @disableable()
     async getAll(): Promise<T[]>{
         return this.entities

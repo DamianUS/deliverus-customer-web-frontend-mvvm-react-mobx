@@ -9,9 +9,8 @@ import AuthenticationRepository from "../../model/authentication/interfaces/Auth
 import loadingToggler from "../decorators/LoadingToggler";
 import User from "../../model/user/User";
 import ValidationError from "../../model/errors/ValidationError";
-import { object, string, number, date, InferType} from 'yup';
+import { object, string} from 'yup';
 import * as yup from 'yup';
-import React from "react";
 import TokenStorer from "../../view/services/interfaces/TokenStorer";
 
 

@@ -18,6 +18,13 @@ class MockUserRepository extends BaseMockRepository<User> implements UserReposit
         this.entities = usersMocked.map((userObject) => this.conversor.convertToInternalEntity(userObject));
     }
 
+    get creationValidationSchema(): object|undefined {
+        return undefined;
+    }
+    get updateValidationSchema(): object|undefined {
+        return undefined;
+    }
+
     @disableable()
     async getByEmailAndPassword(email: string, password: string): Promise<User | undefined> {
         const users = await this.getAll()

@@ -7,6 +7,8 @@ import User from "../user/User";
 import UnauthorizedError from "../errors/UnauthorizedError";
 import disableable from "../mocks/decorators/Disableable";
 import { cloneDeep } from "lodash";
+import { object, string} from 'yup';
+import * as yup from 'yup';
 
 const generateToken = () => {
     return "mockToken"
@@ -20,6 +22,11 @@ const refreshToken = (user: User):void => {
 @injectable()
 class MockAuthenticationRepository implements AuthenticationRepository{
     private userRepository:UserRepository;
+    private loginValidationSchema = object({
+        email: string().required().email(),
+        password: string().required()
+    });
+
     constructor() {
         this.userRepository = inversifyContainer.get<UserRepository>("UserRepository");
     }
@@ -34,6 +41,7 @@ class MockAuthenticationRepository implements AuthenticationRepository{
 
     @disableable()
     async login(email: string, password: string): Promise<User | undefined> {
+        await this.loginValidationSchema.validate({email, password}, {abortEarly: false});
         const loggedInUser = await this.userRepository.getByEmailAndPassword(email, password)
         if(!loggedInUser)
             throw new UnauthorizedError()

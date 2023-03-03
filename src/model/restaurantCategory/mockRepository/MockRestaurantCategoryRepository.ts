@@ -15,6 +15,14 @@ class MockRestaurantCategoryRepository extends BaseMockRepository<RestaurantCate
         this.entities = restaurantCategoriesMocked.map(restaurantCategoryObject => this.conversor.convertToInternalEntity(restaurantCategoryObject));
     }
 
+    get creationValidationSchema(): object|undefined {
+        return undefined;
+    }
+
+    get updateValidationSchema(): object|undefined {
+        return undefined;
+    }
+
     @disableable()
     async getAll(): Promise<RestaurantCategory[]> {
         // @ts-ignore
