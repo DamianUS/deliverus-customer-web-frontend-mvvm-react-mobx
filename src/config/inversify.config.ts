@@ -16,6 +16,7 @@ import AuthenticationRepository from "../model/authentication/interfaces/Authent
 import MockAuthenticationRepository from "../model/authentication/MockAuthenticationRepository";
 import TokenStorer from "../view/services/interfaces/TokenStorer";
 import BrowserLocalStorageStorer from "../view/services/BrowserLocalStorageStorer";
+import LogoutViewModel from "../viewmodel/authentication/LogoutViewModel";
 
 const inversifyContainer = new Container()
 inversifyContainer.bind<GlobalState>('GlobalState').to(GlobalState).inSingletonScope()
@@ -28,6 +29,7 @@ inversifyContainer.bind<AuthenticationRepository>('AuthenticationRepository').to
 //ViewModels
 inversifyContainer.bind<IndexRestaurantsViewModel>('IndexRestaurantsViewModel').to(IndexRestaurantsViewModel).inSingletonScope()
 inversifyContainer.bind<LoginViewModel>('LoginViewModel').to(LoginViewModel).inSingletonScope()
+inversifyContainer.bind<LogoutViewModel>('LogoutViewModel').to(LogoutViewModel).inSingletonScope()
 
 //View
 inversifyContainer.bind<ViewEngine>('ViewEngineService').to(ReactEngineService)

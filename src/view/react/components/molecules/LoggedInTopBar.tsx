@@ -1,18 +1,50 @@
 import React, {ReactNode} from "react";
 import TopBarTemplate from "./TopBarTemplate";
-import {Avatar, Button} from "antd";
+import {Button, Menu, MenuProps, Popover, Typography} from "antd";
 import inversifyContainer from "../../../../config/inversify.config";
-import GlobalState from "../../../../viewmodel/GlobalState";
 import {observer} from "mobx-react-lite";
-import {UserOutlined} from "@ant-design/icons";
+import {LogoutOutlined, UserOutlined} from "@ant-design/icons";
+import LogoutViewModel from "../../../../viewmodel/authentication/LogoutViewModel";
+
+const {Text} = Typography;
 
 const LoggedInTopBar = observer(() => {
-    const [globalState] = React.useState(inversifyContainer.get<GlobalState>("GlobalState"))
+    const [logoutViewModel] = React.useState(inversifyContainer.get<LogoutViewModel>("LogoutViewModel"))
+
+    const items: MenuProps['items'] = [
+        {
+            label: 'Logout',
+            key: 'logout',
+            icon: <LogoutOutlined />,
+        },
+    ];
+
+    const onClick: MenuProps['onClick'] = async (e) => {
+        if(e.key === "logout")
+            await logoutViewModel.logout()
+    };
+
     return (
         <>
             <TopBarTemplate>
                 <div className="flex justify-end pt-3">
-                    <Avatar size="large" icon={<UserOutlined />} />
+                    <Popover
+                        title={logoutViewModel.globalState.loggedInUser?.firstName}
+                        getPopupContainer={trigger => trigger.parentElement as HTMLElement}
+                        placement="bottomLeft"
+                        content={
+                            <Menu
+                                onClick={onClick}
+                                style={{ width: 256 }}
+                                defaultSelectedKeys={['1']}
+                                defaultOpenKeys={['sub1']}
+                                mode="inline"
+                                items={items}
+                            />
+                        }
+                        trigger="click">
+                        <Button size="large" shape="circle" icon={<UserOutlined />} />
+                    </Popover>
                 </div>
             </TopBarTemplate>
         </>
