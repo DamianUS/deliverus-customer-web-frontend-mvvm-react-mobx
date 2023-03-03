@@ -1,7 +1,7 @@
 const configurations = {
     development: {
-        mock_disabled : false,
-        frontend_validation_enabled: true,
+        mock_disabled : true,
+        frontend_validation_enabled: false,
     }
 }
 
