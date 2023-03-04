@@ -27,3 +27,8 @@ test('The backendError is removed after 5 seconds', async () => {
         }, 3500, globalState);
     });
 });
+
+test('The protected route is undefined in GlobalState at creation', () => {
+    const globalState = new GlobalState();
+    expect(globalState.protectedRoute).toBeUndefined();
+});

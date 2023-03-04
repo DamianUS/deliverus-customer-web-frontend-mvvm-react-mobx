@@ -8,18 +8,7 @@ import GlobalState from "../../../../viewmodel/GlobalState";
 
 function GuestTopBar () {
 
-    const tokenStorer = inversifyContainer.get<TokenStorer>("TokenStorer");
-    const globalState = inversifyContainer.get<GlobalState>("GlobalState");
-
     const [showModal, setShowModal] = React.useState(false)
-
-    React.useEffect(() => {
-        const retrieveUserByStoredToken = async () => {
-            globalState.loggedInUser = await tokenStorer.retrieve()
-        };
-        retrieveUserByStoredToken();
-    });
-
     const toggleModalVisibility = () => {
         setShowModal(!showModal);
     }

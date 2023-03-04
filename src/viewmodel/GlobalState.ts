@@ -9,8 +9,15 @@ import config from "../config/config";
 
 @injectable()
 class GlobalState{
-    loading:boolean;
+    _loading:boolean;
+    get loading():boolean{
+        return this._loading;
+    }
+    set loading(loading: boolean){
+        this._loading = loading;
+    }
     _backendError:BackendServiceError|undefined;
+    protectedRoute: string|undefined;
     get backendError():BackendServiceError|undefined{
         return this._backendError;
     }
@@ -20,11 +27,18 @@ class GlobalState{
             globalState._backendError = undefined;
         }, 3000, this);
     }
-    loggedInUser:User|undefined;
+    _loggedInUser:User|undefined;
+    get loggedInUser():User|undefined{
+        return this._loggedInUser;
+    }
+    set loggedInUser(loggedInUser: User|undefined){
+        this._loggedInUser = loggedInUser;
+    }
     enabledFrontEndValidation:boolean;
 
 
     constructor() {
+        this._loading = false;
         this.enabledFrontEndValidation = config.frontend_validation_enabled;
         this.loading = false;
         makeAutoObservable(this)

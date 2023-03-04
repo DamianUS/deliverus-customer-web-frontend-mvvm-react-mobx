@@ -5,6 +5,7 @@ import config from "../../config/config"
 import User from "../../model/user/User";
 import ValidationError from "../../model/errors/ValidationError";
 import exp from "constants";
+import BackendServiceError from "../../model/errors/BackendServiceError";
 
 const {mock_disabled} = config
 test('LoginViewModel gets a repository injected', () => {
@@ -58,24 +59,15 @@ test('LoginViewModel gets a validation error if front-end validation is enabled 
     }
 });
 
-test('LoginViewModel gets a BackendService error or an authorized User with good credentials', async () => {
-    const viewModel = new LoginViewModel();
-    await viewModel.login("customer1@customer.com", "secret");
-    expect(viewModel.globalState.backendError === undefined).toEqual(!mock_disabled);
-    expect(viewModel.loggedInUser instanceof User
-        && viewModel.loggedInUser.token === "mockToken"
-        && viewModel.loggedInUser.tokenExpiration instanceof Date
-        && viewModel.loggedInUser.tokenExpiration > new Date()).toEqual(!mock_disabled);
-});
-
 test('LoginViewModel gets a BackendService error or the global state gets an authorized User with good credentials', async () => {
     const viewModel = new LoginViewModel();
     await viewModel.login("customer1@customer.com", "secret");
-    expect(viewModel.globalState.backendError === undefined).toEqual(!mock_disabled);
     expect(viewModel.globalState.loggedInUser instanceof User
         && viewModel.globalState.loggedInUser.token === "mockToken"
+        && viewModel.loggedInUser instanceof User
+        && viewModel.loggedInUser.token === "mockToken"
         && viewModel.globalState.loggedInUser.tokenExpiration instanceof Date
-        && viewModel.globalState.loggedInUser.tokenExpiration > new Date()).toEqual(!mock_disabled);
+        && viewModel.globalState.loggedInUser.tokenExpiration > new Date()).toBeTruthy()
 });
 
 
@@ -137,5 +129,37 @@ test('LoginViewModel gets a ValidationError with setted errors when email is not
         && !('password' in viewModel.loginValidationError.errors)
         // @ts-ignore
         && viewModel.loginValidationError.errors["email"].length === 1
+    ).toBeTruthy()
+});
+
+
+test('LoginViewModel keeps the protected route when login fails', async () => {
+    const viewModel = new LoginViewModel();
+    await viewModel.login("", "secret");
+    viewModel.globalState.protectedRoute = "/restaurants";
+    expect(
+        viewModel.loginValidationError instanceof ValidationError
+        && viewModel.loginValidationError.errors !== undefined
+        && Object.keys(viewModel.loginValidationError.errors).length === 1
+        // @ts-ignore
+        && !('password' in viewModel.loginValidationError.errors)
+        // @ts-ignore
+        && viewModel.loginValidationError.errors["email"].length === 1
+        && viewModel.globalState.protectedRoute !== undefined
+    ).toBeTruthy()
+});
+
+
+test('LoginViewModel removes the protected route when login is successful', async () => {
+    const viewModel = new LoginViewModel();
+    viewModel.globalState.protectedRoute = "/restaurants";
+    await viewModel.login("customer1@customer.com", "secret");
+    expect(viewModel.globalState.loggedInUser instanceof User
+        && viewModel.globalState.loggedInUser.token === "mockToken"
+        && viewModel.loggedInUser instanceof User
+        && viewModel.loggedInUser.token === "mockToken"
+        && viewModel.globalState.loggedInUser.tokenExpiration instanceof Date
+        && viewModel.globalState.loggedInUser.tokenExpiration > new Date()
+        && viewModel.globalState.protectedRoute === undefined
     ).toBeTruthy()
 });

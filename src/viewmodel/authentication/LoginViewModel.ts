@@ -35,22 +35,23 @@ class LoginViewModel{
         this._validationEnabled = newValue;
     }
     constructor() {
-        this.initialValues = { email: '', password: '', remember: true }
+        this.initialValues = { email: '', password: '', remember: true };
         this.authenticationRepository = inversifyContainer.get<AuthenticationRepository>("AuthenticationRepository");
         this.globalState = inversifyContainer.get<GlobalState>("GlobalState");
         this.tokenStorer = inversifyContainer.get<TokenStorer>("TokenStorer");
-        makeAutoObservable(this)
+        makeAutoObservable(this);
     }
     @loadingToggler()
     async login(email:string, password:string) {
         try{
+            this.loginValidationError = undefined;
+            this.loginError = undefined;
             if(this.validationEnabled){
-                this.loginValidationError = undefined
-                this.loginError = undefined
                 await this.loginSchema.validate({email, password}, {abortEarly: false});
             }
             this.loggedInUser = await this.authenticationRepository.login(email,password);
-            this.globalState.loggedInUser = this.loggedInUser
+            this.globalState.loggedInUser = this.loggedInUser;
+            this.globalState.protectedRoute = undefined;
             this.tokenStorer.store(this.loggedInUser as User);
         }
         catch(error){

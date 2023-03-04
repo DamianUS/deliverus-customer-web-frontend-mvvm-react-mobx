@@ -4,6 +4,7 @@ import LoginViewModel from "../../../../../viewmodel/authentication/LoginViewMod
 import inversifyContainer from "../../../../../config/inversify.config";
 import {Form, Modal, Input, Button, Checkbox, Typography, Col} from "antd";
 import {convertFromValidationErrorToAntDFormFields} from "../../../validation/ConversorToAntDFormFields";
+import LoginForm from "./LoginForm";
 const {Text} = Typography;
 
 type Props = {
@@ -13,23 +14,7 @@ type Props = {
 
 const LoginModal = observer((props:Props) => {
 
-    const [viewModel] = React.useState(inversifyContainer.get<LoginViewModel>("LoginViewModel"))
     const [form] = Form.useForm();
-
-    const generateLoginErrorFields = ():any[] => {
-        return [
-            {name:"email", errors:["Wrong credentials"]},
-            {name:"password", errors:["Wrong credentials"]},
-        ]
-    }
-
-    const loginFormSubmit = async (values:any) => {
-        const {email, password} = values;
-        await viewModel.login(email, password);
-        let fields = convertFromValidationErrorToAntDFormFields(viewModel.initialValues, viewModel.loginValidationError)
-        // @ts-ignore
-        form.setFields(fields)
-    }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
     // @ts-ignore
@@ -43,32 +28,7 @@ const LoginModal = observer((props:Props) => {
             cancelText="Cancel"
             onOk={form.submit}
         >
-            <Form
-                layout="vertical"
-                form={form}
-                initialValues={viewModel.initialValues}
-                onFinish={loginFormSubmit}
-                autoComplete="off"
-            >
-                <Form.Item label="Email" name="email">
-                    <Input size="large" />
-                </Form.Item>
-
-                <Form.Item
-                    label="Password"
-                    name="password"
-                >
-                    <Input.Password size="large" />
-                </Form.Item>
-
-                <Form.Item name="remember" valuePropName="checked">
-                    <Checkbox>Remember me</Checkbox>
-                </Form.Item>
-
-                <Col offset={8} span={16}>
-                    {viewModel.loginError && <div className="mb-10"><Text type="danger">Wrong credentials</Text></div>}
-                </Col>
-            </Form>
+            <LoginForm form={form}></LoginForm>
         </Modal>
 
     );
