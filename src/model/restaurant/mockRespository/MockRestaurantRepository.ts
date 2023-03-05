@@ -34,7 +34,8 @@ class MockRestaurantRepository extends BaseMockRepository<Restaurant> implements
     @hasLoggedInUserParameter()
     @hasUserParameterOfUserType(UserType.owner)
     async getOwnerRestaurants(owner:User): Promise<Restaurant[]> {
-        return await this.getAll();
+        const restaurants = await this.getAll();
+        return restaurants.filter(restaurant => restaurant.owner?.id === owner.id);
     }
 }
 export default MockRestaurantRepository;

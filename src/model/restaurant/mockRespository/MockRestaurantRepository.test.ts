@@ -403,7 +403,7 @@ test('getOwnerRestaurants devuelve Forbidden error con usuario Customer logeado'
     }
 });
 
-test('getOwnerRestaurants devuelve una lista de Restaurant con Owner logeado o BackendServiceError', async () => {
+test('getOwnerRestaurants devuelve una lista de Restaurant con Owner de longitud total -1 o BackendServiceError', async () => {
     expect.assertions(1)
     const repository = new MockRestaurantRepository();
     const authRepository = new MockAuthenticationRepository();
@@ -412,8 +412,8 @@ test('getOwnerRestaurants devuelve una lista de Restaurant con Owner logeado o B
         const user = await authRepository.login('owner1@owner.com', 'secret') as User;
         const restaurants = await repository.getOwnerRestaurants(user);
         // eslint-disable-next-line testing-library/no-await-sync-query
-        const areAllRestaurants = restaurants.map(restaurant => restaurant instanceof Restaurant).reduce((areAllRestaurants, isRestaurant) =>  areAllRestaurants && isRestaurant, true)
-        expect(areAllRestaurants).toBeTruthy();
+        const areAllRestaurants = restaurants.map(restaurant => restaurant instanceof Restaurant && restaurant.owner instanceof User).reduce((areAllRestaurants, isRestaurant) =>  areAllRestaurants && isRestaurant, true)
+        expect(areAllRestaurants && restaurants.length === restaurantsMocked.length-1).toBeTruthy();
     }
     catch(error){
         expect(config.mock_disabled && error instanceof BackendServiceError).toBeTruthy();

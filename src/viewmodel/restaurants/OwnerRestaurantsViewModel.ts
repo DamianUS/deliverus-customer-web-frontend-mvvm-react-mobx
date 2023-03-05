@@ -7,6 +7,7 @@ import { makeAutoObservable } from "mobx"
 import GlobalState from "../GlobalState";
 import RestaurantRepository from "../../model/restaurant/interfaces/RestaurantRepository";
 import loadingToggler from "../decorators/LoadingToggler";
+import User from "../../model/user/User";
 
 
 @injectable()
@@ -25,7 +26,7 @@ class IndexRestaurantsViewModel{
     @loadingToggler()
     async initialize(): Promise<void> {
         try{
-            this.restaurants = await this.restaurantRepository.getAll();
+            this.restaurants = await this.restaurantRepository.getOwnerRestaurants(this.globalState.loggedInUser as User);
         }
         catch(error){
             // @ts-ignore
