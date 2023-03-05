@@ -4,6 +4,7 @@ import config from '../../config/config';
 import MockUserRepository from "../../model/user/mockRepository/MockUserRepository";
 import UserType from "../../model/user/UserType";
 import Restaurant from "../../model/restaurant/Restaurant";
+import CreateRestaurantViewModel from "./CreateRestaurantViewModel";
 
 test('OwnerRestaurantsViewModel gets a repository injected', () => {
     const viewModel = new OwnerRestaurantsViewModel();
@@ -18,6 +19,18 @@ test('OwnerRestaurantsViewModel gets a repository injected', () => {
 test('OwnerRestaurantsViewModel has an empty array of restaurants at creation', () => {
     const viewModel = new OwnerRestaurantsViewModel();
     expect(viewModel.restaurants).toEqual([]);
+});
+
+test('OwnerRestaurantsViewModel is loading when starts initializing', () => {
+    const viewModel = new OwnerRestaurantsViewModel();
+    viewModel.initialize()
+    expect(viewModel.globalState.loading).toBeTruthy();
+});
+
+test('OwnerRestaurantsViewModel is not loading when starts initializing', async () => {
+    const viewModel = new OwnerRestaurantsViewModel();
+    await viewModel.initialize();
+    expect(viewModel.globalState.loading).toBeFalsy();
 });
 
 test('OwnerRestaurant throws Authentication error at initialization when an empty user is provided', async () => {

@@ -4,12 +4,13 @@ import disableable from "./decorators/Disableable";
 import {injectable} from "inversify";
 import { cloneDeep } from "lodash";
 import Conversor from "../conversion/interfaces/Conversor";
+import * as yup from "yup";
+import ValidationError from "../errors/ValidationError";
 
 // @ts-ignore
 @injectable()
 abstract class BaseMockRepository<T extends Model> implements Repository<T>{
     entities:T[]|undefined
-
     abstract get creationValidationSchema():object|undefined;
     abstract get updateValidationSchema():object|undefined;
     abstract get mockedEntites():object[];
@@ -21,7 +22,7 @@ abstract class BaseMockRepository<T extends Model> implements Repository<T>{
     }
 
     @disableable()
-    async getAll(): Promise<T[]>{
+    async getAll(...args:any[]): Promise<T[]>{
         if (!this.entities){
             await this.initializeEntities();
         }
@@ -29,7 +30,7 @@ abstract class BaseMockRepository<T extends Model> implements Repository<T>{
     }
 
     @disableable()
-    async getById(id: number): Promise<T | undefined> {
+    async getById(id: number, ...args:any[]): Promise<T | undefined> {
         const entities = await this.getAll()
         // @ts-ignore
         let foundEntity = entities.find(entity => entity.id === id);
@@ -37,7 +38,7 @@ abstract class BaseMockRepository<T extends Model> implements Repository<T>{
         return clonedEntity
     }
     @disableable()
-    async removeById(id: number): Promise<number> {
+    async removeById(id: number, ...args:any[]): Promise<number> {
         const entities = await this.getAll()
         const oldCount = entities.length
         if(!this.entities || !id || !entities.find(entity => entity.id === id))
@@ -46,26 +47,40 @@ abstract class BaseMockRepository<T extends Model> implements Repository<T>{
         return this.entities.length - oldCount
     }
     @disableable()
-    async save(entity: T): Promise<T> {
+    async save(entity: T, ...args:any[]): Promise<T> {
         if (entity.id)
-            return this.update(entity)
+            return this.update(entity, ...args);
         else
-            return this.store(entity)
+            return this.store(entity, ...args)
     }
     @disableable()
-    private async store(entity: T): Promise<T> {
-        const entities = await this.getAll()
-        const ids:number[] = entities.map(entity => entity.id as number);
-        const lastId = Math.max(...ids);
-        const clonedEntity = cloneDeep(entity)
-        clonedEntity.id = lastId+1;
-        clonedEntity.createdAt = new Date();
-        clonedEntity.updatedAt = new Date();
-        this.entities?.push(clonedEntity);
-        return clonedEntity;
+    async store(entity: T, ...args:any[]): Promise<T> {
+        try{
+            if(this.creationValidationSchema !== undefined){
+                // @ts-ignore
+                await this.creationValidationSchema.validate(entity, {abortEarly: false});
+            }
+            const entities = await this.getAll()
+            const ids:number[] = entities.map(entity => entity.id as number);
+            const lastId = Math.max(...ids);
+            const clonedEntity = cloneDeep(entity)
+            clonedEntity.id = lastId+1;
+            clonedEntity.createdAt = new Date();
+            clonedEntity.updatedAt = new Date();
+            this.entities?.push(clonedEntity);
+            return clonedEntity;
+        }
+        catch(error) {
+            if (error instanceof yup.ValidationError) {
+                throw ValidationError.fromYupErrors(error)
+            }
+            else{
+                throw error;
+            }
+        }
     }
     @disableable()
-    private async update(entity: T): Promise<T> {
+    async update(entity: T, ...args:any[]): Promise<T> {
         const entities = await this.getAll();
         const oldEntityIndex = entities.findIndex(storedEntity => storedEntity.id === entity.id)
         if (oldEntityIndex === -1) {

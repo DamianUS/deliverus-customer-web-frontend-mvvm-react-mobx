@@ -91,12 +91,15 @@ class CreateRestaurantViewModel {
                 await this.creationValidationSchema.validate(newRestaurantFormObject, {abortEarly: false});
             }
             const restaurantConverted = await this.conversor.convertToInternalEntity(newRestaurantFormObject);
-            const restaurant = await this.restaurantRepository.save(restaurantConverted);
+            const restaurant = await this.restaurantRepository.store(restaurantConverted, this.globalState.loggedInUser);
             return restaurant;
         }
         catch(error){
             if(error instanceof yup.ValidationError){
                 this.validationError = ValidationError.fromYupErrors(error)
+            }
+            else if(error instanceof ValidationError){
+                this.validationError = error;
             }
             else{
                 throw error;

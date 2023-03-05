@@ -8,16 +8,16 @@ import RestaurantCategoryRepository from "../../../model/restaurantCategory/inte
 
 type FormRestaurantObject = {
     name: string | undefined,
-    description: string | undefined,
+    description?: string | undefined,
     address: string | undefined,
     postalCode: string | undefined,
-    url: string | undefined,
+    url?: string | undefined,
     shippingCosts: number | undefined,
-    email: string | undefined,
-    phone: string | undefined,
-    status: string | undefined,
-    logo: string | undefined,
-    heroImage: string | undefined,
+    email?: string | undefined,
+    phone?: string | undefined,
+    status?: string | undefined,
+    logo?: string | undefined,
+    heroImage?: string | undefined,
     restaurantCategoryId: number | undefined,
 }
 const convertToRestaurantCategoryId = (restaurantCategory: RestaurantCategory): number => {

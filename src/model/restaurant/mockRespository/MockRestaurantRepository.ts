@@ -11,6 +11,9 @@ import hasUserParameterOfUserType from "../../decorators/HasUserParameterOfUserT
 import UserType from "../../user/UserType";
 import Conversor from '../../conversion/interfaces/Conversor';
 import disableable from "../../mocks/decorators/Disableable";
+import * as yup from "yup";
+import {cloneDeep} from "lodash";
+import ValidationError from "../../errors/ValidationError";
 
 @injectable()
 class MockRestaurantRepository extends BaseMockRepository<Restaurant> implements RestaurantRepository {
@@ -27,7 +30,43 @@ class MockRestaurantRepository extends BaseMockRepository<Restaurant> implements
         return restaurantsMocked;
     }
     get creationValidationSchema(): object|undefined {
-        return undefined;
+        return yup.object().shape({
+            name: yup
+                .string()
+                .max(255, 'Name too long')
+                .required('Name is required'),
+            address: yup
+                .string()
+                .max(255, 'Address too long')
+                .required('Address is required'),
+            postalCode: yup
+                .string()
+                .max(255, 'Postal code too long')
+                .required('Postal code is required'),
+            url: yup
+                .string()
+                .nullable()
+                .url('Please enter a valid url'),
+            shippingCosts: yup
+                .number()
+                .positive('Please provide a valid shipping cost value')
+                .required('Shipping costs value is required'),
+            email: yup
+                .string()
+                .nullable()
+                .email('Please enter a valid email'),
+            phone: yup
+                .string()
+                .nullable()
+                .max(255, 'Phone too long'),
+            category: yup.object({
+                id: yup
+                    .number()
+                    .positive()
+                    .integer()
+                    .required('Restaurant category is required'),
+            })
+        });
     }
     get updateValidationSchema(): object|undefined {
         return undefined;
@@ -35,9 +74,17 @@ class MockRestaurantRepository extends BaseMockRepository<Restaurant> implements
     @disableable()
     @hasLoggedInUserParameter()
     @hasUserParameterOfUserType(UserType.owner)
-    async getOwnerRestaurants(owner:User): Promise<Restaurant[]> {
+    async getOwnerRestaurants(owner:User, ...args:any[]): Promise<Restaurant[]> {
         const restaurants = await this.getAll();
         return restaurants.filter(restaurant => restaurant.owner?.id === owner.id);
+    }
+
+    @disableable()
+    @hasLoggedInUserParameter()
+    @hasUserParameterOfUserType(UserType.owner)
+    async store(entity: Restaurant, owner:User): Promise<Restaurant> {
+        entity.owner = owner;
+        return super.store(entity);
     }
 }
 export default MockRestaurantRepository;

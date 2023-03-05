@@ -249,10 +249,12 @@ test('save es capaz de utilizar un conversor para pasar de restaurant object a R
 
 test('save es capaz de incrementar la length del array a 10', async () => {
     expect.assertions(1)
+    const repository = new MockRestaurantRepository()
+    const authenticationRepository = new MockAuthenticationRepository();
+    const newRestaurant = await _createMockRestaurant()
     try {
-        const repository = new MockRestaurantRepository()
-        const newRestaurant = await _createMockRestaurant()
-        await repository.save(newRestaurant)
+        const loggedInOwner = await authenticationRepository.login("owner2@owner.com", "secret");
+        await repository.save(newRestaurant,loggedInOwner)
         const restaurants = await repository.getAll()
         expect(restaurants.length).toEqual(10);
     }
@@ -263,10 +265,12 @@ test('save es capaz de incrementar la length del array a 10', async () => {
 
 test('save introduce Restaurants con id numérico', async () => {
     expect.assertions(1)
+    const repository = new MockRestaurantRepository();
+    const authenticationRepository = new MockAuthenticationRepository();
+    const newRestaurant = await _createMockRestaurant()
     try{
-        const repository = new MockRestaurantRepository()
-        const newRestaurant = await _createMockRestaurant()
-        await repository.save(newRestaurant)
+        const loggedInOwner = await authenticationRepository.login("owner2@owner.com", "secret");
+        await repository.save(newRestaurant, loggedInOwner)
         const restaurants = await repository.getAll()
         expect(restaurants.find(restaurant => typeof restaurant.id !== 'number')).toBeUndefined();
     }
@@ -278,20 +282,22 @@ test('save introduce Restaurants con id numérico', async () => {
 test('save introduce 6 elementos', async () => {
     expect.assertions(1)
     const repository = new MockRestaurantRepository()
-    // @ts-ignore
-    const creationPromises = [...Array(6).keys()].map(_ => {
-        return _createMockRestaurant()
-    })
-    const entities = await Promise.all(creationPromises);
-    // @ts-ignore
-    const insertionPromises = entities.map(entity => {
-        return repository.save(entity)
-    })
+    const authenticationRepository = new MockAuthenticationRepository();
     try{
-        await Promise.all(insertionPromises);
-        const restaurants = await repository.getAll()
-        expect(restaurants.length).toEqual(restaurantsMocked.length+6);
-    }
+        const loggedInOwner = await authenticationRepository.login("owner2@owner.com", "secret");
+        // @ts-ignore
+        const creationPromises = [...Array(6).keys()].map(_ => {
+            return _createMockRestaurant()
+        })
+        const entities = await Promise.all(creationPromises);
+        // @ts-ignore
+        const insertionPromises = entities.map(entity => {
+            return repository.save(entity, loggedInOwner);
+        })
+            await Promise.all(insertionPromises);
+            const restaurants = await repository.getAll()
+            expect(restaurants.length).toEqual(restaurantsMocked.length+6);
+        }
     catch(error){
         expect(config.mock_disabled && error instanceof BackendServiceError).toBeTruthy();
     }
