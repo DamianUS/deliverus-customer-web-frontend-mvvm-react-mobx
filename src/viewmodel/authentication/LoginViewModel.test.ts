@@ -43,20 +43,13 @@ test('GlobalState is not loading when LoginViewModel ends login', async () => {
     expect(viewModel.globalState.loading).toBeFalsy();
 });
 
-test('LoginViewModel gets a validation error if front-end validation is enabled and a BackendService error or Authorization error otherwise', async () => {
+test('LoginViewModel gets a BackendService error or Authorization error otherwise', async () => {
     expect.assertions(1)
     const viewModel = new LoginViewModel();
     await viewModel.login("bad@bad.com", "bad");
-    if(!viewModel.validationEnabled){
-        // eslint-disable-next-line jest/no-conditional-expect
-        expect(mock_disabled ? (viewModel.loginError === undefined && viewModel.globalState.backendError !== undefined)
-        : (viewModel.loginError !== undefined && viewModel.globalState.backendError === undefined)
-        ).toBeTruthy();
-    }
-    else{
-        // eslint-disable-next-line jest/no-conditional-expect
-        expect(viewModel.loginValidationError !== undefined).toBeTruthy();
-    }
+    const isBackendServiceError = mock_disabled && viewModel.globalState.backendError !== undefined;
+    const isLoginError = !mock_disabled && viewModel.loginError !== undefined;
+    expect(isBackendServiceError || isLoginError).toBeTruthy();
 });
 
 test('LoginViewModel gets a BackendService error or the global state gets an authorized User with good credentials', async () => {

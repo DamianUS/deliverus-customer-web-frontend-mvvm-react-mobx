@@ -18,6 +18,7 @@ import TokenStorer from "../view/services/interfaces/TokenStorer";
 import BrowserLocalStorageStorer from "../view/services/BrowserLocalStorageStorer";
 import LogoutViewModel from "../viewmodel/authentication/LogoutViewModel";
 import HomeRouteProvider from "../view/react/routes/HomeRouteProvider";
+import OwnerRestaurantsViewModel from "../viewmodel/restaurants/OwnerRestaurantsViewModel";
 
 const inversifyContainer = new Container()
 inversifyContainer.bind<GlobalState>('GlobalState').to(GlobalState).inSingletonScope()
@@ -28,9 +29,12 @@ inversifyContainer.bind<UserRepository>('UserRepository').to(MockUserRepository)
 inversifyContainer.bind<AuthenticationRepository>('AuthenticationRepository').to(MockAuthenticationRepository)
 
 //ViewModels
-inversifyContainer.bind<IndexRestaurantsViewModel>('IndexRestaurantsViewModel').to(IndexRestaurantsViewModel).inSingletonScope()
 inversifyContainer.bind<LoginViewModel>('LoginViewModel').to(LoginViewModel).inSingletonScope()
 inversifyContainer.bind<LogoutViewModel>('LogoutViewModel').to(LogoutViewModel).inSingletonScope()
+////Restaurants
+inversifyContainer.bind<IndexRestaurantsViewModel>('IndexRestaurantsViewModel').to(IndexRestaurantsViewModel).inSingletonScope()
+inversifyContainer.bind<OwnerRestaurantsViewModel>('OwnerRestaurantsViewModel').to(OwnerRestaurantsViewModel).inSingletonScope()
+
 
 //View
 inversifyContainer.bind<ViewEngine>('ViewEngineService').to(ReactEngineService)

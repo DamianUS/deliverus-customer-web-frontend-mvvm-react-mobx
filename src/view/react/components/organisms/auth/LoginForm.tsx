@@ -24,13 +24,17 @@ const LoginForm = observer((props:Props) => {
         let fields = convertFromValidationErrorToAntDFormFields(viewModel.initialValues, viewModel.loginValidationError)
         // @ts-ignore
         props.form ? props.form.setFields(fields) : form.setFields(fields)
-        if(protectedRoute !== undefined && viewModel.loginValidationError === undefined && viewModel.loginError === undefined && viewModel.globalState.backendError === undefined){
-            return navigate(protectedRoute);
+        if(viewModel.loginValidationError === undefined && viewModel.loginError === undefined && viewModel.globalState.backendError === undefined){
+            //Needs to navigate one way or another
+            if(protectedRoute !== undefined){
+                return navigate(protectedRoute);
+            }
+            else{
+                const homeRouteProvider = inversifyContainer.get<HomeRouteProvider>("HomeRouteProvider");
+                return navigate(homeRouteProvider.homeRoute);
+            }
         }
-        else{
-            const homeRouteProvider = inversifyContainer.get<HomeRouteProvider>("HomeRouteProvider");
-            return navigate(homeRouteProvider.homeRoute);
-        }
+
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps

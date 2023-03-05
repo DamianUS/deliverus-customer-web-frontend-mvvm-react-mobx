@@ -8,10 +8,11 @@ import GlobalState from "../GlobalState";
 import RestaurantRepository from "../../model/restaurant/interfaces/RestaurantRepository";
 import loadingToggler from "../decorators/LoadingToggler";
 import User from "../../model/user/User";
+import backendErrorHandled from "../decorators/BackendErrorHandled";
 
 
 @injectable()
-class IndexRestaurantsViewModel{
+class OwnerRestaurantsViewModel{
     restaurantRepository: RestaurantRepository;
     restaurants: Restaurant[];
     globalState: GlobalState;
@@ -24,16 +25,10 @@ class IndexRestaurantsViewModel{
     }
 
     @loadingToggler()
+    @backendErrorHandled()
     async initialize(): Promise<void> {
-        try{
-            this.restaurants = await this.restaurantRepository.getOwnerRestaurants(this.globalState.loggedInUser as User);
-        }
-        catch(error){
-            // @ts-ignore
-            if(error.name === "BackendServiceError")
-                this.globalState.backendError = error as BackendServiceError;
-        }
+        this.restaurants = await this.restaurantRepository.getOwnerRestaurants(this.globalState.loggedInUser as User);
     }
 }
 
-export default IndexRestaurantsViewModel;
+export default OwnerRestaurantsViewModel;

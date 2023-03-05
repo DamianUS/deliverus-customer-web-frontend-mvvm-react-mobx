@@ -4,11 +4,12 @@ import IndexRestaurantsViewModel from "../../../../viewmodel/restaurants/IndexRe
 import { observer } from "mobx-react-lite"
 import BaseLayout from "../../templates/BaseLayout";
 import RestaurantCard from "../../components/organisms/restaurants/RestaurantCard";
+import OwnerRestaurantsViewModel from "../../../../viewmodel/restaurants/OwnerRestaurantsViewModel";
 
 
 const RestaurantList = observer(() => {
 
-    const [viewModel] = React.useState(inversifyContainer.get<IndexRestaurantsViewModel>("IndexRestaurantsViewModel"))
+    const [viewModel] = React.useState(inversifyContainer.get<OwnerRestaurantsViewModel>("OwnerRestaurantsViewModel"))
     // eslint-disable-next-line react-hooks/exhaustive-deps
     // @ts-ignore
     React.useEffect(() => {

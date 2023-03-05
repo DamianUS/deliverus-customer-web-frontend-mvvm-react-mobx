@@ -19,7 +19,7 @@ class HomeRouteProvider{
             return "/restaurants";
         }
         else if(loggedInUser?.userType === "owner"){
-            return `/owners/${loggedInUser.id}/restaurants`;
+            return `/restaurants-owner`;
         }
         return route;
     }

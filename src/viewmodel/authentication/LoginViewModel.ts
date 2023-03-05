@@ -12,6 +12,7 @@ import ValidationError from "../../model/errors/ValidationError";
 import { object, string} from 'yup';
 import * as yup from 'yup';
 import TokenStorer from "../../view/services/interfaces/TokenStorer";
+import backendErrorHandled from "../decorators/BackendErrorHandled";
 
 
 @injectable()
@@ -42,6 +43,7 @@ class LoginViewModel{
         makeAutoObservable(this);
     }
     @loadingToggler()
+    @backendErrorHandled()
     async login(email:string, password:string) {
         try{
             this.loginValidationError = undefined;
@@ -58,11 +60,11 @@ class LoginViewModel{
             if(error instanceof yup.ValidationError){
                 this.loginValidationError = ValidationError.fromYupErrors(error)
             }
-            if(error instanceof BackendServiceError){
-                this.globalState.backendError = error;
-            }
             else if(error instanceof UnauthorizedError){
                 this.loginError = error
+            }
+            else{
+                throw error;
             }
         }
     }

@@ -13,14 +13,8 @@ const basePath = '/restaurants'
 
 const restaurantRoutes = (
     <>
-        <GuardedRoute path={basePath} element={<RestaurantList/>} guards={[]}>
-            <GuardProvider fallback={<div>loading...</div>} guards={[isOwner]}>
-                <GuardedRoutes>
-                    <GuardedRoute path="/" element={<OwnerRestaurantList/>} />
-                </GuardedRoutes>
-            </GuardProvider>
-        </GuardedRoute>
-
+        <GuardedRoute path={basePath} element={<RestaurantList/>} guards={[]}></GuardedRoute>
+        <GuardedRoute path={`${basePath}-owner`} guards={[isOwner]} element={<OwnerRestaurantList/>} />
     </>
 )
 export default restaurantRoutes

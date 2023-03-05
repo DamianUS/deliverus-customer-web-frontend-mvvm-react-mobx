@@ -10,12 +10,12 @@ import { cloneDeep } from "lodash";
 import { object, string} from 'yup';
 import * as yup from 'yup';
 
-const generateToken = () => {
-    return "mockToken"
+const generateToken = (user: User) => {
+    return user.token ?? "mockToken"
 }
 
 const refreshToken = (user: User):void => {
-    user.token = generateToken()
+    user.token = generateToken(user);
     user.tokenExpiration = new Date(new Date().getTime() + 30*60000);
 }
 
