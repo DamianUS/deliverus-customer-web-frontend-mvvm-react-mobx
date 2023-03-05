@@ -6,12 +6,12 @@ import config from "../../../config/config";
 import BackendServiceError from "../../errors/BackendServiceError";
 import MockRestaurantConversor from "./MockRestaurantConversor";
 import User from "../../user/User";
-import exp from "constants";
 import UnauthorizedError from "../../errors/UnauthorizedError";
 import MockUserRepository from "../../user/mockRepository/MockUserRepository";
-import AuthenticationRepository from "../../authentication/interfaces/AuthenticationRepository";
 import MockAuthenticationRepository from "../../authentication/MockAuthenticationRepository";
 import ForbiddenError from "../../errors/ForbiddenError";
+import restaurantsMocked from "./restaurants.json";
+
 // @ts-ignore
 
 test('getAll devuelve un array o un BackendServiceError if mocking service is disabled', async () => {
@@ -36,11 +36,11 @@ test('getAll devuelve un array no vacío o un BackendServiceError if mocking ser
     }
 });
 
-test('getAll devuelve un array de longitud 9', async () => {
+test('getAll devuelve un array de longitud correcta', async () => {
     expect.assertions(1)
     try{
         const restaurants = await new MockRestaurantRepository().getAll()
-        expect(restaurants.length === 9).toBeTruthy();
+        expect(restaurants.length === restaurantsMocked.length).toBeTruthy();
     }
     catch(error){
         expect(config.mock_disabled && error instanceof BackendServiceError).toBeTruthy();
@@ -103,6 +103,18 @@ test('getAll devuelve un array de Restaurant que tienen restaurantCategories y t
     }
 });
 
+test('getAll devuelve un array de Restaurant que tienen owner de tipo user', async () => {
+    expect.assertions(1)
+    try {
+        const restaurants = await new MockRestaurantRepository().getAll()
+        const areAllUsers = restaurants.map(restaurant => restaurant.owner !== undefined && restaurant.owner instanceof User).reduce((areAllUsers, areUsers) => areAllUsers && areUsers, true)
+        expect(areAllUsers).toBeTruthy();
+    }
+    catch(error){
+        expect(config.mock_disabled && error instanceof BackendServiceError).toBeTruthy();
+    }
+});
+
 test('findById con id 2 devuelve algo definido', async () => {
     expect.assertions(1)
     try {
@@ -130,6 +142,7 @@ test('findById con id 10 devuelve null', async () => {
 test('findById con id 1 devuelve algo un tipo Restaurant', async () => {
     expect.assertions(1)
     try {
+        // eslint-disable-next-line testing-library/no-await-sync-query
         const restaurant = await new MockRestaurantRepository().getById(1)
         expect(restaurant instanceof Restaurant).toBeTruthy();
     }
@@ -141,6 +154,7 @@ test('findById con id 1 devuelve algo un tipo Restaurant', async () => {
 test('findById con id 1 devuelve algo un tipo Restaurant que tiene restaurantCategory', async () => {
     expect.assertions(1)
     try {
+        // eslint-disable-next-line testing-library/no-await-sync-query
         const restaurant = await new MockRestaurantRepository().getById(1)
         expect(restaurant?.category instanceof RestaurantCategory).toBeTruthy();
     }
@@ -175,7 +189,7 @@ test('findById con id 3 devuelve un tipo Restaurant con el logo undefined', asyn
     }
 });
 
-const _createMockRestaurant = ():Restaurant => {
+const _createMockRestaurant = ():Promise<Restaurant> => {
     const restaurantObject = {
         "name": "Mocked restaurant",
         "description": "Cocina Tradicional",
@@ -200,25 +214,20 @@ const _createMockRestaurant = ():Restaurant => {
     return new MockRestaurantConversor().convertToInternalEntity(restaurantObject)
 }
 
-const _createMockRestaurantObject = ():object => {
-    const newRestaurant = _createMockRestaurant()
-    return new MockRestaurantConversor().convertToExternalObject(newRestaurant)
-}
-
-test('save es capaz de utilizar un conversor para pasar de restaurant object a Restaurant', () => {
+test('save es capaz de utilizar un conversor para pasar de restaurant object a Restaurant', async () => {
     // @ts-ignore
-    const newRestaurant = _createMockRestaurant()
+    const newRestaurant = await _createMockRestaurant()
     expect(newRestaurant instanceof Restaurant).toBeTruthy();
 });
 
-test('save es capaz de utilizar un conversor para pasar de Restaurant a object',() => {
-    const newRestaurant = _createMockRestaurant()
+test('save es capaz de utilizar un conversor para pasar de Restaurant a object',async () => {
+    const newRestaurant = await _createMockRestaurant()
     const restaurantObject = new MockRestaurantConversor().convertToExternalObject(newRestaurant)
     expect(typeof restaurantObject).toEqual('object');
 });
 
-test('save es capaz de utilizar un conversor para pasar de restaurant object a Restaurant que tiene restaurantCateogry con id 1',() => {
-    const newRestaurant = _createMockRestaurant();
+test('save es capaz de utilizar un conversor para pasar de restaurant object a Restaurant que tiene restaurantCateogry con id 1',async () => {
+    const newRestaurant = await _createMockRestaurant();
     expect(newRestaurant.category.id).toEqual(1);
 });
 
@@ -226,7 +235,7 @@ test('save es capaz de incrementar la length del array a 10', async () => {
     expect.assertions(1)
     try {
         const repository = new MockRestaurantRepository()
-        const newRestaurant = _createMockRestaurant()
+        const newRestaurant = await _createMockRestaurant()
         await repository.save(newRestaurant)
         const restaurants = await repository.getAll()
         expect(restaurants.length).toEqual(10);
@@ -240,7 +249,7 @@ test('save introduce Restaurants con id numérico', async () => {
     expect.assertions(1)
     try{
         const repository = new MockRestaurantRepository()
-        const newRestaurant = _createMockRestaurant()
+        const newRestaurant = await _createMockRestaurant()
         await repository.save(newRestaurant)
         const restaurants = await repository.getAll()
         expect(restaurants.find(restaurant => typeof restaurant.id !== 'number')).toBeUndefined();
@@ -254,14 +263,18 @@ test('save introduce 6 elementos', async () => {
     expect.assertions(1)
     const repository = new MockRestaurantRepository()
     // @ts-ignore
-    const insertionPromises = [...Array(6).keys()].map(_ => {
-        const newRestaurant = _createMockRestaurant()
-        return repository.save(newRestaurant)
+    const creationPromises = [...Array(6).keys()].map(_ => {
+        return _createMockRestaurant()
+    })
+    const entities = await Promise.all(creationPromises);
+    // @ts-ignore
+    const insertionPromises = entities.map(entity => {
+        return repository.save(entity)
     })
     try{
         await Promise.all(insertionPromises);
         const restaurants = await repository.getAll()
-        expect(restaurants.length).toEqual(15);
+        expect(restaurants.length).toEqual(restaurantsMocked.length+6);
     }
     catch(error){
         expect(config.mock_disabled && error instanceof BackendServiceError).toBeTruthy();
@@ -373,7 +386,7 @@ test('getOwnerRestaurants devuelve UnauthorizedError con usuario Owner con token
     }
 });
 
-test('getOwnerRestaurants devuelve Forbidden error error con usuario Customer logeado', async () => {
+test('getOwnerRestaurants devuelve Forbidden error con usuario Customer logeado', async () => {
     const repository = new MockRestaurantRepository();
     const authRepository = new MockAuthenticationRepository();
     try{
@@ -385,6 +398,7 @@ test('getOwnerRestaurants devuelve Forbidden error error con usuario Customer lo
         expect(restaurants).toBeUndefined();
     }
     catch(error){
+        const hola = error instanceof ForbiddenError;
         expect(config.mock_disabled ? error instanceof BackendServiceError : error instanceof ForbiddenError).toBeTruthy();
     }
 });

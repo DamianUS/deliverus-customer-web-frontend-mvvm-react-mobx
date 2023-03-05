@@ -1,7 +1,7 @@
 import Model from "../../interfaces/Model";
 
 interface Conversor<T extends Model>{
-    convertToInternalEntity(sourceExternalObject: object):T;
+    convertToInternalEntity(sourceExternalObject: object):Promise<T>;
     convertToExternalObject(entity: T):object;
     //Expected formats for mapper
     //Case 1: {key1: {key2, value} -> key1 is the name of the target entity's property, whilst key2 is the name of the external object property, and value is the function to pass from key2 -> key1

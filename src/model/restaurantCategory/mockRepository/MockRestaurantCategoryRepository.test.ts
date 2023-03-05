@@ -138,7 +138,7 @@ test('findById con id 1 devuelve algo un tipo RestaurantCategory que tiene creat
     }
 });
 
-const _createMockEntity = ():RestaurantCategory => {
+const _createMockEntity = ():Promise<RestaurantCategory> => {
     const object = {
         "name": "Mock restaurant category",
         "createdAt": "2023-02-26T20:17:10.000Z",
@@ -147,19 +147,14 @@ const _createMockEntity = ():RestaurantCategory => {
     return conversor.convertToInternalEntity(object)
 }
 
-const _createMockObject = ():object => {
-    const newEntity = _createMockEntity()
-    return conversor.convertToExternalObject(newEntity)
-}
-
-test('save es capaz de utilizar un conversor para pasar de object a entity', () => {
+test('save es capaz de utilizar un conversor para pasar de object a entity', async () => {
     // @ts-ignore
-    const newEntity = _createMockEntity()
+    const newEntity = await _createMockEntity()
     expect(newEntity instanceof RestaurantCategory).toBeTruthy();
 });
 
-test('save es capaz de utilizar un conversor para pasar de entity a object',() => {
-    const entity = _createMockEntity()
+test('save es capaz de utilizar un conversor para pasar de entity a object',async () => {
+    const entity = await _createMockEntity()
     const object = conversor.convertToExternalObject(entity)
     expect(typeof object).toEqual('object');
 });
@@ -169,7 +164,7 @@ test(`save es capaz de incrementar la length del array a ${collectionLength+1}`,
     expect.assertions(1)
     try {
         const repository = new MockRestaurantCategoryRepository()
-        const newEntity = _createMockEntity()
+        const newEntity = await _createMockEntity()
         await repository.save(newEntity)
         const entities = await repository.getAll()
         expect(entities.length).toEqual(collectionLength+1);
@@ -183,7 +178,7 @@ test('save introduce Entities con id numérico', async () => {
     expect.assertions(1)
     try{
         const repository = new MockRestaurantCategoryRepository()
-        const newEntity = _createMockEntity()
+        const newEntity = await _createMockEntity()
         await repository.save(newEntity)
         const entities = await repository.getAll()
         expect(entities.find(entity => typeof entity.id !== 'number')).toBeUndefined();
@@ -197,8 +192,12 @@ test('save introduce 6 elementos', async () => {
     expect.assertions(1)
     const repository = new MockRestaurantCategoryRepository()
     // @ts-ignore
-    const insertionPromises = [...Array(6).keys()].map(_ => {
-        const newEntity = _createMockEntity()
+    const creationPromises = [...Array(6).keys()].map(_ => {
+        return _createMockEntity()
+    })
+    const entities = await Promise.all(creationPromises);
+    // @ts-ignore
+    const insertionPromises = entities.map(newEntity => {
         return repository.save(newEntity)
     })
     try{

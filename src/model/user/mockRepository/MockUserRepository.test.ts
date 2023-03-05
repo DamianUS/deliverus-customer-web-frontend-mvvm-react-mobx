@@ -165,7 +165,7 @@ test('findById con id 1 devuelve algo un tipo User que tiene createdAt y updated
     }
 });
 
-const _createMockEntity = ():User => {
+const _createMockEntity = ():Promise<User> => {
     const object = {
         "firstName": "Mocked customer",
         "lastName": "Fake 1",
@@ -180,21 +180,17 @@ const _createMockEntity = ():User => {
     return conversor.convertToInternalEntity(object)
 }
 
-const _createMockObject = ():object => {
-    const newEntity = _createMockEntity()
-    return conversor.convertToExternalObject(newEntity)
-}
 
-test('save es capaz de utilizar un conversor para pasar de object a entity', () => {
+test('save es capaz de utilizar un conversor para pasar de object a entity', async () => {
     // @ts-ignore
     expect.assertions(1)
-    const newEntity = _createMockEntity()
+    const newEntity:User = await _createMockEntity();
     expect(newEntity instanceof User).toBeTruthy();
 });
 
-test('save es capaz de utilizar un conversor para pasar de entity a object',() => {
+test('save es capaz de utilizar un conversor para pasar de entity a object',async () => {
     expect.assertions(1)
-    const entity = _createMockEntity()
+    const entity = await _createMockEntity()
     const object = conversor.convertToExternalObject(entity)
     expect(typeof object).toEqual('object');
 });
@@ -204,7 +200,7 @@ test(`save es capaz de incrementar la length del array a ${collectionLength+1}`,
     expect.assertions(1)
     try {
         const repository = new MockUserRepository()
-        const newEntity = _createMockEntity()
+        const newEntity = await _createMockEntity()
         await repository.save(newEntity)
         const entities = await repository.getAll()
         expect(entities.length).toEqual(collectionLength+1);
@@ -218,7 +214,7 @@ test('save introduce Entities con id numérico', async () => {
     expect.assertions(1)
     try{
         const repository = new MockUserRepository()
-        const newEntity = _createMockEntity()
+        const newEntity = await _createMockEntity()
         await repository.save(newEntity)
         const entities = await repository.getAll()
         expect(entities.find(entity => typeof entity.id !== 'number')).toBeUndefined();
@@ -232,8 +228,12 @@ test('save introduce 6 elementos', async () => {
     expect.assertions(1)
     const repository = new MockUserRepository()
     // @ts-ignore
-    const insertionPromises = [...Array(6).keys()].map(_ => {
-        const newEntity = _createMockEntity()
+    const creationPromises = [...Array(6).keys()].map(_ => {
+        return _createMockEntity()
+    })
+    const entities = await Promise.all(creationPromises);
+    // @ts-ignore
+    const insertionPromises = entities.map(newEntity => {
         return repository.save(newEntity)
     })
     try{

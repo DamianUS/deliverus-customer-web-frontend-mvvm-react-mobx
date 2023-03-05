@@ -57,6 +57,7 @@ test('login con token customer3token devuelve undefined', async () => {
         expect(user).toBeUndefined();
     }
     catch(error){
+        // eslint-disable-next-line jest/no-conditional-expect
         expect(config.mock_disabled && error instanceof BackendServiceError).toBeTruthy();
     }
 });
@@ -66,6 +67,7 @@ test('login con token customer2token devuelve user con fecha de expiración actu
     try {
         const repository = new MockAuthenticationRepository();
         const userRepository = new MockUserRepository();
+        // eslint-disable-next-line testing-library/no-await-sync-query
         const user = await userRepository.getById(3);
         const userRefreshed = await repository.loginByToken("customer2token");
         expect(userRefreshed instanceof User

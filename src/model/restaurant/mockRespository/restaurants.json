@@ -19,7 +19,8 @@
         "name": "Fast food",
         "createdAt": "2023-02-26T20:17:10.000Z",
         "updatedAt": "2023-02-26T20:17:10.000Z"
-      }
+      },
+      "userId": 2
     },
     {
       "id": 3,
@@ -39,7 +40,8 @@
         "name": "Fast food",
         "createdAt": "2023-02-26T20:17:10.000Z",
         "updatedAt": "2023-02-26T20:17:10.000Z"
-      }
+      },
+      "userId": 2
     },
     {
       "id": 4,
@@ -59,7 +61,8 @@
         "name": "Fast food",
         "createdAt": "2023-02-26T20:17:10.000Z",
         "updatedAt": "2023-02-26T20:17:10.000Z"
-      }
+      },
+      "userId": 2
     },
     {
       "id": 5,
@@ -79,7 +82,8 @@
         "name": "Fast food",
         "createdAt": "2023-02-26T20:17:10.000Z",
         "updatedAt": "2023-02-26T20:17:10.000Z"
-      }
+      },
+      "userId": 5
     },
     {
       "id": 6,
@@ -99,7 +103,8 @@
         "name": "Fast food",
         "createdAt": "2023-02-26T20:17:10.000Z",
         "updatedAt": "2023-02-26T20:17:10.000Z"
-      }
+      },
+      "userId": 2
     },
     {
       "id": 7,
@@ -119,7 +124,8 @@
         "name": "Fast food",
         "createdAt": "2023-02-26T20:17:10.000Z",
         "updatedAt": "2023-02-26T20:17:10.000Z"
-      }
+      },
+      "userId": 2
     },
     {
       "id": 8,
@@ -139,7 +145,8 @@
         "name": "Fast food",
         "createdAt": "2023-02-26T20:17:10.000Z",
         "updatedAt": "2023-02-26T20:17:10.000Z"
-      }
+      },
+      "userId": 2
     },
     {
       "id": 9,
@@ -159,7 +166,8 @@
         "name": "Fast food",
         "createdAt": "2023-02-26T20:17:10.000Z",
         "updatedAt": "2023-02-26T20:17:10.000Z"
-      }
+      },
+      "userId": 2
     },
     {
       "id": 1,
@@ -180,6 +188,7 @@
         "name": "Spanish",
         "createdAt": "2023-02-26T20:17:10.000Z",
         "updatedAt": "2023-02-26T20:17:10.000Z"
-      }
+      },
+      "userId": 2
     }
   ]

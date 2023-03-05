@@ -5,6 +5,7 @@ import inversifyContainer from "../../../../../config/inversify.config";
 import {Form, Modal, Input, Button, Checkbox, Typography, Col, FormInstance, Result, Alert} from "antd";
 import {convertFromValidationErrorToAntDFormFields} from "../../../validation/ConversorToAntDFormFields";
 import { useNavigate } from "react-router-dom";
+import HomeRouteProvider from "../../../routes/HomeRouteProvider";
 
 const {Text, Paragraph} = Typography;
 
@@ -25,6 +26,10 @@ const LoginForm = observer((props:Props) => {
         props.form ? props.form.setFields(fields) : form.setFields(fields)
         if(protectedRoute !== undefined && viewModel.loginValidationError === undefined && viewModel.loginError === undefined && viewModel.globalState.backendError === undefined){
             return navigate(protectedRoute);
+        }
+        else{
+            const homeRouteProvider = inversifyContainer.get<HomeRouteProvider>("HomeRouteProvider");
+            return navigate(homeRouteProvider.homeRoute);
         }
     }
 
@@ -64,7 +69,7 @@ const LoginForm = observer((props:Props) => {
 
             {!props.form && <Form.Item>
                 <Button type="primary" htmlType="submit">
-                    Submit
+                    Login
                 </Button>
             </Form.Item>}
         </Form>

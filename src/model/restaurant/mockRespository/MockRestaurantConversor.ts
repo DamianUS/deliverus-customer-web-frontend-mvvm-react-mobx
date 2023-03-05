@@ -5,6 +5,9 @@ import RestaurantCategory from "../../restaurantCategory/RestaurantCategory";
 import MockRestaurantCategoryConversor, {
     MockRestaurantCategoryObject
 } from "../../restaurantCategory/mockRepository/MockRestaurantCategoryConversor";
+import User from "../../user/User";
+import MockUserRepository from "../../user/mockRepository/MockUserRepository";
+import MockUserConversor from "../../user/mockRepository/MockUserConversor";
 
 type MockRestaurantObject = {
     id: number|undefined,
@@ -21,10 +24,15 @@ type MockRestaurantObject = {
     heroImage: string|undefined,
     status: string|undefined,
     restaurantCategoryId: number|undefined,
-    restaurantCategory: MockRestaurantCategoryObject|undefined
+    restaurantCategory: MockRestaurantCategoryObject|undefined,
+    userId: number|undefined
 }
 const convertToRestaurantCategoryId = (restaurantCategory: RestaurantCategory): number => {
     return restaurantCategory.id ?? -1;
+}
+
+const convertToUserId = (user: User): number => {
+    return user.id ?? -1;
 }
 
 class MockRestaurantConversor extends BaseConversor<Restaurant>{
@@ -48,7 +56,8 @@ class MockRestaurantConversor extends BaseConversor<Restaurant>{
             "heroImage": undefined,
             "status": undefined,
             "restaurantCategoryId": undefined,
-            "restaurantCategory": undefined
+            "restaurantCategory": undefined,
+            "userId": undefined,
         };
     }
 
@@ -57,12 +66,13 @@ class MockRestaurantConversor extends BaseConversor<Restaurant>{
             restaurantCategoryId: {"category": convertToRestaurantCategoryId},
             createdAt: {"createdAt": convertDateToString},
             updatedAt: {"updatedAt": convertDateToString},
+            userId: {"owner": convertToUserId}
         }
     }
 
     getMapperToObtainInternalEntity(): Record<string, any> {
         return {
-            category: {"restaurantCategory": (sourceObject:MockRestaurantObject):RestaurantCategory => {
+            category: {"restaurantCategory": async (sourceObject:MockRestaurantObject):Promise<RestaurantCategory|undefined> => {
                 //This anonymous function is needed because of limitations of Javascript. In other languages, I had passed a static method, but...
                 const conversor = new MockRestaurantCategoryConversor();
                 return conversor.convertToInternalEntity(sourceObject);
@@ -70,6 +80,15 @@ class MockRestaurantConversor extends BaseConversor<Restaurant>{
             //owner: {"user": convertToOwner },
             createdAt: {"createdAt": convertToDate},
             updatedAt: {"updatedAt": convertToDate},
+            owner: {"userId": async (userId:number):Promise<User|undefined> => {
+                    //This anonymous function is needed because of limitations of Javascript. In other languages, I had passed a static method, but...
+                const userRepository = new MockUserRepository();
+                const user = await userRepository.getById(userId);
+                if(user){
+                    const conversor = new MockUserConversor();
+                    return conversor.convertToInternalEntity(user);
+                }
+            }},
         }
     }
 

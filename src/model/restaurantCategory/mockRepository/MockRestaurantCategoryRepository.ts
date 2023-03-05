@@ -6,27 +6,27 @@ import BaseMockRepository from "../../mocks/BaseMockRepository";
 import RestaurantCategory from "../RestaurantCategory";
 import MockRestaurantCategoryConversor from "./MockRestaurantCategoryConversor";
 import RestaurantCategoryRepository from "../interfaces/RestaurantCategoryRepository";
+import Conversor from '../../conversion/interfaces/Conversor';
+
 @injectable()
-class MockRestaurantCategoryRepository extends BaseMockRepository<RestaurantCategory> implements RestaurantCategoryRepository{
-    private conversor:MockRestaurantCategoryConversor;
+class MockRestaurantCategoryRepository extends BaseMockRepository<RestaurantCategory> implements RestaurantCategoryRepository {
+    private _conversor:MockRestaurantCategoryConversor;
     constructor() {
         super()
-        this.conversor = new MockRestaurantCategoryConversor();
-        this.entities = restaurantCategoriesMocked.map(restaurantCategoryObject => this.conversor.convertToInternalEntity(restaurantCategoryObject));
+        this._conversor = new MockRestaurantCategoryConversor();
     }
-
+    get mockedEntites(): object[] {
+        return restaurantCategoriesMocked;
+    }
+    get conversor(): Conversor<RestaurantCategory> {
+        return this._conversor
+    }
     get creationValidationSchema(): object|undefined {
         return undefined;
     }
 
     get updateValidationSchema(): object|undefined {
         return undefined;
-    }
-
-    @disableable()
-    async getAll(): Promise<RestaurantCategory[]> {
-        // @ts-ignore
-        return this.entities;
     }
 }
 export default MockRestaurantCategoryRepository;

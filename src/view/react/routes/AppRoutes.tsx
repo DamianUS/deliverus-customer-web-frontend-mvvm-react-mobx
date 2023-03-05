@@ -9,8 +9,8 @@ import {
 import App from "../App";
 import restaurantRoutes from "./RestaurantRoutes";
 import Login from "../pages/Login";
-import guestGuard from "./guards/GuestGuard";
 import retrieveAuthenticatedUser from "./guards/RetrieveAuthenticatedUser";
+import isGuest from "./guards/IsGuest";
 function AppRoutes (props:object|undefined) {
   return (
           <BrowserRouter>
@@ -23,7 +23,7 @@ function AppRoutes (props:object|undefined) {
                   <GuardProvider fallback={<div>loading...</div>} guards={[retrieveAuthenticatedUser]}>
                       <GuardedRoutes>
                           <GuardedRoute path="/" element={<App />} />
-                          <GuardedRoute path="/login" guards={[guestGuard]} element={<Login />} />
+                          <GuardedRoute path="/login" guards={[isGuest]} element={<Login />} />
                           {restaurantRoutes}
                       </GuardedRoutes>
                   </GuardProvider>

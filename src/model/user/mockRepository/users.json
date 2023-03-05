@@ -60,5 +60,19 @@
     "updatedAt": "2023-02-26T20:17:10.000Z",
     "token": "customer3token",
     "tokenExpiration": "2023-02-26T20:17:10.000Z"
+  },
+  {
+    "id": 5,
+    "firstName": "Restaurant Owner 2",
+    "lastName": "Fake 1",
+    "email": "owner2@owner.com",
+    "password": "secret",
+    "phone": "+3466677888",
+    "address": "Fake street 123",
+    "postalCode": "41001",
+    "userType": "owner",
+    "avatar": "/femaleavatar.png",
+    "createdAt": "2023-02-26T20:17:10.000Z",
+    "updatedAt": "2023-02-26T20:17:10.000Z"
   }
 ]

@@ -3,10 +3,10 @@ import Conversor from "./interfaces/Conversor";
 
 abstract class BaseConversor<T extends Model> implements Conversor<T>{
 
-    convertToInternalEntity(sourceObject: object):T{
+    async convertToInternalEntity(sourceObject: object):Promise<T>{
         const emptyEntity = this.getEmptyInternalEntity();
         const mappingRules = this.getMapperToObtainInternalEntity()
-        emptyEntity.getProperties().forEach(entityPropertyName => {
+        const promises = emptyEntity.getProperties().map(async entityPropertyName => {
             const mappingRule = mappingRules[entityPropertyName];
             if(!mappingRule){
                 // @ts-ignore
@@ -18,7 +18,15 @@ abstract class BaseConversor<T extends Model> implements Conversor<T>{
                 const conversionValue = sourceObject[Object.keys(mappingRule)[0]];
                 if(conversionValue && conversionFunction){
                     // @ts-ignore
-                    emptyEntity[entityPropertyName] = conversionFunction(conversionValue);
+                    const conversionResult = conversionFunction(conversionValue);
+                    if(conversionResult instanceof Promise){
+                        // @ts-ignore
+                        emptyEntity[entityPropertyName] = await conversionResult;
+                    }
+                    else{
+                        // @ts-ignore
+                        emptyEntity[entityPropertyName] = conversionResult;
+                    }
                 }
             }
             else if(typeof mappingRule === 'string'){
@@ -26,6 +34,7 @@ abstract class BaseConversor<T extends Model> implements Conversor<T>{
                 emptyEntity[entityPropertyName] = sourceObject[mappingRule];
             }
         })
+        await Promise.all(promises);
         return emptyEntity;
     }
 

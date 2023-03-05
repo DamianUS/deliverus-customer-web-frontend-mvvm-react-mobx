@@ -17,6 +17,7 @@ import MockAuthenticationRepository from "../model/authentication/MockAuthentica
 import TokenStorer from "../view/services/interfaces/TokenStorer";
 import BrowserLocalStorageStorer from "../view/services/BrowserLocalStorageStorer";
 import LogoutViewModel from "../viewmodel/authentication/LogoutViewModel";
+import HomeRouteProvider from "../view/react/routes/HomeRouteProvider";
 
 const inversifyContainer = new Container()
 inversifyContainer.bind<GlobalState>('GlobalState').to(GlobalState).inSingletonScope()
@@ -34,5 +35,6 @@ inversifyContainer.bind<LogoutViewModel>('LogoutViewModel').to(LogoutViewModel).
 //View
 inversifyContainer.bind<ViewEngine>('ViewEngineService').to(ReactEngineService)
 inversifyContainer.bind<TokenStorer>('TokenStorer').to(BrowserLocalStorageStorer)
+inversifyContainer.bind<HomeRouteProvider>('HomeRouteProvider').to(HomeRouteProvider)
 
 export default inversifyContainer

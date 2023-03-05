@@ -7,17 +7,22 @@ import BaseMockRepository from "../../mocks/BaseMockRepository";
 import UserRepository from "../interfaces/UserRepository";
 import disableable from "../../mocks/decorators/Disableable";
 import { cloneDeep } from "lodash";
+import Conversor from '../../conversion/interfaces/Conversor';
 
 @injectable()
-class MockUserRepository extends BaseMockRepository<User> implements UserRepository{
-    private conversor:MockUserConversor;
+class MockUserRepository extends BaseMockRepository<User> implements UserRepository {
+    private _conversor:MockUserConversor;
 
     constructor() {
         super()
-        this.conversor = new MockUserConversor();
-        this.entities = usersMocked.map((userObject) => this.conversor.convertToInternalEntity(userObject));
+        this._conversor = new MockUserConversor();
     }
-
+    get mockedEntites(): object[] {
+        return usersMocked;
+    }
+    get conversor(): Conversor<User> {
+        return this._conversor;
+    }
     get creationValidationSchema(): object|undefined {
         return undefined;
     }

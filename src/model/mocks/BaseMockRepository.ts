@@ -3,23 +3,29 @@ import Model from "../interfaces/Model";
 import disableable from "./decorators/Disableable";
 import {injectable} from "inversify";
 import { cloneDeep } from "lodash";
+import Conversor from "../conversion/interfaces/Conversor";
 
 // @ts-ignore
 @injectable()
 abstract class BaseMockRepository<T extends Model> implements Repository<T>{
-    entities:T[]
-
-    protected constructor() {
-        this.entities = [];
-    }
+    entities:T[]|undefined
 
     abstract get creationValidationSchema():object|undefined;
     abstract get updateValidationSchema():object|undefined;
+    abstract get mockedEntites():object[];
+    abstract get conversor():Conversor<T>;
 
+    async initializeEntities(): Promise<void> {
+        const entitiesPromises = this.mockedEntites.map(entitySourceObject => this.conversor.convertToInternalEntity(entitySourceObject));
+        this.entities = await Promise.all(entitiesPromises)
+    }
 
     @disableable()
     async getAll(): Promise<T[]>{
-        return this.entities
+        if (!this.entities){
+            await this.initializeEntities();
+        }
+        return this.entities ?? []
     }
 
     @disableable()
@@ -34,7 +40,7 @@ abstract class BaseMockRepository<T extends Model> implements Repository<T>{
     async removeById(id: number): Promise<number> {
         const entities = await this.getAll()
         const oldCount = entities.length
-        if(!id || !entities.find(entity => entity.id === id))
+        if(!this.entities || !id || !entities.find(entity => entity.id === id))
             return 0
         this.entities = this.entities.filter(entity => entity.id !== id)
         return this.entities.length - oldCount
@@ -55,7 +61,7 @@ abstract class BaseMockRepository<T extends Model> implements Repository<T>{
         clonedEntity.id = lastId+1;
         clonedEntity.createdAt = new Date();
         clonedEntity.updatedAt = new Date();
-        this.entities.push(clonedEntity);
+        this.entities?.push(clonedEntity);
         return clonedEntity;
     }
     @disableable()
@@ -67,7 +73,9 @@ abstract class BaseMockRepository<T extends Model> implements Repository<T>{
         }
         const clonedEntity = cloneDeep(entity);
         clonedEntity.updatedAt = new Date();
-        this.entities[oldEntityIndex] = clonedEntity;
+        if(this.entities){
+            this.entities[oldEntityIndex] = clonedEntity;
+        }
         return clonedEntity;
     }
 }
