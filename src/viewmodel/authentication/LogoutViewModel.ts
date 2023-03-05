@@ -13,6 +13,7 @@ import { object, string, number, date, InferType} from 'yup';
 import * as yup from 'yup';
 import React from "react";
 import TokenStorer from "../../view/services/interfaces/TokenStorer";
+import backendErrorHandled from "../decorators/BackendErrorHandled";
 
 
 @injectable()
@@ -28,18 +29,12 @@ class LogoutViewModel{
         makeAutoObservable(this)
     }
     @loadingToggler()
+    @backendErrorHandled()
     async logout() {
         if(this.globalState.loggedInUser !== undefined){
-            try{
-                await this.authenticationRepository.logout(this.globalState.loggedInUser);
-                this.globalState.loggedInUser = undefined;
-                this.tokenStorer.clear();
-            }
-            catch(error){
-                if(error instanceof BackendServiceError){
-                    this.globalState.backendError = error;
-                }
-            }
+            await this.authenticationRepository.logout(this.globalState.loggedInUser);
+            this.globalState.loggedInUser = undefined;
+            this.tokenStorer.clear();
         }
     }
 }

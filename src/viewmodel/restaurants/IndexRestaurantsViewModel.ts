@@ -7,6 +7,7 @@ import { makeAutoObservable } from "mobx"
 import GlobalState from "../GlobalState";
 import RestaurantRepository from "../../model/restaurant/interfaces/RestaurantRepository";
 import loadingToggler from "../decorators/LoadingToggler";
+import backendErrorHandled from "../decorators/BackendErrorHandled";
 
 
 @injectable()
@@ -22,15 +23,9 @@ class IndexRestaurantsViewModel{
     }
 
     @loadingToggler()
+    @backendErrorHandled()
     async initialize(): Promise<void> {
-        try{
-            this.restaurants = await this.restaurantRepository.getAll();
-        }
-        catch(error){
-            // @ts-ignore
-            if(error.name === "BackendServiceError")
-                this.globalState.backendError = error as BackendServiceError;
-        }
+        this.restaurants = await this.restaurantRepository.getAll();
     }
 }
 
