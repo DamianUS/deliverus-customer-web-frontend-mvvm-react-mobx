@@ -1,12 +1,18 @@
-import IndexRestaurantsViewModel from "./IndexRestaurantsViewModel";
-import Restaurant from "../../model/restaurant/Restaurant";
-import BackendServiceError from "../../model/errors/BackendServiceError";
-import GlobalState from "../GlobalState";
 import OwnerRestaurantsViewModel from "./OwnerRestaurantsViewModel";
+import User from "../../model/user/User";
+import config from '../../config/config';
+import MockUserRepository from "../../model/user/mockRepository/MockUserRepository";
+import UserType from "../../model/user/UserType";
+import Restaurant from "../../model/restaurant/Restaurant";
 
 test('OwnerRestaurantsViewModel gets a repository injected', () => {
     const viewModel = new OwnerRestaurantsViewModel();
-    expect(viewModel.restaurantRepository).toBeDefined();
+    expect(viewModel.restaurantRepository &&
+        viewModel.globalState !== undefined &&
+        viewModel.globalState.loading === false &&
+        viewModel.globalState.backendError === undefined &&
+        viewModel.globalState.loggedInUser === undefined
+    ).toBeTruthy();
 });
 
 test('OwnerRestaurantsViewModel has an empty array of restaurants at creation', () => {
@@ -14,66 +20,66 @@ test('OwnerRestaurantsViewModel has an empty array of restaurants at creation', 
     expect(viewModel.restaurants).toEqual([]);
 });
 
-test('OwnerRestaurantsViewModel is not loading at creation', () => {
-    const viewModel = new IndexRestaurantsViewModel();
-    expect(viewModel.globalState.loading).toBeFalsy();
+test('OwnerRestaurant throws Authentication error at initialization when an empty user is provided', async () => {
+    const viewModel = new OwnerRestaurantsViewModel();
+    viewModel.globalState.loggedInUser = new User();
+    await viewModel.initialize();
+    const isBackendError = config.mock_disabled && viewModel.globalState.backendError !== undefined
+    const isAuthorizationError = !config.mock_disabled && viewModel.globalState.authenticationError !== undefined
+    expect(isBackendError || isAuthorizationError).toBeTruthy();
 });
 
-test('OwnerRestaurantsViewModel has no backend error at creation', () => {
-    const viewModel = new IndexRestaurantsViewModel();
-    expect(viewModel.globalState.backendError).toBeUndefined();
+const mockLoggedInUser = ():User => {
+    const user = new User();
+    user.token = "algo";
+    user.tokenExpiration = new Date(new Date().getTime() + 30*60000);
+    return user;
+}
+
+const mockExpiredUser = ():User => {
+    const user = new User();
+    user.token = "algo";
+    user.tokenExpiration = new Date(new Date().getTime() - 30*60000);
+    return user;
+}
+
+test('OwnerRestaurant throws Authentication error at initialization when an expired token is provided', async () => {
+    const viewModel = new OwnerRestaurantsViewModel();
+    // eslint-disable-next-line testing-library/no-await-sync-query
+    viewModel.globalState.loggedInUser = mockExpiredUser();
+    await viewModel.initialize();
+    const isBackendError = config.mock_disabled && viewModel.globalState.backendError !== undefined
+    const isAuthorizationError = !config.mock_disabled && viewModel.globalState.authenticationError !== undefined
+    expect(isBackendError || isAuthorizationError).toBeTruthy();
 });
 
-test('OwnerRestaurantsViewModel has no backend error at creation', () => {
-    const viewModel = new IndexRestaurantsViewModel();
-    expect(viewModel.globalState.backendError).toBeUndefined();
+const mockCustomer = ():User => {
+    const user = new User();
+    user.token = "algo";
+    user.tokenExpiration = new Date(new Date().getTime() + 30*60000);
+    user.userType = UserType.customer;
+    return user;
+}
+
+test('OwnerRestaurant throws Forbidden error at initialization when an customer is provided', async () => {
+    const viewModel = new OwnerRestaurantsViewModel();
+    // eslint-disable-next-line testing-library/no-await-sync-query
+    viewModel.globalState.loggedInUser = mockCustomer();
+    await viewModel.initialize();
+    const isBackendError = config.mock_disabled && viewModel.globalState.backendError !== undefined
+    const isForbiddenError = !config.mock_disabled && viewModel.globalState.forbiddenError !== undefined
+    expect(isBackendError || isForbiddenError).toBeTruthy();
 });
 
-/*
-test('IndexRestaurantViewModel recovers an array of length > 0 when page loads', async () => {
-    const viewModel = new IndexRestaurantsViewModel();
-    await viewModel.initialize()
-    expect(viewModel.restaurants.length > 0 || viewModel.globalState.backendError instanceof BackendServiceError).toBeTruthy();
-});
 
-test('IndexRestaurantViewModel recovers an array of restaurants when page loads', async () => {
-    const viewModel = new IndexRestaurantsViewModel();
-    await viewModel.initialize()
-    const areAllRestaurants = viewModel.restaurants.map(restaurant => restaurant instanceof Restaurant).reduce((areAllRestaurants, isRestaurant) =>  areAllRestaurants && isRestaurant, true)
-    expect(areAllRestaurants || viewModel.globalState.backendError instanceof BackendServiceError).toBeTruthy();
+test('OwnerRestaurantsViewModel recovers an array of Restaurants with length 1 when page loads', async () => {
+    const viewModel = new OwnerRestaurantsViewModel();
+    const userRepository = new MockUserRepository();
+    // eslint-disable-next-line testing-library/no-await-sync-query
+    viewModel.globalState.loggedInUser = await userRepository.getById(5);
+    await viewModel.initialize();
+    const isBackendError = config.mock_disabled && viewModel.globalState.backendError !== undefined;
+    const hasLoadedRestaurants = !config.mock_disabled && viewModel.restaurants && viewModel.restaurants.length === 1;
+    const areAllRestaurants = !config.mock_disabled && viewModel.restaurants?.map(restaurant => restaurant instanceof Restaurant).reduce((areAllRestaurants, isRestaurant) =>  areAllRestaurants && isRestaurant, true)
+    expect((hasLoadedRestaurants && areAllRestaurants) || isBackendError).toBeTruthy();
 });
-
-test('IndexRestaurantViewModel gets a GlobalState injected', () => {
-    const viewModel = new IndexRestaurantsViewModel();
-    expect(viewModel.globalState).toBeDefined();
-});
-
-test('IndexRestaurantViewModel initial globalState loading is false', () => {
-    const viewModel = new IndexRestaurantsViewModel();
-    expect(viewModel.globalState.loading).toBeFalsy();
-});
-
-test('IndexRestaurantViewModel initial backendError is false', () => {
-    const viewModel = new IndexRestaurantsViewModel();
-    viewModel.globalState = new GlobalState();
-    expect(viewModel.globalState.backendError).toBeUndefined();
-});
-
-test('GlobalState is loading when IndexRestaurantViewModel starts initializing', () => {
-    const viewModel = new IndexRestaurantsViewModel();
-    viewModel.initialize()
-    expect(viewModel.globalState.loading).toBeTruthy();
-});
-
-test('GlobalState is not loading when IndexRestaurantViewModel ends initializing', async () => {
-    const viewModel = new IndexRestaurantsViewModel();
-    await viewModel.initialize()
-    expect(viewModel.globalState.loading).toBeFalsy();
-});
-
-test('GlobalState is either of undefined when IndexRestaurantViewModel ends initializing', async () => {
-    const viewModel = new IndexRestaurantsViewModel();
-    await viewModel.initialize()
-    expect(viewModel.globalState.backendError === undefined || viewModel.globalState.backendError instanceof BackendServiceError).toBeTruthy();
-});
-*/

@@ -5,10 +5,15 @@ import { makeAutoObservable } from "mobx"
 import BackendServiceError from "../model/errors/BackendServiceError";
 import User from "../model/user/User";
 import config from "../config/config";
+import UnauthorizedError from "../model/errors/UnauthorizedError";
+import ForbiddenError from "../model/errors/ForbiddenError";
 
 
 @injectable()
 class GlobalState{
+    protectedRoute: string|undefined;
+    enabledFrontEndValidation:boolean;
+
     _loading:boolean;
     get loading():boolean{
         return this._loading;
@@ -17,7 +22,6 @@ class GlobalState{
         this._loading = loading;
     }
     _backendError:BackendServiceError|undefined;
-    protectedRoute: string|undefined;
     get backendError():BackendServiceError|undefined{
         return this._backendError;
     }
@@ -34,8 +38,20 @@ class GlobalState{
     set loggedInUser(loggedInUser: User|undefined){
         this._loggedInUser = loggedInUser;
     }
-    enabledFrontEndValidation:boolean;
-
+    _authenticationError:UnauthorizedError|undefined;
+    get authenticationError():UnauthorizedError|undefined{
+        return this._authenticationError;
+    }
+    set authenticationError(authenticationError: UnauthorizedError|undefined){
+        this._authenticationError = authenticationError;
+    }
+    _forbiddenError:ForbiddenError|undefined;
+    get forbiddenError():ForbiddenError|undefined{
+        return this._forbiddenError;
+    }
+    set forbiddenError(forbiddenError: UnauthorizedError|undefined){
+        this._forbiddenError = forbiddenError;
+    }
 
     constructor() {
         this._loading = false;

@@ -2,6 +2,8 @@ import GlobalState from "../GlobalState";
 import 'reflect-metadata'
 import inversifyContainer from "../../config/inversify.config";
 import BackendServiceError from "../../model/errors/BackendServiceError";
+import UnauthorizedError from "../../model/errors/UnauthorizedError";
+import ForbiddenError from "../../model/errors/ForbiddenError";
 
 const backendErrorHandled = () => {
     return function(target: unknown, propertyKey: string, descriptor: PropertyDescriptor) {
@@ -21,6 +23,12 @@ const backendErrorHandled = () => {
                 globalState.loading = false;
                 if(error instanceof BackendServiceError){
                     globalState.backendError = error;
+                }
+                else if(error instanceof UnauthorizedError){
+                    globalState.authenticationError = error
+                }
+                else if(error instanceof ForbiddenError){
+                    globalState.forbiddenError = error
                 }
                 else{
                     throw error;

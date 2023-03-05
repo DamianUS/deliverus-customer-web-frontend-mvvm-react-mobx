@@ -63,11 +63,11 @@ test('getAll devuelve un array de User y todo con userType', async () => {
     try{
         const entities = await new MockUserRepository().getAll()
         // @ts-ignore
-        const areAllEntities = entities.map(entity => entity.userType in UserType.customer).reduce((areAllEntities, isEntityAndHasType) =>  areAllEntities && isEntityAndHasType, true)
+        const areAllEntities = entities.map(entity => Object.values(UserType).includes(entity.userType)).reduce((areAllEntities, isEntityAndHasType) =>  areAllEntities && isEntityAndHasType, true)
         return expect(areAllEntities).toBeTruthy();
     }
     catch(error){
-        expect(error instanceof BackendServiceError).toEqual(config.mock_disabled)
+        expect(config.mock_disabled && error instanceof BackendServiceError).toBeTruthy();
     }
 });
 

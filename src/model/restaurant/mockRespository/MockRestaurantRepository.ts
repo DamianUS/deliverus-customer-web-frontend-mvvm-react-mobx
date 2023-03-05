@@ -10,6 +10,7 @@ import hasLoggedInUserParameter from "../../decorators/HasLoggedInUserParameter"
 import hasUserParameterOfUserType from "../../decorators/HasUserParameterOfUserType";
 import UserType from "../../user/UserType";
 import Conversor from '../../conversion/interfaces/Conversor';
+import disableable from "../../mocks/decorators/Disableable";
 
 @injectable()
 class MockRestaurantRepository extends BaseMockRepository<Restaurant> implements RestaurantRepository {
@@ -31,6 +32,7 @@ class MockRestaurantRepository extends BaseMockRepository<Restaurant> implements
     get updateValidationSchema(): object|undefined {
         return undefined;
     }
+    @disableable()
     @hasLoggedInUserParameter()
     @hasUserParameterOfUserType(UserType.owner)
     async getOwnerRestaurants(owner:User): Promise<Restaurant[]> {

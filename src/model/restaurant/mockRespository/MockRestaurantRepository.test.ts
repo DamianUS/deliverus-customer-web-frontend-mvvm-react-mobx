@@ -11,6 +11,8 @@ import MockUserRepository from "../../user/mockRepository/MockUserRepository";
 import MockAuthenticationRepository from "../../authentication/MockAuthenticationRepository";
 import ForbiddenError from "../../errors/ForbiddenError";
 import restaurantsMocked from "./restaurants.json";
+import RestaurantStatus from "../RestaurantStatus";
+import UserType from "../../user/UserType";
 
 // @ts-ignore
 
@@ -85,6 +87,20 @@ test('getAll devuelve un array de Restaurant que tienen createdAt y updatedAt co
             .map(restaurant => restaurantDatesAreDateIfPresent(restaurant))
             .reduce((areAllDates, areDates) =>  areAllDates && areDates, true)
         expect(areAllDates).toBeTruthy();
+    }
+    catch(error){
+        expect(config.mock_disabled && error instanceof BackendServiceError).toBeTruthy();
+    }
+});
+
+test('getAll devuelve un array de Restaurant que tienen status como RestaurantStatus', async () => {
+    expect.assertions(1)
+    try{
+        const restaurants = await new MockRestaurantRepository().getAll();
+        const areAllStatus = restaurants
+            .map(restaurant => Object.values(RestaurantStatus).includes(restaurant.status))
+            .reduce((areAllStatus, areStatus) =>  areAllStatus && areStatus, true)
+        expect(areAllStatus).toBeTruthy();
     }
     catch(error){
         expect(config.mock_disabled && error instanceof BackendServiceError).toBeTruthy();
