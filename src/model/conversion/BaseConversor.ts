@@ -1,7 +1,7 @@
 import Model from "../interfaces/Model";
-import Conversor from "./interfaces/Conversor";
+import ModelConversor from "./interfaces/ModelConversor";
 
-abstract class BaseConversor<T extends Model> implements Conversor<T>{
+abstract class BaseConversor<T extends Model> implements ModelConversor<T>{
 
     async convertToInternalEntity(sourceObject: object):Promise<T>{
         const emptyEntity = this.getEmptyInternalEntity();

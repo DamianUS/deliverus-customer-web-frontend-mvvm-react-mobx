@@ -5,9 +5,9 @@ import 'reflect-metadata'
 import { makeAutoObservable } from "mobx"
 import GlobalState from "../GlobalState";
 import UnauthorizedError from "../../model/errors/UnauthorizedError";
-import AuthenticationRepository from "../../model/authentication/interfaces/AuthenticationRepository";
+import AuthenticationRepository from "../../model/models/authentication/interfaces/AuthenticationRepository";
 import loadingToggler from "../decorators/LoadingToggler";
-import User from "../../model/user/User";
+import User from "../../model/models/user/User";
 import ValidationError from "../../model/errors/ValidationError";
 import { object, string, number, date, InferType} from 'yup';
 import * as yup from 'yup';

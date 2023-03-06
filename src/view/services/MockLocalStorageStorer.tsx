@@ -1,11 +1,11 @@
 import { injectable } from 'inversify'
 import TokenStorer, {BearerToken} from "./interfaces/TokenStorer";
-import User from "../../model/user/User";
-import AuthenticationRepository from "../../model/authentication/interfaces/AuthenticationRepository";
+import User from "../../model/models/user/User";
+import AuthenticationRepository from "../../model/models/authentication/interfaces/AuthenticationRepository";
 import GlobalState from "../../viewmodel/GlobalState";
 import inversifyContainer from "../../config/inversify.config";
 import "reflect-metadata"
-import MockAuthenticationRepository from "../../model/authentication/MockAuthenticationRepository";
+import MockAuthenticationRepository from "../../model/repositories/mock/authentication/MockAuthenticationRepository";
 
 
 class LocalStorageMock {

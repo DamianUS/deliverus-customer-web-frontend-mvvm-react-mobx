@@ -1,13 +1,13 @@
 import CreateRestaurantViewModel from "./CreateRestaurantViewModel";
 import config from "../../config/config";
 import {FormRestaurantObject} from "./conversors/FormRestaurantConversor";
-import User from "../../model/user/User";
+import User from "../../model/models/user/User";
 import OwnerRestaurantsViewModel from "./OwnerRestaurantsViewModel";
-import UserType from "../../model/user/UserType";
-import AuthenticationRepository from "../../model/authentication/interfaces/AuthenticationRepository";
-import MockAuthenticationRepository from "../../model/authentication/MockAuthenticationRepository";
+import UserType from "../../model/models/user/UserType";
+import AuthenticationRepository from "../../model/models/authentication/interfaces/AuthenticationRepository";
+import MockAuthenticationRepository from "../../model/repositories/mock/authentication/MockAuthenticationRepository";
 import exp from "constants";
-import MockRestaurantRepository from "../../model/restaurant/mockRespository/MockRestaurantRepository";
+import MockRestaurantRepository from "../../model/repositories/mock/restaurant/MockRestaurantRepository";
 
 test('CreateRestaurantViewModel has the correct initial state', () => {
     const viewModel = new CreateRestaurantViewModel();

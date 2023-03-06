@@ -7,7 +7,7 @@ import {convertFromValidationErrorToAntDFormFields} from "../../../validation/Co
 import { useNavigate } from "react-router-dom";
 import HomeRouteProvider from "../../../routes/HomeRouteProvider";
 import CreateRestaurantViewModel from "../../../../../viewmodel/restaurants/CreateRestaurantViewModel";
-import Restaurant from "../../../../../model/restaurant/Restaurant";
+import Restaurant from "../../../../../model/models/restaurant/Restaurant";
 import ValidationError from "../../../../../model/errors/ValidationError";
 
 const {Text, Paragraph} = Typography;

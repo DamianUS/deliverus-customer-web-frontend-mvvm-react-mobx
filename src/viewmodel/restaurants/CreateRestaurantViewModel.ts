@@ -1,17 +1,18 @@
 import inversifyContainer from "../../config/inversify.config";
-import Restaurant from "../../model/restaurant/Restaurant";
+import Restaurant from "../../model/models/restaurant/Restaurant";
 import {injectable} from "inversify";
 import 'reflect-metadata'
 import { makeAutoObservable } from "mobx"
 import GlobalState from "../GlobalState";
-import RestaurantRepository from "../../model/restaurant/interfaces/RestaurantRepository";
+import RestaurantRepository from "../../model/models/restaurant/interfaces/RestaurantRepository";
 import loadingToggler from "../decorators/LoadingToggler";
 import backendErrorHandled from "../decorators/BackendErrorHandled";
-import RestaurantCategoryRepository from "../../model/restaurantCategory/interfaces/RestaurantCategoryRepository";
-import RestaurantCategory from "../../model/restaurantCategory/RestaurantCategory";
+import RestaurantCategoryRepository from "../../model/models/restaurantCategory/interfaces/RestaurantCategoryRepository";
+import RestaurantCategory from "../../model/models/restaurantCategory/RestaurantCategory";
 import * as yup from 'yup';
 import FormRestaurantConversor, * as FormRestaurant from "./conversors/FormRestaurantConversor";
 import ValidationError from "../../model/errors/ValidationError";
+import validationErrorfromYupError from '../conversors/ValidationErrorFromYupConversor';
 
 
 @injectable()
@@ -97,7 +98,7 @@ class CreateRestaurantViewModel {
         }
         catch(error){
             if(error instanceof yup.ValidationError){
-                this.validationError = ValidationError.fromYupErrors(error)
+                this.validationError = validationErrorfromYupError(error)
             }
             else if(error instanceof ValidationError){
                 this.validationError = error;

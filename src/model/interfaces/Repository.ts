@@ -1,4 +1,4 @@
-import Restaurant from "../restaurant/Restaurant";
+import Restaurant from "../models/restaurant/Restaurant";
 
 interface Repository<T>{
     getAll(...args:any[]): Promise<T[]>

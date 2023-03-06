@@ -1,4 +1,4 @@
-import Restaurant from "../model/restaurant/Restaurant";
+import Restaurant from "../model/models/restaurant/Restaurant";
 
 const arrayToDynamicNumberOfBuckets = (elementArray: any[], elementsPerBucket:number) => {
     const numberOfBuckets = Math.ceil(elementArray.length / elementsPerBucket);

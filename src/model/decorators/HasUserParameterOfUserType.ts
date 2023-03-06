@@ -1,9 +1,9 @@
 import 'reflect-metadata'
 import config from "../../config/config";
 import BackendServiceError from "../errors/BackendServiceError";
-import User from "../user/User";
+import User from "../models/user/User";
 import UnauthorizedError from "../errors/UnauthorizedError";
-import UserType from "../user/UserType";
+import UserType from "../models/user/UserType";
 import ForbiddenError from "../errors/ForbiddenError";
 
 const isUserWithUserType = (argument: any, userType: UserType) => {

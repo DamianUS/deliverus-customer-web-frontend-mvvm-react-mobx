@@ -2,7 +2,7 @@
 
 import config from "../../config/config"
 import LogoutViewModel from "./LogoutViewModel";
-import User from "../../model/user/User";
+import User from "../../model/models/user/User";
 test('LogoutViewModel gets a repository injected', () => {
     const viewModel = new LogoutViewModel();
     expect(viewModel.authenticationRepository).toBeDefined();

@@ -1,9 +1,9 @@
 import OwnerRestaurantsViewModel from "./OwnerRestaurantsViewModel";
-import User from "../../model/user/User";
+import User from "../../model/models/user/User";
 import config from '../../config/config';
-import MockUserRepository from "../../model/user/mockRepository/MockUserRepository";
-import UserType from "../../model/user/UserType";
-import Restaurant from "../../model/restaurant/Restaurant";
+import MockUserRepository from "../../model/repositories/mock/user/MockUserRepository";
+import UserType from "../../model/models/user/UserType";
+import Restaurant from "../../model/models/restaurant/Restaurant";
 import CreateRestaurantViewModel from "./CreateRestaurantViewModel";
 
 test('OwnerRestaurantsViewModel gets a repository injected', () => {

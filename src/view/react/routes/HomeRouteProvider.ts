@@ -1,4 +1,4 @@
-import UserType from "../../../model/user/UserType";
+import UserType from "../../../model/models/user/UserType";
 import GlobalState from "../../../viewmodel/GlobalState";
 import inversifyContainer from "../../../config/inversify.config";
 import {injectable} from "inversify";

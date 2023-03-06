@@ -1,9 +1,9 @@
-import RestaurantCategory from "../../../model/restaurantCategory/RestaurantCategory";
-import User from "../../../model/user/User";
+import RestaurantCategory from "../../../model/models/restaurantCategory/RestaurantCategory";
+import User from "../../../model/models/user/User";
 import BaseConversor from "../../../model/conversion/BaseConversor";
-import Restaurant from "../../../model/restaurant/Restaurant";
+import Restaurant from "../../../model/models/restaurant/Restaurant";
 import inversifyContainer from "../../../config/inversify.config";
-import RestaurantCategoryRepository from "../../../model/restaurantCategory/interfaces/RestaurantCategoryRepository";
+import RestaurantCategoryRepository from "../../../model/models/restaurantCategory/interfaces/RestaurantCategoryRepository";
 
 
 type FormRestaurantObject = {

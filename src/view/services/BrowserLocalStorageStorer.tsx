@@ -1,10 +1,10 @@
 import { injectable } from 'inversify'
 import TokenStorer, {BearerToken} from "./interfaces/TokenStorer";
-import User from "../../model/user/User";
+import User from "../../model/models/user/User";
 import "reflect-metadata"
 import inversifyContainer from "../../config/inversify.config";
 import GlobalState from "../../viewmodel/GlobalState";
-import AuthenticationRepository from "../../model/authentication/interfaces/AuthenticationRepository";
+import AuthenticationRepository from "../../model/models/authentication/interfaces/AuthenticationRepository";
 
 const createBearerTokenFromUser = (user:User):BearerToken => {
     const bearerToken: BearerToken = {

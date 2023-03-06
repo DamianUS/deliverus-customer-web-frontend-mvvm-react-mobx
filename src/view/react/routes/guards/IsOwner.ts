@@ -1,7 +1,7 @@
 import {GuardMiddleware} from 'react-router-guarded-routes'
 import inversifyContainer from "../../../../config/inversify.config";
 import GlobalState from "../../../../viewmodel/GlobalState";
-import UserType from "../../../../model/user/UserType";
+import UserType from "../../../../model/models/user/UserType";
 
 const isOwner: GuardMiddleware = async (to, from, next) => {
     const globalState = inversifyContainer.get<GlobalState>("GlobalState");

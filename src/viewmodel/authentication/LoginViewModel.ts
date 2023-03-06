@@ -1,19 +1,18 @@
 import inversifyContainer from "../../config/inversify.config";
-import BackendServiceError from "../../model/errors/BackendServiceError";
 import {injectable} from "inversify";
 import 'reflect-metadata'
 import { makeAutoObservable } from "mobx"
 import GlobalState from "../GlobalState";
 import UnauthorizedError from "../../model/errors/UnauthorizedError";
-import AuthenticationRepository from "../../model/authentication/interfaces/AuthenticationRepository";
+import AuthenticationRepository from "../../model/models/authentication/interfaces/AuthenticationRepository";
 import loadingToggler from "../decorators/LoadingToggler";
-import User from "../../model/user/User";
+import User from "../../model/models/user/User";
 import ValidationError from "../../model/errors/ValidationError";
 import { object, string} from 'yup';
 import * as yup from 'yup';
 import TokenStorer from "../../view/services/interfaces/TokenStorer";
 import backendErrorHandled from "../decorators/BackendErrorHandled";
-
+import validationErrorfromYupError from '../conversors/ValidationErrorFromYupConversor';
 
 @injectable()
 class LoginViewModel{
@@ -58,7 +57,7 @@ class LoginViewModel{
         }
         catch(error){
             if(error instanceof yup.ValidationError){
-                this.loginValidationError = ValidationError.fromYupErrors(error)
+                this.loginValidationError = validationErrorfromYupError(error)
             }
             else if(error instanceof UnauthorizedError){
                 this.loginError = error

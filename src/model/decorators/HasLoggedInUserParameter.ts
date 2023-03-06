@@ -1,7 +1,7 @@
 import 'reflect-metadata'
 import config from "../../config/config";
 import BackendServiceError from "../errors/BackendServiceError";
-import User from "../user/User";
+import User from "../models/user/User";
 import UnauthorizedError from "../errors/UnauthorizedError";
 
 const isLoggedInUser = (argument: any) => {

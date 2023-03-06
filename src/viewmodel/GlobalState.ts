@@ -3,7 +3,7 @@ import {injectable} from "inversify";
 import 'reflect-metadata'
 import { makeAutoObservable } from "mobx"
 import BackendServiceError from "../model/errors/BackendServiceError";
-import User from "../model/user/User";
+import User from "../model/models/user/User";
 import config from "../config/config";
 import UnauthorizedError from "../model/errors/UnauthorizedError";
 import ForbiddenError from "../model/errors/ForbiddenError";

@@ -1,7 +1,7 @@
-import MockAuthenticationRepository from "../../model/authentication/MockAuthenticationRepository";
+import MockAuthenticationRepository from "../../model/repositories/mock/authentication/MockAuthenticationRepository";
 import config from '../../config/config';
 import BackendServiceError from "../../model/errors/BackendServiceError";
-import User from "../../model/user/User";
+import User from "../../model/models/user/User";
 import MockLocalStorageStorer from "./MockLocalStorageStorer";
 test('MockLocalStorageStorer hace retrieve y obtiene un user o undefined', async () => {
     expect.assertions(1)

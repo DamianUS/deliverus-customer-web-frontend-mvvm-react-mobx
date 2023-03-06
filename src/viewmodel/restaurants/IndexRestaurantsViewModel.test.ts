@@ -1,5 +1,5 @@
 import IndexRestaurantsViewModel from "./IndexRestaurantsViewModel";
-import Restaurant from "../../model/restaurant/Restaurant";
+import Restaurant from "../../model/models/restaurant/Restaurant";
 import BackendServiceError from "../../model/errors/BackendServiceError";
 import GlobalState from "../GlobalState";
 

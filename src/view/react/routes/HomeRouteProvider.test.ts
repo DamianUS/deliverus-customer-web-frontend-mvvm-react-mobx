@@ -1,5 +1,5 @@
 import HomeRouteProvider from "./HomeRouteProvider";
-import MockAuthenticationRepository from "../../../model/authentication/MockAuthenticationRepository";
+import MockAuthenticationRepository from "../../../model/repositories/mock/authentication/MockAuthenticationRepository";
 import config from "../../../config/config";
 import BackendServiceError from "../../../model/errors/BackendServiceError";
 test('HomeRouteProvider devuelve / inicialmente', async () => {
