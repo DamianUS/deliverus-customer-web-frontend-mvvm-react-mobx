@@ -28,10 +28,10 @@ const inversifyContainer = new Container()
 inversifyContainer.bind<GlobalState>('GlobalState').to(GlobalState).inSingletonScope()
 
 //Repositories
-inversifyContainer.bind<RestaurantRepository>('RestaurantRepository').to(MockRestaurantRepository)
-inversifyContainer.bind<RestaurantCategoryRepository>('RestaurantCategoryRepository').to(MockRestaurantCategoryRepository)
-inversifyContainer.bind<UserRepository>('UserRepository').to(MockUserRepository)
-inversifyContainer.bind<AuthenticationRepository>('AuthenticationRepository').to(MockAuthenticationRepository)
+inversifyContainer.bind<RestaurantRepository>('RestaurantRepository').to(MockRestaurantRepository).inSingletonScope()
+inversifyContainer.bind<RestaurantCategoryRepository>('RestaurantCategoryRepository').to(MockRestaurantCategoryRepository).inSingletonScope()
+inversifyContainer.bind<UserRepository>('UserRepository').to(MockUserRepository).inSingletonScope()
+inversifyContainer.bind<AuthenticationRepository>('AuthenticationRepository').to(MockAuthenticationRepository).inSingletonScope()
 
 //ViewModels
 inversifyContainer.bind<LoginViewModel>('LoginViewModel').to(LoginViewModel).inSingletonScope()

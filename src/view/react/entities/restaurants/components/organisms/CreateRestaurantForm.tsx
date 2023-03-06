@@ -2,7 +2,20 @@ import React from 'react';
 import { observer } from "mobx-react-lite"
 import LoginViewModel from "../../../../../../viewmodel/authentication/LoginViewModel";
 import inversifyContainer from "../../../../../../config/inversify.config";
-import {Form, Modal, Input, Button, Checkbox, Typography, Col, FormInstance, Result, Alert} from "antd";
+import {
+    Form,
+    Modal,
+    Input,
+    Button,
+    Checkbox,
+    Typography,
+    Col,
+    FormInstance,
+    Result,
+    Alert,
+    InputNumber,
+    Select
+} from "antd";
 import {convertFromValidationErrorToAntDFormFields} from "../../../../validation/ConversorToAntDFormFields";
 import { useNavigate } from "react-router-dom";
 import HomeRouteProvider from "../../../../routes/HomeRouteProvider";
@@ -15,29 +28,40 @@ const {Text, Paragraph} = Typography;
 type Props = {
     form?: FormInstance;
     onSuccess?: (restaurant:Restaurant) => void;
-    onError?: (error: ValidationError) => void;
+    onError?: (error: ValidationError|undefined) => void;
 }
 
-const LoginForm = observer((props:Props) => {
-    const navigate = useNavigate();
+const CreateRestaurantForm = observer((props:Props) => {
     const [viewModel] = React.useState(inversifyContainer.get<CreateRestaurantViewModel>("CreateRestaurantViewModel"))
     const [form] = Form.useForm();
     const createFormSubmit = async (values:any) => {
         const restaurantCreated = await viewModel.create(values);
         let fields = convertFromValidationErrorToAntDFormFields(viewModel.initialValues, viewModel.validationError)
+        const currentForm = props.form ? props.form : form
         // @ts-ignore
-        props.form ? props.form.setFields(fields) : form.setFields(fields)
+        currentForm.setFields(fields)
         const isCorrectlyCreated = viewModel.validationError === undefined &&
             viewModel.globalState.authenticationError === undefined &&
             viewModel.globalState.backendError === undefined &&
             restaurantCreated instanceof Restaurant
-        if(isCorrectlyCreated && props.onSuccess)
+        if(isCorrectlyCreated && props.onSuccess){
+            currentForm.resetFields();
             props.onSuccess(restaurantCreated);
-
+        }
+        else if(props.onError)
+            props.onError(viewModel.validationError);
     }
 
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    // @ts-ignore
+    const restaurantCategoryOptions = () => {
+        return viewModel.restaurantCategories?.map(category => {
+            return {value:category.id, label:category.name}
+        })
+    }
+
+    React.useEffect(() => {
+        const initializer = async () =>{await viewModel.initialize()}
+        initializer()
+    }, [viewModel])
 
     return (
         <Form
@@ -47,28 +71,34 @@ const LoginForm = observer((props:Props) => {
             onFinish={createFormSubmit}
             autoComplete="off"
         >
-            <Form.Item label="Email" name="email">
+            <Form.Item label="Nombre" name="name">
                 <Input size="large" />
             </Form.Item>
 
-            <Form.Item
-                label="Password"
-                name="password"
-            >
-                <Input.Password size="large" />
+            <Form.Item label="Dirección" name="address">
+                <Input size="large" />
             </Form.Item>
 
-            <Form.Item name="remember" valuePropName="checked">
-                <Checkbox>Remember me</Checkbox>
+            <Form.Item label="Código Postal" name="postalCode">
+                <Input size="large" />
             </Form.Item>
+
+            <Form.Item label="Gastos de envío" name="shippingCosts">
+                <InputNumber size="large" addonAfter="€" defaultValue={0} className="w-full" />
+            </Form.Item>
+
+            <Form.Item label="Categoría" name="restaurantCategoryId">
+                {viewModel.restaurantCategories && <Select options={restaurantCategoryOptions()} />}
+            </Form.Item>
+
 
             {!props.form && <Form.Item>
                 <Button type="primary" htmlType="submit">
-                    Login
+                    Guardar
                 </Button>
             </Form.Item>}
         </Form>
     );
 });
 
-export default LoginForm;
+export default CreateRestaurantForm;
