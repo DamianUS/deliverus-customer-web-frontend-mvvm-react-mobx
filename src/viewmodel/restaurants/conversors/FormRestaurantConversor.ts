@@ -1,6 +1,6 @@
 import RestaurantCategory from "../../../model/models/restaurantCategory/RestaurantCategory";
 import User from "../../../model/models/user/User";
-import BaseConversor from "../../../model/conversion/BaseConversor";
+import BaseModelConversor from "../../../model/conversion/BaseModelConversor";
 import Restaurant from "../../../model/models/restaurant/Restaurant";
 import inversifyContainer from "../../../config/inversify.config";
 import RestaurantCategoryRepository from "../../../model/models/restaurantCategory/interfaces/RestaurantCategoryRepository";
@@ -28,7 +28,7 @@ const convertToUserId = (user: User): number => {
     return user.id ?? -1;
 }
 
-class FormRestaurantConversor extends BaseConversor<Restaurant> {
+class FormRestaurantConversor extends BaseModelConversor<Restaurant> {
     getEmptyInternalEntity(): Restaurant {
         return new Restaurant()
     }

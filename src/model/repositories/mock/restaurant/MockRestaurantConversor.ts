@@ -1,4 +1,4 @@
-import BaseConversor from "../../../conversion/BaseConversor";
+import BaseModelConversor from "../../../conversion/BaseModelConversor";
 import Restaurant from "../../../models/restaurant/Restaurant";
 import {convertDateToString, convertToDate} from "../../../conversion/CommonConversionFunctions";
 import RestaurantCategory from "../../../models/restaurantCategory/RestaurantCategory";
@@ -63,7 +63,7 @@ const convertToRestaurantStatus = (stauts: string): RestaurantStatus => {
     return RestaurantStatus.offline;
 }
 
-class MockRestaurantConversor extends BaseConversor<Restaurant> {
+class MockRestaurantConversor extends BaseModelConversor<Restaurant> {
     getEmptyInternalEntity(): Restaurant {
         return new Restaurant()
     }

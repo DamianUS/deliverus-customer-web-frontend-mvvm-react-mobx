@@ -1,4 +1,4 @@
-import BaseConversor from "../../../conversion/BaseConversor";
+import BaseModelConversor from "../../../conversion/BaseModelConversor";
 import RestaurantCategory from "../../../models/restaurantCategory/RestaurantCategory";
 import {convertToDate, convertDateToString} from "../../../conversion/CommonConversionFunctions";
 
@@ -8,7 +8,7 @@ type MockRestaurantCategoryObject = {
     cratedAt: string|undefined,
     updatedAt: string|undefined,
 }
-class MockRestaurantCategoryConversor extends BaseConversor<RestaurantCategory>{
+class MockRestaurantCategoryConversor extends BaseModelConversor<RestaurantCategory>{
     getEmptyInternalEntity(): RestaurantCategory {
         return new RestaurantCategory();
     }

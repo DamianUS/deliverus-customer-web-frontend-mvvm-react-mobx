@@ -1,4 +1,4 @@
-import BaseConversor from "../../../conversion/BaseConversor";
+import BaseModelConversor from "../../../conversion/BaseModelConversor";
 import User from "../../../models/user/User";
 import {convertDateToString, convertToDate} from "../../../conversion/CommonConversionFunctions";
 import UserType from "../../../models/user/UserType";
@@ -17,7 +17,7 @@ type MockUserObject = {
     createdAt: string|undefined,
     updatedAt: string|undefined
 }
-class MockUserConversor extends BaseConversor<User>{
+class MockUserConversor extends BaseModelConversor<User>{
     getEmptyInternalEntity(): User {
         return new User();
     }
