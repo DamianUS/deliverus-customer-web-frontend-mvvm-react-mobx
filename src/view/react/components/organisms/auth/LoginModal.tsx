@@ -1,9 +1,6 @@
 import React from 'react';
 import { observer } from "mobx-react-lite"
-import LoginViewModel from "../../../../../viewmodel/authentication/LoginViewModel";
-import inversifyContainer from "../../../../../config/inversify.config";
 import {Form, Modal, Input, Button, Checkbox, Typography, Col} from "antd";
-import {convertFromValidationErrorToAntDFormFields} from "../../../validation/ConversorToAntDFormFields";
 import LoginForm from "./LoginForm";
 const {Text} = Typography;
 

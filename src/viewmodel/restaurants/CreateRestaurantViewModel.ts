@@ -19,7 +19,7 @@ class CreateRestaurantViewModel {
     restaurantRepository: RestaurantRepository;
     restaurantCategoryRepository: RestaurantCategoryRepository;
     restaurantCategories: RestaurantCategory[] | undefined;
-    initialValues: FormRestaurant.FormRestaurantObject | undefined;
+    initialValues: FormRestaurant.FormRestaurantObject;
     globalState: GlobalState;
     conversor: FormRestaurantConversor;
     validationError: ValidationError|undefined;
@@ -71,6 +71,7 @@ class CreateRestaurantViewModel {
         this.restaurantCategoryRepository = inversifyContainer.get<RestaurantCategoryRepository>("RestaurantCategoryRepository");
         this.globalState = inversifyContainer.get<GlobalState>("GlobalState");
         this.conversor = new FormRestaurantConversor();
+        this.initialValues = this.conversor.getExternalObjectWithAllPropertiesEmpty();
         makeAutoObservable(this)
     }
 

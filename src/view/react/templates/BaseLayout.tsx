@@ -12,11 +12,12 @@ type Props = {
     children?: ReactNode,
     topBar?: ReactNode,
     footer?: ReactNode,
+    pageTitle?: ReactNode,
+
 }
 
 const BaseLayout = observer((props: Props) => {
     const [globalState] = React.useState(inversifyContainer.get<GlobalState>("GlobalState"))
-
     return (
         <Layout>
             <Header style={{ position: 'sticky', top: 0, zIndex: 1, width: '100%' }}>
@@ -24,20 +25,23 @@ const BaseLayout = observer((props: Props) => {
             </Header>
             <Content>
                 <div className="dark:bg-slate-800 p-10" style={{minHeight: "90vh"}}>
-                {globalState.loading && <Space size="middle"><Spin size="large" /></Space>}
-                {globalState.backendError &&
-                    <Alert
-                        className="mb-10"
-                        message="Something wrong happened."
-                        description="Please, contact with the system administrator."
-                        type="error"
-                        showIcon
-                        closable
-                    />
-                }
-                {
-                    props.children ?? 'Default content'
-                }
+                    <div className="mb-10">
+                    {props.pageTitle}
+                    </div>
+                    {globalState.loading && <Space size="middle"><Spin size="large" /></Space>}
+                    {globalState.backendError &&
+                        <Alert
+                            className="mb-10"
+                            message="Something wrong happened."
+                            description="Please, contact with the system administrator."
+                            type="error"
+                            showIcon
+                            closable
+                        />
+                    }
+                    {
+                        props.children ?? 'Default content'
+                    }
                 </div>
             </Content>
             <Footer>{props.footer ?? 'Default footer'}</Footer>

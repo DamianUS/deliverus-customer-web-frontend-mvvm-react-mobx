@@ -5,11 +5,13 @@ import inversifyContainer from "../../../../config/inversify.config";
 import {observer} from "mobx-react-lite";
 import {LogoutOutlined, UserOutlined} from "@ant-design/icons";
 import LogoutViewModel from "../../../../viewmodel/authentication/LogoutViewModel";
+import {useNavigate} from "react-router-dom";
 
 const {Text} = Typography;
 
 const LoggedInTopBar = observer(() => {
     const [logoutViewModel] = React.useState(inversifyContainer.get<LogoutViewModel>("LogoutViewModel"))
+    const navigate = useNavigate();
 
     const items: MenuProps['items'] = [
         {
@@ -20,8 +22,10 @@ const LoggedInTopBar = observer(() => {
     ];
 
     const onClick: MenuProps['onClick'] = async (e) => {
-        if(e.key === "logout")
+        if(e.key === "logout"){
             await logoutViewModel.logout()
+            return navigate("/");
+        }
     };
 
     return (

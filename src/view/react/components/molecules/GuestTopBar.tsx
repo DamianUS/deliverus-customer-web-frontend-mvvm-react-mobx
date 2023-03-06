@@ -2,9 +2,6 @@ import React, {ReactNode} from "react";
 import TopBarTemplate from "./TopBarTemplate";
 import {Button} from "antd";
 import LoginModal from "../organisms/auth/LoginModal";
-import inversifyContainer from "../../../../config/inversify.config";
-import TokenStorer from "../../../services/interfaces/TokenStorer";
-import GlobalState from "../../../../viewmodel/GlobalState";
 
 function GuestTopBar () {
 
