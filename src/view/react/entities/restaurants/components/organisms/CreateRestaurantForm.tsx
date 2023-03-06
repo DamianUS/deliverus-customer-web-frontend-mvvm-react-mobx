@@ -1,14 +1,14 @@
 import React from 'react';
 import { observer } from "mobx-react-lite"
-import LoginViewModel from "../../../../../viewmodel/authentication/LoginViewModel";
-import inversifyContainer from "../../../../../config/inversify.config";
+import LoginViewModel from "../../../../../../viewmodel/authentication/LoginViewModel";
+import inversifyContainer from "../../../../../../config/inversify.config";
 import {Form, Modal, Input, Button, Checkbox, Typography, Col, FormInstance, Result, Alert} from "antd";
-import {convertFromValidationErrorToAntDFormFields} from "../../../validation/ConversorToAntDFormFields";
+import {convertFromValidationErrorToAntDFormFields} from "../../../../validation/ConversorToAntDFormFields";
 import { useNavigate } from "react-router-dom";
-import HomeRouteProvider from "../../../routes/HomeRouteProvider";
-import CreateRestaurantViewModel from "../../../../../viewmodel/restaurants/CreateRestaurantViewModel";
-import Restaurant from "../../../../../model/models/restaurant/Restaurant";
-import ValidationError from "../../../../../model/errors/ValidationError";
+import HomeRouteProvider from "../../../../routes/HomeRouteProvider";
+import CreateRestaurantViewModel from "../../../../../../viewmodel/restaurants/CreateRestaurantViewModel";
+import Restaurant from "../../../../../../model/models/restaurant/Restaurant";
+import ValidationError from "../../../../../../model/errors/ValidationError";
 
 const {Text, Paragraph} = Typography;
 

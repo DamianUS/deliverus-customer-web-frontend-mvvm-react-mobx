@@ -1,7 +1,7 @@
 import React from 'react';
 import {Card, Typography, Divider, Row, Col, Space} from 'antd';
 import {FieldTimeOutlined, DollarCircleOutlined} from '@ant-design/icons';
-import Restaurant from "../../../../../model/models/restaurant/Restaurant";
+import Restaurant from "../../../../../../model/models/restaurant/Restaurant";
 const {Meta} = Card;
 const {Text,Paragraph} = Typography;
 

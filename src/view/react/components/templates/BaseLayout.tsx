@@ -1,10 +1,10 @@
 import { observer } from "mobx-react-lite"
 import {Alert, Layout, Space, Spin, Typography} from 'antd';
 import React, {ReactNode} from "react";
-import GuestTopBar from "../components/molecules/GuestTopBar";
-import inversifyContainer from "../../../config/inversify.config";
-import GlobalState from "../../../viewmodel/GlobalState";
-import LoggedInTopBar from "../components/molecules/LoggedInTopBar";
+import GuestTopBar from "../molecules/GuestTopBar";
+import inversifyContainer from "../../../../config/inversify.config";
+import GlobalState from "../../../../viewmodel/GlobalState";
+import LoggedInTopBar from "../molecules/LoggedInTopBar";
 const { Header, Content, Footer } = Layout;
 const { Text } = Typography;
 

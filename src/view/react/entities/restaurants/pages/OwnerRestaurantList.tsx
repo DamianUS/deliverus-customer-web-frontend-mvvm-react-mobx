@@ -1,10 +1,10 @@
 import React from 'react';
-import inversifyContainer from "../../../../config/inversify.config";
-import IndexRestaurantsViewModel from "../../../../viewmodel/restaurants/IndexRestaurantsViewModel";
+import inversifyContainer from "../../../../../config/inversify.config";
+import IndexRestaurantsViewModel from "../../../../../viewmodel/restaurants/IndexRestaurantsViewModel";
 import { observer } from "mobx-react-lite"
-import BaseLayout from "../../templates/BaseLayout";
-import RestaurantCard from "../../components/organisms/restaurants/RestaurantCard";
-import OwnerRestaurantsViewModel from "../../../../viewmodel/restaurants/OwnerRestaurantsViewModel";
+import BaseLayout from "../../../components/templates/BaseLayout";
+import RestaurantCard from "../components/organisms/RestaurantCard";
+import OwnerRestaurantsViewModel from "../../../../../viewmodel/restaurants/OwnerRestaurantsViewModel";
 import {Breadcrumb, Button} from "antd";
 import {HomeOutlined, ShopOutlined} from "@ant-design/icons";
 

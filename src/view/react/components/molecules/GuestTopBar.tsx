@@ -1,7 +1,7 @@
 import React, {ReactNode} from "react";
 import TopBarTemplate from "./TopBarTemplate";
 import {Button} from "antd";
-import LoginModal from "../organisms/auth/LoginModal";
+import LoginModal from "../organisms/LoginModal";
 
 function GuestTopBar () {
 

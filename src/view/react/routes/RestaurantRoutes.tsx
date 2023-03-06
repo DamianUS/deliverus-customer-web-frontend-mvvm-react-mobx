@@ -4,9 +4,9 @@ import {
     GuardProvider,
     GuardedRoutes
 } from 'react-router-guarded-routes'
-import RestaurantList from "../pages/restaurants/RestaurantList";
+import RestaurantList from "../entities/restaurants/pages/RestaurantList";
 import isOwner from "./guards/IsOwner";
-import OwnerRestaurantList from "../pages/restaurants/OwnerRestaurantList";
+import OwnerRestaurantList from "../entities/restaurants/pages/OwnerRestaurantList";
 
 
 const basePath = '/restaurants'

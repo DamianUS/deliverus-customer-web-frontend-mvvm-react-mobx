@@ -1,8 +1,8 @@
 import React from 'react';
 import {observer} from "mobx-react-lite"
 import {Card, Result} from "antd";
-import BaseLayout from "../templates/BaseLayout";
-import LoginForm from "../components/organisms/auth/LoginForm";
+import BaseLayout from "../components/templates/BaseLayout";
+import LoginForm from "../components/organisms/LoginForm";
 import inversifyContainer from "../../../config/inversify.config";
 import LoginViewModel from "../../../viewmodel/authentication/LoginViewModel";
 
