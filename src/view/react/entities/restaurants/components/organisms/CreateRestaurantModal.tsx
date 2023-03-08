@@ -31,7 +31,7 @@ const CreateRestaurantModal = observer((props:Props) => {
         <Modal
             open={props.visible}
             title="Crear restaurante"
-            onCancel={props.onClose}
+            onCancel={() => {form.resetFields();props.onClose()}}
             okText="Guardar"
             cancelText="Cancelar"
             onOk={form.submit}

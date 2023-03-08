@@ -53,6 +53,10 @@ class GlobalState{
         this._forbiddenError = forbiddenError;
     }
 
+    get hasErrors():boolean {
+        return this.forbiddenError !== undefined || this.backendError !== undefined || this.authenticationError !== undefined;
+    }
+
     constructor() {
         this._loading = false;
         this.enabledFrontEndValidation = config.frontend_validation_enabled;

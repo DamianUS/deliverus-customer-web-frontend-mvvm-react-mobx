@@ -5,6 +5,13 @@ import MockUserRepository from "../../model/repositories/mock/user/MockUserRepos
 import UserType from "../../model/models/user/UserType";
 import Restaurant from "../../model/models/restaurant/Restaurant";
 import CreateRestaurantViewModel from "./CreateRestaurantViewModel";
+import MockRestaurantRepository from "../../model/repositories/mock/restaurant/MockRestaurantRepository";
+import BackendServiceError from "../../model/errors/BackendServiceError";
+import UnauthorizedError from "../../model/errors/UnauthorizedError";
+import MockAuthenticationRepository from "../../model/repositories/mock/authentication/MockAuthenticationRepository";
+import ForbiddenError from "../../model/errors/ForbiddenError";
+import repository from "../../model/interfaces/Repository";
+import globalState from "../GlobalState";
 
 test('OwnerRestaurantsViewModel gets a repository injected', () => {
     const viewModel = new OwnerRestaurantsViewModel();
@@ -92,7 +99,60 @@ test('OwnerRestaurantsViewModel recovers an array of Restaurants with length 1 w
     viewModel.globalState.loggedInUser = await userRepository.getById(5);
     await viewModel.initialize();
     const isBackendError = config.mock_disabled && viewModel.globalState.backendError !== undefined;
-    const hasLoadedRestaurants = !config.mock_disabled && viewModel.restaurants && viewModel.restaurants.length === 1;
+    const hasLoadedRestaurants = !config.mock_disabled && viewModel.restaurants && viewModel.restaurants.length === 2;
     const areAllRestaurants = !config.mock_disabled && viewModel.restaurants?.map(restaurant => restaurant instanceof Restaurant).reduce((areAllRestaurants, isRestaurant) =>  areAllRestaurants && isRestaurant, true)
     expect((hasLoadedRestaurants && areAllRestaurants) || isBackendError).toBeTruthy();
+});
+
+
+test('Remove establece un authentication error sin usuario logeado', async () => {
+    expect.assertions(1)
+    const viewModel = new OwnerRestaurantsViewModel();
+    await viewModel.initialize();
+    // eslint-disable-next-line testing-library/no-await-sync-query
+    await viewModel.remove((await viewModel.restaurantRepository.getById(1)) as Restaurant);
+    const isBackendError = config.mock_disabled && viewModel.globalState.backendError !== undefined
+    const isAuthorizationError = !config.mock_disabled && viewModel.globalState.authenticationError !== undefined
+    expect(isBackendError || isAuthorizationError).toBeTruthy();
+});
+
+test('Remove establece un forbidden error con customer logeado', async () => {
+    expect.assertions(1)
+    const viewModel = new OwnerRestaurantsViewModel();
+    const authenticationRepository = new MockAuthenticationRepository();
+    viewModel.globalState.loggedInUser = await authenticationRepository.login('customer1@customer.com', 'secret');
+    await viewModel.initialize();
+    // eslint-disable-next-line testing-library/no-await-sync-query
+    await viewModel.remove((await viewModel.restaurantRepository.getById(1)) as Restaurant);
+    const isBackendError = config.mock_disabled && viewModel.globalState.backendError !== undefined
+    const isForbiddenError = !config.mock_disabled && viewModel.globalState.forbiddenError !== undefined
+    expect(isBackendError || isForbiddenError).toBeTruthy();
+});
+
+test('Remove establece un forbidden error cuando un owner intenta borrar el restaurante de otro owner', async () => {
+    expect.assertions(1)
+    const viewModel = new OwnerRestaurantsViewModel();
+    const authenticationRepository = new MockAuthenticationRepository();
+    viewModel.globalState.loggedInUser = await authenticationRepository.login('owner1@owner.com', 'secret');
+    await viewModel.initialize();
+    // eslint-disable-next-line testing-library/no-await-sync-query
+    await viewModel.remove((await viewModel.restaurantRepository.getById(1)) as Restaurant);
+    const isBackendError = config.mock_disabled && viewModel.globalState.backendError !== undefined
+    const isForbiddenError = !config.mock_disabled && viewModel.globalState.forbiddenError !== undefined
+    expect(isBackendError || isForbiddenError).toBeTruthy();
+});
+
+test('Remove reduce el length en 1 cuando borra un restaurante propio', async () => {
+    expect.assertions(1)
+    const viewModel = new OwnerRestaurantsViewModel();
+    const authenticationRepository = new MockAuthenticationRepository();
+    viewModel.globalState.loggedInUser = await authenticationRepository.login('owner2@owner.com', 'secret');
+    await viewModel.initialize();
+    const oldLength = viewModel.restaurants.length;
+    // eslint-disable-next-line testing-library/no-await-sync-query
+    await viewModel.remove((await viewModel.restaurantRepository.getById(5)) as Restaurant);
+    const newLength = viewModel.restaurants.length
+    const isBackendError = config.mock_disabled && viewModel.globalState.backendError !== undefined
+    const hasRemoved = !config.mock_disabled && (Math.max(0,oldLength-1) === newLength)
+    expect(isBackendError || hasRemoved).toBeTruthy();
 });

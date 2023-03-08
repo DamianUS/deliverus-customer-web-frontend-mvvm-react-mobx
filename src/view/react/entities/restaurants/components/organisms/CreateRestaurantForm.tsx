@@ -88,7 +88,15 @@ const CreateRestaurantForm = observer((props:Props) => {
             </Form.Item>
 
             <Form.Item label="Categoría" name="restaurantCategoryId">
-                {viewModel.restaurantCategories && <Select options={restaurantCategoryOptions()} />}
+                {viewModel.restaurantCategories &&
+                    <Select placeholder="Selecciona una categoría"
+                            showSearch
+                            optionFilterProp="children"
+                            filterOption={(input, option) =>
+                                (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
+                            }
+                            size="large"
+                            options={restaurantCategoryOptions()} />}
             </Form.Item>
 
 

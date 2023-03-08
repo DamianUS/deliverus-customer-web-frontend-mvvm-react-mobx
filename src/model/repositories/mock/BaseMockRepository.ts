@@ -6,6 +6,7 @@ import { cloneDeep } from "lodash";
 import ModelConversor from "../../conversion/interfaces/ModelConversor";
 import * as yup from "yup";
 import ValidationError from "../../errors/ValidationError";
+import fromYupErrors from "./errorConversors/ValidationErrorFromYupConversor";
 
 // @ts-ignore
 @injectable()
@@ -38,13 +39,19 @@ abstract class BaseMockRepository<T extends Model> implements Repository<T>{
         return clonedEntity
     }
     @disableable()
-    async removeById(id: number, ...args:any[]): Promise<number> {
+    private async removeById(id: number, ...args:any[]): Promise<number> {
         const entities = await this.getAll()
         const oldCount = entities.length
         if(!this.entities || !id || !entities.find(entity => entity.id === id))
             return 0
         this.entities = this.entities.filter(entity => entity.id !== id)
         return this.entities.length - oldCount
+    }
+    @disableable()
+    async remove(entity: T, ...args: any[]): Promise<number> {
+        if(entity.id)
+            return this.removeById(entity.id);
+        return 0;
     }
     @disableable()
     async save(entity: T, ...args:any[]): Promise<T> {
@@ -72,7 +79,7 @@ abstract class BaseMockRepository<T extends Model> implements Repository<T>{
         }
         catch(error) {
             if (error instanceof yup.ValidationError) {
-                throw ValidationError.fromYupErrors(error)
+                throw fromYupErrors(error);
             }
             else{
                 throw error;

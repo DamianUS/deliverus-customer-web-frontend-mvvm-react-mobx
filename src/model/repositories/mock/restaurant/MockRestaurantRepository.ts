@@ -14,6 +14,7 @@ import disableable from "../decorators/Disableable";
 import * as yup from "yup";
 import {cloneDeep} from "lodash";
 import ValidationError from "../../../errors/ValidationError";
+import isRestaurantOwner from "../../../decorators/restaurants/isRestaurantOwner";
 
 @injectable()
 class MockRestaurantRepository extends BaseMockRepository<Restaurant> implements RestaurantRepository {
@@ -85,6 +86,15 @@ class MockRestaurantRepository extends BaseMockRepository<Restaurant> implements
     async store(entity: Restaurant, owner:User): Promise<Restaurant> {
         entity.owner = owner;
         return super.store(entity);
+    }
+
+    @disableable()
+    @hasLoggedInUserParameter()
+    @hasUserParameterOfUserType(UserType.owner)
+    @isRestaurantOwner()
+    async remove(entity: Restaurant, owner:User): Promise<number> {
+        entity.owner = owner;
+        return super.remove(entity);
     }
 }
 export default MockRestaurantRepository;
