@@ -3,7 +3,7 @@ import inversifyContainer from "../../../../../config/inversify.config";
 import { observer } from "mobx-react-lite"
 import BaseLayout from "../../../components/templates/BaseLayout";
 import OwnerRestaurantsViewModel from "../../../../../viewmodel/restaurants/OwnerRestaurantsViewModel";
-import {Breadcrumb, Button, Space, Table, Tag, Tooltip, Typography, Popconfirm, message} from "antd";
+import {Breadcrumb, Button, Space, Table, Tag, Tooltip, Typography, Popconfirm, message, Dropdown} from "antd";
 import {
     CheckCircleOutlined,
     CloseCircleOutlined, DeleteOutlined, EditOutlined,
@@ -16,6 +16,9 @@ import type { ColumnsType } from 'antd/es/table';
 import Restaurant from "../../../../../model/models/restaurant/Restaurant";
 import RestaurantCategory from "../../../../../model/models/restaurantCategory/RestaurantCategory";
 import RestaurantStatus from "../../../../../model/models/restaurant/RestaurantStatus";
+import type { MenuProps } from 'antd';
+import { Link } from "react-router-dom";
+import restaurant from "../../../../../model/models/restaurant/Restaurant";
 const {Text} = Typography;
 
 const RestaurantList = observer(() => {
@@ -30,6 +33,26 @@ const RestaurantList = observer(() => {
         </Breadcrumb.Item>
     </Breadcrumb>
 
+
+    const buildRestaurantDropDownItems = (restaurant: Restaurant) => {
+        const items = [
+            {
+                label: <Link to={`/restaurants/${restaurant.id}/products`}>Manage products</Link>,
+                key: '0',
+            },
+            {
+                type: 'divider',
+            },
+            {
+                label: <Link to={`/restaurants/${restaurant.id}/orders`}>Manage orders</Link>,
+                key: '1',
+            },
+        ];
+        return {items: items};
+    }
+
+
+    // @ts-ignore
     const tableColumns: ColumnsType<Restaurant> = [
         {
             title: 'Name',
@@ -97,7 +120,10 @@ const RestaurantList = observer(() => {
             render: (_, restaurant) => (
                 <Space size="middle">
                     <Tooltip title={`Manage restaurant ${restaurant.name}'s products and orders`}>
-                        <Button shape="circle" icon={<ZoomInOutlined />} />
+                        {/* @ts-ignore */}
+                        <Dropdown menu={buildRestaurantDropDownItems(restaurant)} trigger={['click']}>
+                            <Button shape="circle" icon={<ZoomInOutlined />} />
+                        </Dropdown>
                     </Tooltip>
                     <Tooltip title={`Edit restaurant ${restaurant.name}`}>
                         <Button shape="circle" type="primary" ghost icon={<EditOutlined />} />
