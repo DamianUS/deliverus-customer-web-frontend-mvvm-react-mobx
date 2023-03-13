@@ -7,6 +7,7 @@ import usersMocked from "./users.json";
 import User from "../../../models/user/User";
 import UserType from "../../../models/user/UserType";
 import exp from "constants";
+import NotFoundError from "../../../errors/NotFoundError";
 
 // @ts-ignore
 
@@ -115,15 +116,19 @@ test('findById con id 2 devuelve algo definido', async () => {
     }
 });
 
-test('findById con id 10 devuelve undefined', async () => {
+test('findById con id 10 lanza NotFoundError', async () => {
     expect.assertions(1)
     try {
         // eslint-disable-next-line testing-library/no-await-sync-query
-        const entity = await new MockUserRepository().getById(10)
-        expect(entity).toBeUndefined();
+        await new MockUserRepository().getById(10)
     }
     catch(error){
-        expect(config.mock_disabled && error instanceof BackendServiceError).toBeTruthy();
+        if(config.mock_disabled){
+            expect(config.mock_disabled && error instanceof BackendServiceError).toBeTruthy();
+        }
+        else{
+            expect(!config.mock_disabled && error instanceof NotFoundError).toBeTruthy();
+        }
     }
 });
 
@@ -276,16 +281,21 @@ test('removeById devuelve 0 si el id no existe', async () => {
     }
 });
 
-test('removeById borra el id 1', async () => {
+test('removeById borra el id 1 y lanza excepción NotFoundError al intentar buscarlo de nuevo', async () => {
     expect.assertions(1)
     const repository = new MockUserRepository();
     try{
         await repository.removeById(1);
         // eslint-disable-next-line testing-library/no-await-sync-query
-        expect(await repository.getById(1)).toBeUndefined();
+        await repository.getById(1);
     }
     catch(error){
-        expect(config.mock_disabled && error instanceof BackendServiceError).toBeTruthy();
+        if(config.mock_disabled){
+            expect(config.mock_disabled && error instanceof BackendServiceError).toBeTruthy();
+        }
+        else{
+            expect(!config.mock_disabled && error instanceof NotFoundError).toBeTruthy();
+        }
     }
 });
 

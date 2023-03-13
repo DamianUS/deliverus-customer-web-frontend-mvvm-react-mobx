@@ -92,6 +92,14 @@ class MockRestaurantRepository extends BaseMockRepository<Restaurant> implements
     @hasLoggedInUserParameter()
     @hasUserParameterOfUserType(UserType.owner)
     @isRestaurantOwner()
+    async update(entity: Restaurant, owner:User): Promise<Restaurant> {
+        return super.update(entity);
+    }
+
+    @disableable()
+    @hasLoggedInUserParameter()
+    @hasUserParameterOfUserType(UserType.owner)
+    @isRestaurantOwner()
     async remove(entity: Restaurant, owner:User): Promise<number> {
         entity.owner = owner;
         return super.remove(entity);

@@ -5,6 +5,7 @@ import config from "../../../../config/config";
 import BackendServiceError from "../../../errors/BackendServiceError";
 import MockRestaurantCategoryConversor from "./MockRestaurantCategoryConversor";
 import restaurantCategoriesMocked from "./restaurantCategories.json";
+import NotFoundError from "../../../errors/NotFoundError";
 
 
 
@@ -104,11 +105,15 @@ test('findById con id 10 devuelve undefined', async () => {
     expect.assertions(1)
     try {
         // eslint-disable-next-line testing-library/no-await-sync-query
-        const entity = await new MockRestaurantCategoryRepository().getById(10)
-        expect(entity).toBeUndefined();
+        await new MockRestaurantCategoryRepository().getById(10)
     }
     catch(error){
-        expect(config.mock_disabled && error instanceof BackendServiceError).toBeTruthy();
+        if(config.mock_disabled){
+            expect(config.mock_disabled && error instanceof BackendServiceError).toBeTruthy();
+        }
+        else{
+            expect(!config.mock_disabled && error instanceof NotFoundError).toBeTruthy();
+        }
     }
 });
 
@@ -246,10 +251,15 @@ test('removeById borra el id 1', async () => {
     try{
         await repository.removeById(1);
         // eslint-disable-next-line testing-library/no-await-sync-query
-        expect(await repository.getById(1)).toBeUndefined();
+        await repository.getById(1);
     }
     catch(error){
-        expect(config.mock_disabled && error instanceof BackendServiceError).toBeTruthy();
+        if(config.mock_disabled){
+            expect(config.mock_disabled && error instanceof BackendServiceError).toBeTruthy();
+        }
+        else{
+            expect(!config.mock_disabled && error instanceof NotFoundError).toBeTruthy();
+        }
     }
 });
 

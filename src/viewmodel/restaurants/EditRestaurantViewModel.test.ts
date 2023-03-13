@@ -8,15 +8,18 @@ import AuthenticationRepository from "../../model/models/authentication/interfac
 import MockAuthenticationRepository from "../../model/repositories/mock/authentication/MockAuthenticationRepository";
 import exp from "constants";
 import MockRestaurantRepository from "../../model/repositories/mock/restaurant/MockRestaurantRepository";
+import EditRestaurantViewModel from "./EditRestaurantViewModel";
+import Restaurant from "../../model/models/restaurant/Restaurant";
 
-test('CreateRestaurantViewModel has the correct initial state', () => {
-    const viewModel = new CreateRestaurantViewModel();
+test('EditRestaurantViewModel has the correct initial state', () => {
+    const viewModel = new EditRestaurantViewModel();
     expect(
         viewModel.restaurantRepository !== undefined &&
         viewModel.restaurantCategoryRepository !== undefined &&
         viewModel.globalState !== undefined &&
         viewModel.conversor !== undefined &&
-        viewModel.initialValues !== undefined &&
+        viewModel.initialValues === undefined &&
+        viewModel.restaurant === undefined &&
         viewModel.globalState.loading == false &&
         viewModel.globalState.backendError === undefined &&
         viewModel.globalState.forbiddenError === undefined &&
@@ -24,20 +27,24 @@ test('CreateRestaurantViewModel has the correct initial state', () => {
     ).toBeTruthy();
 });
 
-test('CreateRestaurantViewModel is loading when CreateRestaurantViewModel starts initializing', () => {
-    const viewModel = new CreateRestaurantViewModel();
-    viewModel.initialize()
+test('EditRestaurantViewModel is loading when starts initializing', () => {
+    const viewModel = new EditRestaurantViewModel();
+    viewModel.initialize(1)
     expect(viewModel.globalState.loading).toBeTruthy();
 });
 
 test('CreateRestaurantViewModel has the correct state when finishes initializing', async () => {
-    const viewModel = new CreateRestaurantViewModel();
-    await viewModel.initialize();
+    const viewModel = new EditRestaurantViewModel();
+    await viewModel.initialize(1);
     const isStateCorrect = !config.mock_disabled &&
         viewModel.globalState.loading === false &&
         viewModel.validationError === undefined &&
         viewModel.restaurantCategories !== undefined &&
-        viewModel.restaurantCategories.length > 0;
+        viewModel.restaurantCategories.length > 0 &&
+        viewModel.statuses !== undefined &&
+        viewModel.statuses.length > 0 &&
+        viewModel.restaurant !== undefined &&
+        viewModel.restaurant instanceof Restaurant;
     const isBackendError = config.mock_disabled && viewModel.globalState.backendError !== undefined
     expect(isStateCorrect || isBackendError).toBeTruthy();
 });

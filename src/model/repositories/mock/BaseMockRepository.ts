@@ -7,6 +7,7 @@ import ModelConversor from "../../conversion/interfaces/ModelConversor";
 import * as yup from "yup";
 import ValidationError from "../../errors/ValidationError";
 import fromYupErrors from "./errorConversors/ValidationErrorFromYupConversor";
+import NotFoundError from "../../errors/NotFoundError";
 
 // @ts-ignore
 @injectable()
@@ -35,6 +36,9 @@ abstract class BaseMockRepository<T extends Model> implements Repository<T>{
         const entities = await this.getAll()
         // @ts-ignore
         let foundEntity = entities.find(entity => entity.id === id);
+        if(foundEntity === undefined){
+            throw new NotFoundError();
+        }
         const clonedEntity = cloneDeep(foundEntity);
         return clonedEntity
     }

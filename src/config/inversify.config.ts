@@ -23,6 +23,7 @@ import RestaurantCategoryRepository from "../model/models/restaurantCategory/int
 import MockRestaurantCategoryRepository
     from "../model/repositories/mock/restaurantCategory/MockRestaurantCategoryRepository";
 import CreateRestaurantViewModel from "../viewmodel/restaurants/CreateRestaurantViewModel";
+import EditRestaurantViewModel from "../viewmodel/restaurants/EditRestaurantViewModel";
 
 const inversifyContainer = new Container()
 inversifyContainer.bind<GlobalState>('GlobalState').to(GlobalState).inSingletonScope()
@@ -40,7 +41,7 @@ inversifyContainer.bind<LogoutViewModel>('LogoutViewModel').to(LogoutViewModel).
 inversifyContainer.bind<IndexRestaurantsViewModel>('IndexRestaurantsViewModel').to(IndexRestaurantsViewModel).inSingletonScope()
 inversifyContainer.bind<OwnerRestaurantsViewModel>('OwnerRestaurantsViewModel').to(OwnerRestaurantsViewModel).inSingletonScope()
 inversifyContainer.bind<CreateRestaurantViewModel>('CreateRestaurantViewModel').to(CreateRestaurantViewModel).inSingletonScope()
-
+inversifyContainer.bind<EditRestaurantViewModel>('EditRestaurantViewModel').to(EditRestaurantViewModel).inSingletonScope()
 
 //View
 inversifyContainer.bind<ViewEngine>('ViewEngineService').to(ReactEngineService)
